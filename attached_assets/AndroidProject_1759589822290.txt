@@ -1,0 +1,426 @@
+Fiche projet — Musep50 Trésorerie Express (Android / Kotlin)
+1. Titre
+
+Musep50 Trésorerie Express — Application Android native (Kotlin, Jetpack Compose)
+
+2. Résumé du projet
+
+Application mobile Android destinée à automatiser la collecte et la publication des listes de payeurs pour trois types d’entrées (droit d’adhésion, fonds de caisse, cotisations exceptionnelles). L’app fonctionne hors-ligne, sécurisée par PIN, permet le suivi de l’avancement par opération, la génération d’un rapport (image/PDF/texte) prêt à partager sur WhatsApp, l’identification des retardataires et l’export CSV local.
+
+3. Objectifs fonctionnels
+
+Enregistrer rapidement les paiements hors-ligne.
+
+Pour chaque opération : afficher Montant ciblé / Collecté / Restant.
+
+Générer en 1 clic la liste des payeurs (image / PDF / texte) prête à partager sur WhatsApp.
+
+Voir et filtrer les retardataires ; préparer des messages de rappel pré-remplis (partage WhatsApp).
+
+Sécuriser l’accès par PIN (option Biometric si disponible).
+
+Sauvegarde locale et export CSV.
+
+Optionnel : import/export pour transfert entre appareils (fichier chiffré).
+
+4. Périmètre (scope)
+
+Inclus :
+
+Application Android native en Kotlin
+
+Stockage local (Room)
+
+UI moderne (Jetpack Compose)
+
+Export CSV / PDF / Image
+
+Partage via Intent WhatsApp
+
+PIN de protection + chiffrement minimal des données sensibles
+
+Exclus :
+
+Back-end serveur (synchronisation cloud) — optionnel / futur
+
+Paiement en ligne / intégration de passerelle de paiements
+
+5. Utilisateurs cibles & rôles
+
+Trésorière (utilisatrice principale) : saisie paiements, publication listes, envoi rappels.
+
+Administrateur (facultatif) : configuration des opérations, sauvegarde/export.
+
+Lecteurs (public) : reçoivent et consultent les listes via WhatsApp (pas d’accès direct à l’app).
+
+6. Fonctionnalités détaillées (User stories)
+A. Gestion des opérations
+
+Créer/éditer une Opération (type, nom, montant cible, période d’un mois).
+
+Lister toutes les opérations en cours / passées.
+
+Clôturer une opération (verrouiller les modifications, archiver).
+
+B. Enregistrement des paiements (hors-ligne)
+
+Écran rapide “Enregistrer paiement” :
+
+Sélection opération
+
+Nom du payeur (nom + contact facultatif)
+
+Montant payé
+
+Date (par défaut aujourd’hui)
+
+Méthode (espèces, mobile money, autre)
+
+Commentaire / reçu
+
+Validation et stockage local instantané.
+
+C. Suivi (dashboard)
+
+Pour chaque opération : Montant ciblé / Collecté / Restant (affichage visuel : barres / pourcentage).
+
+Liste des payeurs pour une opération, tri et recherche.
+
+D. Publication / Export
+
+Génération d’une liste prête à publier :
+
+Formats : texte (copier/coller), PDF (portrait), image (screenshot généré via Compose -> bitmap).
+
+Bouton “Partager” ouvrant Intent/chooser (WhatsApp recommandé).
+
+Export CSV (tous paiements / par opération).
+
+E. Rappels pour retardataires
+
+Détecter retardataires : membres attendus non présents après la date + filtre par opération.
+
+Génération de messages pré-remplis (ex. : « Bonjour X, nous n’avons pas encore reçu votre cotisation Musep50 pour l’opération Y. Montant restant : Z. »)
+
+Partage via WhatsApp Intent (pré-rempli) ou copier/coller.
+
+F. Sécurité & Sauvegarde
+
+Code PIN pour ouvrir l’application.
+
+Option biométrie (BiometricPrompt) si disponible.
+
+Chiffrement des fichiers d’export sensibles (optionnel).
+
+Sauvegarde locale : dossier accessible (avec FileProvider) ; export CSV chiffré possible.
+
+Option d’effacement / réinitialisation.
+
+G. Accessibilité & Internationalisation
+
+Support Français par défaut ; textes séparés (strings.xml).
+
+Tailles de texte adaptables ; contrastes conformes.
+
+7. Architecture technique & choix technos
+Frontend / Mobile
+
+Langage : Kotlin
+
+UI : Jetpack Compose
+
+Architecture : MVVM (ViewModel + LiveData / StateFlow)
+
+Navigation : Jetpack Navigation Compose
+
+Dependency Injection : Hilt
+
+Background work : WorkManager (pour tâches planifiées, ex: rappels)
+
+Biometric : BiometricPrompt
+
+Persistance
+
+Room (SQLite) pour stockage local
+
+Option sécurité : SQLCipher ou EncryptedFile / EncryptedSharedPreferences (AndroidX Security) pour données sensibles
+
+Export & génération
+
+PDF : android.graphics.pdf.PdfDocument ou bibliothèque (iText/AndroidPdf) — privilégier Android native si licence / simplicité
+
+Image : convertir Compose composable en Bitmap
+
+CSV : génération manuelle (StringBuilder) puis écriture fichier (FileProvider)
+
+Partage
+
+Partage WhatsApp : Intent ACTION_SEND avec text/plain ou image/* + Intent.setPackage("com.whatsapp") si on veut forcer WhatsApp, sinon chooser.
+
+Tests & CI
+
+Unit tests : JUnit + Mockito / MockK
+
+UI tests : Espresso (ou Compose UI Test)
+
+CI : GitHub Actions (lint, build, tests)
+
+8. Modélisation des données (schéma simplifié)
+Tables principales (Room Entities)
+
+Operation
+
+id: Long (PK)
+
+nom: String
+
+type: ENUM {ADHESION, FONDS_CAISSE, COTISATION_EXCEPTIONNELLE}
+
+montantCible: Double
+
+dateDebut: Long (timestamp)
+
+dateFin: Long (timestamp)
+
+etat: ENUM {EN_COURS, CLOTURE}
+
+description: String?
+
+Payer
+
+id: Long (PK)
+
+nom: String
+
+contact: String? (telephone/email)
+
+note: String?
+
+Paiement
+
+id: Long (PK)
+
+operationId: Long (FK)
+
+payerId: Long? (FK) — peut être null si anonym
+
+montant: Double
+
+datePaiement: Long
+
+methode: String
+
+commentaire: String?
+
+Parametres / Settings
+
+id: Int
+
+pinHash: String (haché)
+
+biometricEnabled: Boolean
+
+lastBackup: Long
+
+ReminderLog (optionnel)
+
+id
+
+paiementId / payerId
+
+dateEnvoi
+
+messageEnvoye
+
+mode (WhatsApp, SMS)
+
+9. API DAO & Exemples Kotlin (signatures)
+@Dao
+interface OperationDao {
+  @Query("SELECT * FROM Operation WHERE etat = :etat")
+  fun getOperationsByState(etat: String): Flow<List<Operation>>
+
+  @Insert
+  suspend fun insert(operation: Operation): Long
+
+  @Update
+  suspend fun update(operation: Operation)
+}
+
+@Dao
+interface PaiementDao {
+  @Query("SELECT * FROM Paiement WHERE operationId = :opId ORDER BY datePaiement DESC")
+  fun getPaiementsForOperation(opId: Long): Flow<List<Paiement>>
+
+  @Query("SELECT SUM(montant) FROM Paiement WHERE operationId = :opId")
+  suspend fun getTotalCollected(opId: Long): Double?
+
+  @Insert
+  suspend fun insertPaiement(paiement: Paiement)
+}
+
+10. Écrans & navigation (wireframe textuel)
+
+Écran d’accueil / Dashboard
+
+Liste opérations en cours avec barres de progression
+
+Bouton “Nouvelle opération” + recherche
+
+Écran opération (detail)
+
+Statistiques (ciblé / collecté / restant)
+
+Liste des payeurs & paiements
+
+Boutons : Export / Publier / Rappels / Clôturer
+
+Écran saisie paiement (rapide)
+
+Formulaire compact (opération, nom, montant, date, méthode)
+
+Validation + bouton “Enregistrer”
+
+Écran Publication
+
+Prévisualisation texte / PDF / Image
+
+Bouton “Partager” (WhatsApp / autres)
+
+Écran Retardataires
+
+Liste filtrée + case à cocher pour générer message / partager
+
+Écran paramètres
+
+Gérer PIN, Biometric, sauvegarde/export, format export
+
+Écran sauvegarde/import
+
+Export CSV / Import CSV chiffré
+
+11. Sécurité & confidentialité
+
+PIN stocké sous forme hachée (PBKDF2 / bcrypt)
+
+Données sensibles (paramètres, backups) chiffrées via AndroidX Security (EncryptedFile / EncryptedSharedPreferences) ou SQLCipher pour Room.
+
+Permissions minimales — accès stockage via SAF / FileProvider (pour Android 11+).
+
+Ne pas stocker contacts externes sans consentement ; éviter d’envoyer des informations personnelles via WhatsApp non chiffrées si sensibles.
+
+12. Gestion offline / résilience
+
+Toutes les opérations doivent fonctionner hors-ligne (Room).
+
+Les générateurs de PDF / images sont locaux.
+
+En cas d’ajout simultané sur plusieurs appareils (hors périmètre), proposer import/export manuel via fichier chiffré.
+
+13. Tests d’acceptation (critères de validation)
+
+Saisie d’un paiement instantanément visible dans la liste de l’opération.
+
+Le tableau Montant ciblé / Collecté / Restant se met à jour après chaque paiement.
+
+Génération PDF / image / texte correspond exactement à la liste affichée.
+
+Partage via WhatsApp ouvre bien un message avec le contenu (ou le fichier en pièce jointe).
+
+PIN verrouille l’ouverture ; sans PIN on ne peut pas accéder aux données.
+
+Export CSV contient l’ensemble des paiements avec colonnes : id, operation, payer, montant, date, methode, commentaire.
+
+14. Livrables
+
+Code source complet (GitHub) avec README (setup, build, run).
+
+Maquettes / prototypes (Figma ou images).
+
+Diagrammes UML (cas d’usage, classes, séquence).
+
+Script de création de la DB / MLD & documentation du schéma.
+
+Rapport technique (choix technos, limites, tests effectués).
+
+Fichiers d’install (APK) pour test.
+
+Jeu de tests (unitaires + UI).
+
+Guide utilisateur (courte documentation) + screenshots.
+
+Export CSV & exemple de PDF généré (échantillon).
+
+15. Plan de livraison (jalons — sans durées)
+
+M1 : Spécifications & cahier des charges finalisé + maquettes UI.
+
+M2 : Base de données Room + modèles + DAO.
+
+M3 : Écrans principaux : Dashboard, détail opération, saisie paiement.
+
+M4 : Fonction export (CSV/PDF/Image) + partage WhatsApp.
+
+M5 : Sécurité (PIN/biométrie) + export chiffré.
+
+M6 : Tests unitaires & UI + corrections.
+
+M7 : Packaging (APK) + documentation + démonstration.
+
+Remarque : j’ai listé des jalons sans indiquer de durées. Si tu veux, on peut transformer ces jalons en planning avec durées et ressources (je te fournis un planning estimé si tu me confirmes que tu veux des durées).
+
+16. Risques & mitigations
+
+Problèmes de permission Android (stockage / file provider) → utiliser SAF & FileProvider, tester sur Android 10–14.
+
+Problèmes de compatibilité WhatsApp (packagename différent sur variantes) → utiliser chooser si en doute.
+
+Perte de données si l’app désinstallée → proposer export CSV automatique / sauvegarde chiffrée.
+
+Données sensibles exposées → chiffrer backups et PIN, limiter logs.
+
+17. Ressources & compétences requises
+
+Développeur Android Kotlin (Jetpack Compose, Room, Hilt)
+
+UI/UX Designer (maquettes)
+
+QA/Testeur (unit & instrumentation)
+
+Optionnel : spécialiste sécurité pour chiffrement/backups
+
+18. Exemples de snippets / UI pattern (rapide)
+
+génération PDF : PdfDocument pour dessiner texte/tableau ; ou utiliser Compose -> bitmap -> convertir en PDF.
+
+partage : val sendIntent = Intent().apply{ action = Intent.ACTION_SEND; putExtra(Intent.EXTRA_TEXT, text); type = "text/plain" } startActivity(Intent.createChooser(sendIntent, "Partager via"))
+
+19. Checklist de livraison (pratique)
+
+ README clair (how-to build/run/test)
+
+ APK testable
+
+ Maquettes Figma + export PNG
+
+ MCD / MLD + script SQL
+
+ Export CSV & exemple PDF
+
+ Tests automatiques (au moins un pour DAO, un pour ViewModel, un UI test)
+
+ Guide utilisateur (1 page)
+
+ Démo vidéo (facultative mais recommandée)
+
+20. Critères d’évaluation (proposition pour le jury)
+
+Fonctionnalités principales implémentées (saisie, suivi, export, partage) — 40%
+
+Qualité UX & ergonomie — 20%
+
+Sécurité (PIN, chiffrement minimal) — 10%
+
+Qualité du code & architecture (MVVM, DI) — 15%
+
+Tests & documentation — 15%
