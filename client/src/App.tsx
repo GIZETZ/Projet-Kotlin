@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Dashboard from "@/components/Dashboard";
 import PINEntry from "@/components/PINEntry";
 import OperationDetails from "@/pages/OperationDetails";
+import CotisationExceptionnelleDetails from "@/pages/CotisationExceptionnelleDetails";
+import FondsCaisseDetails from "@/pages/FondsCaisseDetails";
 import EditOperation from "@/pages/EditOperation";
 import NewOperation from "@/pages/NewOperation";
 import Profile from "@/pages/Profile";
@@ -20,6 +22,8 @@ function Router() {
       <Route path="/profile" component={Profile} />
       <Route path="/operation/new" component={NewOperation} />
       <Route path="/operation/:id" component={OperationDetails} />
+      <Route path="/cotisation-exceptionnelle/:id" component={CotisationExceptionnelleDetails} />
+      <Route path="/fonds-caisse/:id" component={FondsCaisseDetails} />
       <Route path="/operation/:id/edit" component={EditOperation} />
       <Route path="/adhesion-settings" component={AdhesionSettings} />
       <Route component={NotFound} />

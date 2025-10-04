@@ -130,16 +130,31 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {filteredOperations.map((operation) => (
-                <Link key={operation.id} href={`/operation/${operation.id}`}>
-                  <OperationCard
-                    operation={operation}
-                    onViewDetails={() => {}}
-                    onExport={() => handleExport(operation)}
-                    onEdit={() => {}}
-                  />
-                </Link>
-              ))}
+              {filteredOperations.map((operation) => {
+                const getOperationPath = (op: Operation) => {
+                  switch(op.type) {
+                    case "ADHESION":
+                      return `/operation/${op.id}`;
+                    case "COTISATION_EXCEPTIONNELLE":
+                      return `/cotisation-exceptionnelle/${op.id}`;
+                    case "FONDS_CAISSE":
+                      return `/fonds-caisse/${op.id}`;
+                    default:
+                      return `/operation/${op.id}`;
+                  }
+                };
+
+                return (
+                  <Link key={operation.id} href={getOperationPath(operation)}>
+                    <OperationCard
+                      operation={operation}
+                      onViewDetails={() => {}}
+                      onExport={() => handleExport(operation)}
+                      onEdit={() => {}}
+                    />
+                  </Link>
+                );
+              })}
             </div>
           )}
 
