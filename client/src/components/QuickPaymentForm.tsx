@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Import useEffect
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,9 +10,9 @@ import { X } from "lucide-react";
 interface QuickPaymentFormProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (payment: PaymentFormData) => void;
-  operations?: { id: number; nom: string }[];
-  initialData?: Partial<PaymentFormData>;
+  onSubmit: (data: PaymentFormData) => void;
+  operations?: { id: number; nom: string }[]; // Made operations optional
+  initialData?: Partial<PaymentFormData>; // Use Partial for initialData
   mode?: "create" | "edit";
   onDelete?: () => void;
 }
@@ -27,17 +27,17 @@ export interface PaymentFormData {
   commentaire: string;
 }
 
-export default function QuickPaymentForm({ 
-  open, 
-  onClose, 
-  onSubmit, 
-  operations = [], 
+export default function QuickPaymentForm({
+  open,
+  onClose,
+  onSubmit,
+  operations = [],
   initialData,
   mode = "create",
   onDelete
 }: QuickPaymentFormProps) {
   const defaultFormData: PaymentFormData = {
-    operationId: 0,
+    operationId: operations.length > 0 ? operations[0].id : 0, // Set default to first operation if available
     payerName: "",
     montant: 0,
     datePaiement: new Date().toISOString().split('T')[0],
@@ -45,29 +45,44 @@ export default function QuickPaymentForm({
     commentaire: "",
   };
 
-  const [formData, setFormData] = useState<PaymentFormData>({
-    ...defaultFormData,
-    ...initialData,
+  const [formData, setFormData] = useState<PaymentFormData>(() => {
+    if (initialData) {
+      return { ...defaultFormData, ...initialData };
+    }
+    return defaultFormData;
   });
+
+  // Effect to update form data when initialData changes or when the dialog opens/closes
+  useEffect(() => {
+    if (open) {
+      if (initialData) {
+        setFormData({ ...defaultFormData, ...initialData });
+      } else {
+        setFormData(defaultFormData);
+      }
+    }
+  }, [open, initialData, operations]); // Depend on open, initialData, and operations
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
+    if (mode === "create") {
+      setFormData(defaultFormData); // Reset form for new entry
+    }
+    // onClose will be called by the parent component after onSubmit is handled
+  };
+
+  const handleClose = () => {
+    // Reset form to default or initialData when closing if not editing
     if (mode === "create") {
       setFormData(defaultFormData);
     }
     onClose();
   };
 
-  // Update form data when initialData changes
-  useState(() => {
-    if (initialData) {
-      setFormData({ ...defaultFormData, ...initialData });
-    }
-  });
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-2xl">
@@ -81,6 +96,7 @@ export default function QuickPaymentForm({
               value={formData.operationId.toString()}
               onValueChange={(value) => setFormData({ ...formData, operationId: parseInt(value) })}
               required
+              disabled={mode === "edit"} // Disable operation selection when editing
             >
               <SelectTrigger id="operation" data-testid="select-operation">
                 <SelectValue placeholder="Sélectionner une opération" />
@@ -167,7 +183,7 @@ export default function QuickPaymentForm({
 
           <div className="flex flex-col gap-3 pt-4">
             <div className="flex gap-3">
-              <Button type="button" variant="outline" onClick={onClose} className="flex-1" data-testid="button-cancel">
+              <Button type="button" variant="outline" onClick={handleClose} className="flex-1" data-testid="button-cancel">
                 Annuler
               </Button>
               <Button type="submit" className="flex-1" data-testid="button-save-payment">

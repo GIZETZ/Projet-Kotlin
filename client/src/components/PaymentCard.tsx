@@ -2,7 +2,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { Banknote, CreditCard, Smartphone } from "lucide-react";
+import { Banknote, CreditCard, Smartphone, Edit, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export interface Payment {
   id: number;
@@ -16,6 +17,7 @@ export interface Payment {
 interface PaymentCardProps {
   payment: Payment;
   onClick?: () => void;
+  onDelete?: () => void; // Added onDelete prop
 }
 
 const methodIcons: Record<string, typeof Banknote> = {
@@ -24,7 +26,7 @@ const methodIcons: Record<string, typeof Banknote> = {
   carte: CreditCard,
 };
 
-export default function PaymentCard({ payment, onClick }: PaymentCardProps) {
+export default function PaymentCard({ payment, onClick, onDelete }: PaymentCardProps) {
   const MethodIcon = methodIcons[payment.methode.toLowerCase()] || Banknote;
 
   return (
@@ -53,6 +55,35 @@ export default function PaymentCard({ payment, onClick }: PaymentCardProps) {
             {new Intl.NumberFormat("fr-FR", { style: "currency", currency: "XAF" }).format(payment.montant)}
           </p>
         </div>
+      </div>
+      {/* Actions */}
+      <div className="flex gap-2 pt-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClick?.();
+          }}
+          className="flex-1"
+          data-testid="button-edit-payment"
+        >
+          <Edit className="w-4 h-4 mr-2" />
+          Modifier
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete?.();
+          }}
+          className="flex-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+          data-testid="button-delete-payment"
+        >
+          <Trash2 className="w-4 h-4 mr-2" />
+          Supprimer
+        </Button>
       </div>
     </Card>
   );

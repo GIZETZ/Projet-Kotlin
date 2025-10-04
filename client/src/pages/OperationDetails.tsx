@@ -30,6 +30,8 @@ export default function OperationDetails() {
   const [exportModalOpen, setExportModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [editingPayment, setEditingPayment] = useState<Payment | null>(null);
+  const [deletingPaymentId, setDeletingPaymentId] = useState<number | null>(null);
 
   // todo: remove mock functionality - fetch real data
   const mockOperation = {
@@ -80,38 +82,38 @@ export default function OperationDetails() {
   if (percentage >= 100) progressVariant = "success";
   else if (percentage >= 80) progressVariant = "warning";
 
-  const handlePaymentClick = (payment: Payment) => {
-    setSelectedPayment(payment);
+  const handleEditPayment = (payment: Payment) => {
+    setEditingPayment(payment);
     setPaymentFormOpen(true);
   };
 
   const handleAddPayment = () => {
-    setSelectedPayment(null);
+    setEditingPayment(null);
     setPaymentFormOpen(true);
   };
 
-  const handleSavePayment = (data: PaymentFormData) => {
-    if (selectedPayment) {
-      console.log("Updating payment:", selectedPayment.id, data);
+  const handlePaymentSubmit = (data: PaymentFormData) => {
+    if (editingPayment) {
+      console.log("Updating payment:", editingPayment.id, data);
       // todo: remove mock functionality - update payment in backend
     } else {
       console.log("Creating payment:", data);
       // todo: remove mock functionality - create payment in backend
     }
+    setPaymentFormOpen(false);
+    setEditingPayment(null);
   };
 
-  const handleDeletePayment = () => {
-    if (selectedPayment) {
-      setPaymentFormOpen(false);
-      setDeleteDialogOpen(true);
-    }
-  };
-
-  const confirmDeletePayment = () => {
-    console.log("Deleting payment:", selectedPayment?.id);
+  const handleDeletePayment = (id: number) => {
+    console.log("Deleting payment:", id);
     // todo: remove mock functionality - delete payment from backend
     setDeleteDialogOpen(false);
-    setSelectedPayment(null);
+    setDeletingPaymentId(null);
+  };
+
+  const handleClosePaymentForm = () => {
+    setPaymentFormOpen(false);
+    setEditingPayment(null);
   };
 
   return (
@@ -210,7 +212,8 @@ export default function OperationDetails() {
                   <PaymentCard
                     key={payment.id}
                     payment={payment}
-                    onClick={() => handlePaymentClick(payment)}
+                    onClick={() => handleEditPayment(payment)}
+                    onDelete={() => setDeletingPaymentId(payment.id)}
                   />
                 ))}
               </div>
@@ -222,23 +225,19 @@ export default function OperationDetails() {
       {/* Modals */}
       <QuickPaymentForm
         open={paymentFormOpen}
-        onClose={() => {
-          setPaymentFormOpen(false);
-          setSelectedPayment(null);
-        }}
-        onSubmit={handleSavePayment}
+        onClose={handleClosePaymentForm}
+        onSubmit={handlePaymentSubmit}
         operations={[{ id: mockOperation.id, nom: mockOperation.nom }]}
-        mode={selectedPayment ? "edit" : "create"}
-        initialData={selectedPayment ? {
-          id: selectedPayment.id,
+        mode={editingPayment ? "edit" : "create"}
+        initialData={editingPayment ? {
+          id: editingPayment.id,
           operationId: mockOperation.id,
-          payerName: selectedPayment.payerName,
-          montant: selectedPayment.montant,
-          datePaiement: format(selectedPayment.datePaiement, "yyyy-MM-dd"),
-          methode: selectedPayment.methode.toLowerCase(),
-          commentaire: selectedPayment.commentaire || "",
+          payerName: editingPayment.payerName,
+          montant: editingPayment.montant,
+          datePaiement: format(editingPayment.datePaiement, "yyyy-MM-dd"),
+          methode: editingPayment.methode.toLowerCase(),
+          commentaire: editingPayment.commentaire || "",
         } : undefined}
-        onDelete={selectedPayment ? handleDeletePayment : undefined}
       />
 
       <ExportModal
@@ -249,17 +248,17 @@ export default function OperationDetails() {
       />
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+      <AlertDialog open={deletingPaymentId !== null} onOpenChange={(open) => !open && setDeletingPaymentId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
             <AlertDialogDescription>
-              Êtes-vous sûr de vouloir supprimer ce paiement de {selectedPayment?.payerName} ? Cette action est irréversible.
+              Êtes-vous sûr de vouloir supprimer ce paiement de {mockPayments.find(p => p.id === deletingPaymentId)?.payerName} ? Cette action est irréversible.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel data-testid="button-cancel-delete">Annuler</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeletePayment} data-testid="button-confirm-delete">
+            <AlertDialogAction onClick={() => deletingPaymentId && handleDeletePayment(deletingPaymentId)} className="bg-red-500 hover:bg-red-600" data-testid="button-confirm-delete">
               Supprimer
             </AlertDialogAction>
           </AlertDialogFooter>
