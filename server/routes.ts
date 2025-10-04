@@ -296,6 +296,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.put("/api/users/:id/pin", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { currentPin, newPin } = req.body;
+      
+      if (!currentPin || !newPin || newPin.length !== 4) {
+        return res.status(400).json({ message: "Données invalides" });
+      }
+
+      const user = await storage.getUserById(id);
+      if (!user) {
+        return res.status(404).json({ message: "Utilisateur non trouvé" });
+      }
+
+      if (user.pin !== currentPin) {
+        return res.status(401).json({ message: "PIN actuel incorrect" });
+      }
+
+      await storage.updateUser(id, { pin: newPin });
+      res.json({ message: "PIN mis à jour avec succès" });
+    } catch (error) {
+      console.error("Update PIN error:", error);
+      res.status(500).json({ message: "Erreur lors de la mise à jour du PIN" });
+    }
+  });
+
   // ==================== PARAMETRES ====================
   app.get("/api/parametres", async (req, res) => {
     try {

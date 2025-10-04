@@ -1,8 +1,13 @@
-
 import { db } from './db';
 import { users, operations, paiements, parametres } from '@shared/schema';
-import { eq, desc, sql } from 'drizzle-orm';
+import { eq, desc, sql, and } from 'drizzle-orm';
 import crypto from 'crypto';
+
+// Define User type if not already defined elsewhere, assuming it's part of '@shared/schema'
+// If User type is defined in '@shared/schema', you might not need this explicit type definition here.
+// For the purpose of this fix, we assume 'User' is a type that has at least 'email' and 'pin' properties.
+type User = typeof users.$inferSelect;
+
 
 function hashPin(pin: string): string {
   return crypto.createHash('sha256').update(pin).digest('hex');
@@ -28,14 +33,20 @@ export const storage = {
     return user;
   },
 
-  async verifyUserCredentials(email: string, pin: string) {
-    const user = await this.getUserByEmail(email);
-    if (!user) return null;
-    
-    const pinHash = hashPin(pin);
-    if (user.pinHash === pinHash) {
+  async verifyUserCredentials(email: string, pin: string): Promise<User | null> {
+    const user = await db.query.users.findFirst({
+      where: eq(users.email, email),
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    // Compare PINs as strings to ensure exact match
+    if (user.pin === pin) {
       return user;
     }
+
     return null;
   },
 
@@ -92,7 +103,7 @@ export const storage = {
     })
     .from(paiements)
     .where(eq(paiements.operationId, operationId));
-    
+
     return result[0] || { total: 0, count: 0 };
   },
 

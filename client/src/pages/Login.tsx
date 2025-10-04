@@ -26,10 +26,10 @@ export default function Login({ onLoginSuccess }: LoginProps) {
     }
   };
 
-  const handlePinSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handlePinSubmit = async (pinToSubmit?: string) => {
+    const finalPin = pinToSubmit || pin;
 
-    if (pin.length !== 4) {
+    if (finalPin.length !== 4) {
       toast({
         title: "Erreur",
         description: "Le code PIN doit contenir 4 chiffres",
@@ -42,7 +42,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, pin }),
+        body: JSON.stringify({ email, pin: finalPin }),
       });
 
       const data = await response.json();
@@ -77,8 +77,8 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       
       if (newPin.length === 4) {
         setTimeout(() => {
-          handlePinSubmit(new Event('submit') as any);
-        }, 100);
+          handlePinSubmit(newPin);
+        }, 200);
       }
     }
   };

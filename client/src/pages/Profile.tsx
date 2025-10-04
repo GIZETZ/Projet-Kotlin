@@ -73,10 +73,29 @@ export default function Profile() {
       return;
     }
     
-    // TODO: Add API endpoint to change PIN
-    console.log("Changing PIN");
-    setPinData({ currentPin: "", newPin: "", confirmPin: "" });
-    setIsChangingPin(false);
+    try {
+      const response = await fetch(`/api/users/${profileData.id}/pin`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentPin: pinData.currentPin,
+          newPin: pinData.newPin,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("PIN modifié avec succès");
+        setPinData({ currentPin: "", newPin: "", confirmPin: "" });
+        setIsChangingPin(false);
+      } else {
+        alert(data.message || "Erreur lors du changement de PIN");
+      }
+    } catch (error) {
+      console.error("Error changing PIN:", error);
+      alert("Erreur de connexion au serveur");
+    }
   };
 
   const handleLogout = () => {
