@@ -20,11 +20,26 @@ export default function NewOperation() {
     description: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Creating operation:", formData);
-    // todo: remove mock functionality - save to backend
-    setLocation("/");
+    
+    try {
+      const response = await fetch("/api/operations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setLocation("/");
+      } else {
+        const data = await response.json();
+        alert(data.message || "Erreur lors de la création de l'opération");
+      }
+    } catch (error) {
+      console.error("Error creating operation:", error);
+      alert("Erreur de connexion au serveur");
+    }
   };
 
   return (

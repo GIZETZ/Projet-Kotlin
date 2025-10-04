@@ -21,6 +21,7 @@ export interface PaymentFormData {
   id?: number;
   operationId: number;
   payerName: string;
+  userId?: number; // Added userId
   montant: number;
   montantDu?: number;
   datePaiement: string;
@@ -40,6 +41,7 @@ export default function QuickPaymentForm({
   const defaultFormData: PaymentFormData = {
     operationId: operations.length > 0 ? operations[0].id : 0, // Set default to first operation if available
     payerName: "",
+    userId: undefined, // Initialize userId to undefined
     montant: 0,
     datePaiement: new Date().toISOString().split('T')[0],
     methode: "especes",
@@ -53,9 +55,12 @@ export default function QuickPaymentForm({
     return defaultFormData;
   });
 
+  const [users, setUsers] = useState<Array<{ id: number; nom: string }>>([]);
+
   // Effect to update form data when initialData changes or when the dialog opens/closes
   useEffect(() => {
     if (open) {
+      fetchUsers(); // Fetch users when the dialog opens
       if (initialData) {
         setFormData({ ...defaultFormData, ...initialData });
       } else {
@@ -63,6 +68,21 @@ export default function QuickPaymentForm({
       }
     }
   }, [open, initialData, operations]); // Depend on open, initialData, and operations
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("/api/users");
+      if (response.ok) {
+        const data = await response.json();
+        setUsers(data);
+      } else {
+        console.error("Failed to fetch users:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,15 +133,32 @@ export default function QuickPaymentForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="payerName">Nom du payeur *</Label>
-            <Input
-              id="payerName"
-              value={formData.payerName}
-              onChange={(e) => setFormData({ ...formData, payerName: e.target.value })}
-              placeholder="Ex: Jean Mukendi"
+            <Label htmlFor="userId">Payeur *</Label>
+            <Select
+              value={formData.userId?.toString() || ""}
+              onValueChange={(value) => {
+                const userId = parseInt(value);
+                const user = users.find(u => u.id === userId);
+                setFormData({
+                  ...formData,
+                  userId,
+                  payerName: user?.nom || "" // Set payerName based on selected user
+                });
+              }}
               required
-              data-testid="input-payer-name"
-            />
+              disabled={mode === "edit"} // Disable user selection when editing if appropriate
+            >
+              <SelectTrigger id="userId" data-testid="select-user">
+                <SelectValue placeholder="Sélectionner un payeur" />
+              </SelectTrigger>
+              <SelectContent>
+                {users.map((user) => (
+                  <SelectItem key={user.id} value={user.id.toString()}>
+                    {user.nom}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

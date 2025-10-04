@@ -34,9 +34,13 @@ function Router() {
 }
 
 function App() {
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<any>(() => {
+    const saved = localStorage.getItem("currentUser");
+    return saved ? JSON.parse(saved) : null;
+  });
 
   const handleLoginSuccess = (user: any) => {
+    localStorage.setItem("currentUser", JSON.stringify(user));
     setCurrentUser(user);
   };
 

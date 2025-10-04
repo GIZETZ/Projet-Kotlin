@@ -102,6 +102,27 @@ export default function OperationDetails() {
     } else {
       console.log("Creating payment:", data);
       // todo: remove mock functionality - create payment in backend
+      // Replace mock functionality with actual fetch call
+      fetch("/api/paiements", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          operationId: data.operationId,
+          userId: data.userId, // Use userId from form data
+          montant: parseFloat(data.montant.toString()),
+          montantDu: data.montantDu ? parseFloat(data.montantDu.toString()) : undefined,
+          methodePaiement: data.methode === "mobileMoney" ? "Mobile Money" : data.methode === "especes" ? "Espèces" : "Virement",
+          commentaire: data.commentaire,
+          datePaiement: data.datePaiement,
+        }),
+      }).then(response => {
+        if (!response.ok) {
+          console.error("Failed to create payment");
+        }
+        // Potentially refetch operations or payments here
+      }).catch(error => {
+        console.error("Error creating payment:", error);
+      });
     }
     setPaymentFormOpen(false);
     setEditingPayment(null);
@@ -240,6 +261,7 @@ export default function OperationDetails() {
           datePaiement: format(editingPayment.datePaiement, "yyyy-MM-dd"),
           methode: editingPayment.methode.toLowerCase(),
           commentaire: editingPayment.commentaire || "",
+          userId: 1 // Assuming a default or contextually derived userId for editing
         } : undefined}
       />
 

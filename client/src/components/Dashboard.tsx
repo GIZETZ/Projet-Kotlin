@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,45 +14,31 @@ export default function Dashboard() {
   const [exportModalOpen, setExportModalOpen] = useState(false);
   const [selectedOperation, setSelectedOperation] = useState<Operation | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [operations, setOperations] = useState<any[]>([]);
 
-  // todo: remove mock functionality
-  const mockOperations: Operation[] = [
-    {
-      id: 1,
-      nom: "Cotisation Janvier 2025",
-      type: "ADHESION",
-      montantCible: 50000,
-      montantCollecte: 32500,
-      dateDebut: new Date(2025, 0, 1),
-      dateFin: new Date(2025, 0, 31),
-      etat: "EN_COURS",
-      nombrePayeurs: 13,
-    },
-    {
-      id: 2,
-      nom: "Fonds de caisse Q1",
-      type: "FONDS_CAISSE",
-      montantCible: 100000,
-      montantCollecte: 87500,
-      dateDebut: new Date(2025, 0, 1),
-      dateFin: new Date(2025, 2, 31),
-      etat: "EN_COURS",
-      nombrePayeurs: 28,
-    },
-    {
-      id: 3,
-      nom: "Cotisation Décembre 2024",
-      type: "COTISATION_EXCEPTIONNELLE",
-      montantCible: 30000,
-      montantCollecte: 30000,
-      dateDebut: new Date(2024, 11, 1),
-      dateFin: new Date(2024, 11, 31),
-      etat: "CLOTURE",
-      nombrePayeurs: 12,
-    },
-  ];
+  useEffect(() => {
+    fetchOperations();
+  }, []);
 
-  const filteredOperations = mockOperations.filter((op) =>
+  const fetchOperations = async () => {
+    try {
+      const response = await fetch("/api/operations");
+      if (response.ok) {
+        const data = await response.json();
+        setOperations(data.map((op: any) => ({
+          ...op,
+          dateDebut: new Date(op.dateDebut),
+          dateFin: op.dateFin ? new Date(op.dateFin) : null,
+          etat: op.statut === "En cours" ? "EN_COURS" : "TERMINE",
+          nombrePayeurs: op.nombrePaiements || 0,
+        })));
+      }
+    } catch (error) {
+      console.error("Error fetching operations:", error);
+    }
+  };
+
+  const filteredOperations = operations.filter((op) =>
     op.nom.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -178,7 +164,7 @@ export default function Dashboard() {
         open={paymentFormOpen}
         onClose={() => setPaymentFormOpen(false)}
         onSubmit={(data) => console.log("Payment submitted:", data)}
-        operations={mockOperations.filter(op => op.etat === "EN_COURS").map(op => ({ id: op.id, nom: op.nom }))}
+        operations={operations.filter(op => op.etat === "EN_COURS").map(op => ({ id: op.id, nom: op.nom }))}
       />
 
       {selectedOperation && (

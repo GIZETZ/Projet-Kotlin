@@ -22,13 +22,14 @@ import { ArrowLeft, Save, LogOut, Lock, User, Mail, Phone, Building, Shield } fr
 export default function Profile() {
   const [, setLocation] = useLocation();
   
-  // todo: remove mock functionality - fetch real user data
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
   const [profileData, setProfileData] = useState({
-    nom: "Jean Mukendi",
-    email: "jean.mukendi@example.com",
-    telephone: "+243 900 000 000",
-    organisation: "Association Musep50",
-    role: "Administrateur",
+    id: currentUser.id || 1,
+    nom: currentUser.nom || "Jean Mukendi",
+    email: currentUser.email || "jean.mukendi@example.com",
+    telephone: currentUser.telephone || "+243 900 000 000",
+    organisation: currentUser.organisation || "Association Musep50",
+    role: currentUser.role || "Administrateur",
   });
 
   const [pinData, setPinData] = useState({
@@ -40,34 +41,47 @@ export default function Profile() {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isChangingPin, setIsChangingPin] = useState(false);
 
-  const handleProfileUpdate = (e: React.FormEvent) => {
+  const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Updating profile:", profileData);
-    setIsEditingProfile(false);
-    // todo: remove mock functionality - save to backend
+    try {
+      const response = await fetch(`/api/users/${profileData.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nom: profileData.nom,
+          email: profileData.email,
+          telephone: profileData.telephone,
+          organisation: profileData.organisation,
+        }),
+      });
+      if (response.ok) {
+        setIsEditingProfile(false);
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
 
-  const handlePinChange = (e: React.FormEvent) => {
+  const handlePinChange = async (e: React.FormEvent) => {
     e.preventDefault();
     if (pinData.newPin !== pinData.confirmPin) {
-      console.error("Les PINs ne correspondent pas");
+      alert("Les PINs ne correspondent pas");
       return;
     }
     if (pinData.newPin.length !== 4) {
-      console.error("Le PIN doit contenir 4 chiffres");
+      alert("Le PIN doit contenir 4 chiffres");
       return;
     }
+    
+    // TODO: Add API endpoint to change PIN
     console.log("Changing PIN");
     setPinData({ currentPin: "", newPin: "", confirmPin: "" });
     setIsChangingPin(false);
-    // todo: remove mock functionality - save to backend
   };
 
   const handleLogout = () => {
-    console.log("Logging out");
-    // todo: remove mock functionality - implement real logout
-    setLocation("/");
-    window.location.reload();
+    localStorage.removeItem("currentUser");
+    window.location.href = "/login";
   };
 
   const getInitials = (name: string) => {

@@ -1,6 +1,5 @@
-
-import { useState } from "react";
-import { Link } from "wouter";
+import { useState, useEffect } from "react";
+import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,21 +9,73 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function AdhesionSettings() {
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
   const [montantAdhesion, setMontantAdhesion] = useState(2500);
   const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    fetchMontantAdhesion();
+  }, []);
+
+  const fetchMontantAdhesion = async () => {
+    try {
+      const response = await fetch("/api/parametres/montant_adhesion");
+      if (response.ok) {
+        const data = await response.json();
+        setMontantAdhesion(parseFloat(data.valeur));
+      } else {
+        // Handle error, e.g., show a toast
+        toast({
+          title: "Erreur",
+          description: "Impossible de charger le montant d'adhésion.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching montant adhesion:", error);
+      toast({
+        title: "Erreur de connexion",
+        description: "Impossible de se connecter au serveur pour charger le montant d'adhésion.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
 
-    // todo: remove mock functionality - save to backend
-    setTimeout(() => {
-      toast({
-        title: "Paramètres enregistrés",
-        description: "Le montant d'adhésion a été mis à jour avec succès.",
+    try {
+      const response = await fetch("/api/parametres/montant_adhesion", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ valeur: montantAdhesion.toString() }),
       });
+
+      if (response.ok) {
+        toast({
+          title: "Paramètres enregistrés",
+          description: "Le montant d'adhésion a été mis à jour avec succès.",
+        });
+        setLocation("/");
+      } else {
+        const errorData = await response.json();
+        toast({
+          title: "Erreur lors de la sauvegarde",
+          description: errorData.message || "Une erreur est survenue. Veuillez réessayer.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error saving setting:", error);
+      toast({
+        title: "Erreur de connexion",
+        description: "Impossible de se connecter au serveur pour sauvegarder les paramètres.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSaving(false);
-    }, 500);
+    }
   };
 
   return (
