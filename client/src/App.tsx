@@ -8,12 +8,14 @@ import PINEntry from "@/components/PINEntry";
 import OperationDetails from "@/pages/OperationDetails";
 import EditOperation from "@/pages/EditOperation";
 import NewOperation from "@/pages/NewOperation";
+import Profile from "@/pages/Profile";
 import { useState } from "react";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Dashboard} />
+      <Route path="/profile" component={Profile} />
       <Route path="/operation/new" component={NewOperation} />
       <Route path="/operation/:id" component={OperationDetails} />
       <Route path="/operation/:id/edit" component={EditOperation} />

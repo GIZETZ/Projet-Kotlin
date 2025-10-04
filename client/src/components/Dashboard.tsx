@@ -6,7 +6,7 @@ import OperationCard, { Operation } from "./OperationCard";
 import QuickPaymentForm from "./QuickPaymentForm";
 import ExportModal from "./ExportModal";
 import BottomNav from "./BottomNav";
-import { Plus, Search, Menu, Bell } from "lucide-react";
+import { Plus, Search, Menu, Bell, User } from "lucide-react";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -88,6 +88,11 @@ export default function Dashboard() {
               <Button size="icon" variant="ghost" data-testid="button-notifications">
                 <Bell className="w-5 h-5" />
               </Button>
+              <Link href="/profile">
+                <Button size="icon" variant="ghost" data-testid="button-profile">
+                  <User className="w-5 h-5" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
