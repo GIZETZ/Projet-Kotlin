@@ -17,9 +17,9 @@ export default function StatCard({ label, value, currency = true, variant = "def
     : value.toLocaleString("fr-FR");
 
   return (
-    <div className="space-y-1">
-      <p className="text-sm text-muted-foreground">{label}</p>
-      <p className={`text-2xl font-bold tabular-nums ${variantClasses[variant]}`} data-testid={`stat-${label.toLowerCase().replace(/\s+/g, '-')}`}>
+    <div className="space-y-2">
+      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{label}</p>
+      <p className={`text-xl font-bold tabular-nums leading-tight ${variantClasses[variant]}`} data-testid={`stat-${label.toLowerCase().replace(/\s+/g, '-')}`}>
         {formattedValue}
       </p>
     </div>

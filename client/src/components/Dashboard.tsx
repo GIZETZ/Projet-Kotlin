@@ -96,7 +96,7 @@ export default function Dashboard() {
       <main className="container mx-auto px-4 py-6 max-w-7xl">
         <div className="space-y-6">
           {/* Search and Actions */}
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
@@ -108,7 +108,7 @@ export default function Dashboard() {
                 data-testid="input-search"
               />
             </div>
-            <Button onClick={() => console.log("New operation")} className="hidden md:inline-flex" data-testid="button-new-operation">
+            <Button onClick={() => console.log("New operation")} className="hidden md:inline-flex whitespace-nowrap" data-testid="button-new-operation">
               <Plus className="w-4 h-4 mr-2" />
               Nouvelle opération
             </Button>
@@ -116,8 +116,12 @@ export default function Dashboard() {
 
           {/* Operations Grid */}
           {filteredOperations.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">Aucune opération trouvée</p>
+            <div className="text-center py-16 space-y-3">
+              <div className="mx-auto w-16 h-16 rounded-full bg-muted flex items-center justify-center">
+                <Search className="w-8 h-8 text-muted-foreground" />
+              </div>
+              <p className="text-lg font-medium text-foreground">Aucune opération trouvée</p>
+              <p className="text-sm text-muted-foreground">Essayez de modifier votre recherche</p>
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

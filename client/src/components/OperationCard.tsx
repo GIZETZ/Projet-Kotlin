@@ -29,13 +29,22 @@ interface OperationCardProps {
 export default function OperationCard({ operation, onViewDetails, onExport, onEdit }: OperationCardProps) {
   const montantRestant = operation.montantCible - operation.montantCollecte;
   const isActive = operation.etat === "EN_COURS";
+  const percentage = (operation.montantCollecte / operation.montantCible) * 100;
+  
+  // Déterminer la variante de la barre de progression
+  let progressVariant: "primary" | "success" | "warning" = "primary";
+  if (percentage >= 100) {
+    progressVariant = "success";
+  } else if (percentage >= 80) {
+    progressVariant = "warning";
+  }
 
   return (
     <Card className="hover-elevate active-elevate-2" data-testid={`card-operation-${operation.id}`}>
-      <CardHeader className="space-y-3">
-        <div className="flex items-start justify-between gap-2">
-          <div className="space-y-2 flex-1">
-            <h3 className="text-xl font-semibold" data-testid="text-operation-name">{operation.nom}</h3>
+      <CardHeader className="space-y-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-2 flex-1 min-w-0">
+            <h3 className="text-xl font-semibold leading-tight" data-testid="text-operation-name">{operation.nom}</h3>
             <div className="flex items-center gap-2 flex-wrap">
               <OperationBadge type={operation.type} />
               {!isActive && (
@@ -47,7 +56,7 @@ export default function OperationCard({ operation, onViewDetails, onExport, onEd
             </div>
           </div>
           {onEdit && isActive && (
-            <Button size="icon" variant="ghost" onClick={onEdit} data-testid="button-edit-operation">
+            <Button size="icon" variant="ghost" onClick={onEdit} className="shrink-0" data-testid="button-edit-operation">
               <Edit className="w-4 h-4" />
             </Button>
           )}
@@ -58,20 +67,25 @@ export default function OperationCard({ operation, onViewDetails, onExport, onEd
       </CardHeader>
 
       <CardContent className="space-y-6">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-6">
           <StatCard label="Ciblé" value={operation.montantCible} />
           <StatCard label="Collecté" value={operation.montantCollecte} variant="success" />
           <StatCard label="Restant" value={montantRestant} variant={montantRestant > 0 ? "warning" : "success"} />
         </div>
 
-        <ProgressBar current={operation.montantCollecte} target={operation.montantCible} />
+        <ProgressBar 
+          current={operation.montantCollecte} 
+          target={operation.montantCible}
+          variant={progressVariant}
+        />
 
-        <div className="text-sm text-muted-foreground">
-          <span className="font-medium text-foreground">{operation.nombrePayeurs}</span> payeur{operation.nombrePayeurs > 1 ? "s" : ""}
+        <div className="flex items-center gap-2 text-base">
+          <span className="font-semibold text-foreground">{operation.nombrePayeurs}</span>
+          <span className="text-muted-foreground">payeur{operation.nombrePayeurs > 1 ? "s" : ""}</span>
         </div>
       </CardContent>
 
-      <CardFooter className="flex gap-2 flex-wrap">
+      <CardFooter className="flex gap-3 flex-wrap">
         <Button onClick={onViewDetails} className="flex-1" data-testid="button-view-details">
           <FileText className="w-4 h-4 mr-2" />
           Détails
