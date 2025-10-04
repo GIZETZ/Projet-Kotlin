@@ -1,38 +1,44 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
 
-// modify the interface with any CRUD methods
-// you might need
+import { db } from './db';
+import { users } from '@shared/schema';
+import { eq } from 'drizzle-orm';
+import crypto from 'crypto';
 
-export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+function hashPin(pin: string): string {
+  return crypto.createHash('sha256').update(pin).digest('hex');
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
-  }
-
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+export const storage = {
+  async createUser(data: { nom: string; email: string; telephone?: string; organisation?: string; role?: string; pin: string }) {
+    const pinHash = hashPin(data.pin);
+    const [user] = await db.insert(users).values({
+      nom: data.nom,
+      email: data.email,
+      telephone: data.telephone,
+      organisation: data.organisation,
+      role: data.role || 'Membre',
+      pinHash,
+    }).returning();
     return user;
-  }
-}
+  },
 
-export const storage = new MemStorage();
+  async getUserByEmail(email: string) {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  },
+
+  async verifyUserCredentials(email: string, pin: string) {
+    const user = await this.getUserByEmail(email);
+    if (!user) return null;
+    
+    const pinHash = hashPin(pin);
+    if (user.pinHash === pinHash) {
+      return user;
+    }
+    return null;
+  },
+
+  async getAllUsers() {
+    return await db.select().from(users);
+  }
+};
