@@ -9,6 +9,8 @@ import OperationDetails from "@/pages/OperationDetails";
 import EditOperation from "@/pages/EditOperation";
 import NewOperation from "@/pages/NewOperation";
 import Profile from "@/pages/Profile";
+import AdhesionSettings from "@/pages/AdhesionSettings";
+import NotFound from "@/pages/not-found";
 import { useState } from "react";
 
 function Router() {
@@ -19,7 +21,8 @@ function Router() {
       <Route path="/operation/new" component={NewOperation} />
       <Route path="/operation/:id" component={OperationDetails} />
       <Route path="/operation/:id/edit" component={EditOperation} />
-      <Route component={Dashboard} />
+      <Route path="/adhesion-settings" component={AdhesionSettings} />
+      <Route component={NotFound} />
     </Switch>
   );
 }

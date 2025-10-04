@@ -74,26 +74,23 @@ export default function Dashboard() {
       {/* Header */}
       <header className="sticky top-0 z-40 bg-card border-b border-border">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Button size="icon" variant="ghost" className="md:hidden" data-testid="button-menu">
-                <Menu className="w-5 h-5" />
+          <div className="flex items-center gap-3">
+            <Button size="icon" variant="ghost" className="md:hidden" data-testid="button-menu">
+              <Menu className="w-5 h-5" />
+            </Button>
+            <h1 className="text-2xl font-bold">Tableau de bord</h1>
+            <div className="flex-1" />
+            <Link href="/adhesion-settings">
+              <Button variant="outline" size="sm" className="hidden md:flex" data-testid="button-adhesion-settings">
+                Paramètres d'adhésion
               </Button>
-              <div>
-                <h1 className="text-2xl font-bold text-primary">Musep50</h1>
-                <p className="text-sm text-muted-foreground hidden sm:block">Trésorerie Express</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button size="icon" variant="ghost" data-testid="button-notifications">
-                <Bell className="w-5 h-5" />
-              </Button>
-              <Link href="/profile">
-                <Button size="icon" variant="ghost" data-testid="button-profile">
-                  <User className="w-5 h-5" />
-                </Button>
-              </Link>
-            </div>
+            </Link>
+            <Button size="icon" variant="ghost" data-testid="button-notifications">
+              <Bell className="w-5 h-5" />
+            </Button>
+            <Button size="icon" variant="ghost" data-testid="button-profile">
+              <User className="w-5 h-5" />
+            </Button>
           </div>
         </div>
       </header>

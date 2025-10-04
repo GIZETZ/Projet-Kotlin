@@ -51,6 +51,7 @@ export default function OperationDetails() {
       id: 1,
       payerName: "Jean Mukendi",
       montant: 2500,
+      montantDu: 2500,
       datePaiement: new Date(2025, 0, 15),
       methode: "Mobile Money",
       commentaire: "Orange Money",
@@ -59,16 +60,18 @@ export default function OperationDetails() {
       id: 2,
       payerName: "Marie Kabongo",
       montant: 2500,
+      montantDu: 2500,
       datePaiement: new Date(2025, 0, 14),
       methode: "Espèces",
     },
     {
       id: 3,
       payerName: "Paul Tshimanga",
-      montant: 2500,
+      montant: 1500,
+      montantDu: 2500,
       datePaiement: new Date(2025, 0, 13),
       methode: "Mobile Money",
-      commentaire: "Vodacom M-Pesa",
+      commentaire: "Vodacom M-Pesa - Paiement partiel",
     },
   ];
 

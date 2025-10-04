@@ -22,6 +22,7 @@ export interface PaymentFormData {
   operationId: number;
   payerName: string;
   montant: number;
+  montantDu?: number;
   datePaiement: string;
   methode: string;
   commentaire: string;
@@ -123,19 +124,35 @@ export default function QuickPaymentForm({
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="montant">Montant (XAF) *</Label>
-            <Input
-              id="montant"
-              type="number"
-              value={formData.montant || ""}
-              onChange={(e) => setFormData({ ...formData, montant: parseFloat(e.target.value) || 0 })}
-              placeholder="2500"
-              required
-              min="0"
-              step="100"
-              data-testid="input-amount"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="montantDu">Montant dû (XAF)</Label>
+              <Input
+                id="montantDu"
+                type="number"
+                value={formData.montantDu || ""}
+                onChange={(e) => setFormData({ ...formData, montantDu: parseFloat(e.target.value) || undefined })}
+                placeholder="2500"
+                min="0"
+                step="100"
+                data-testid="input-amount-due"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="montant">Montant payé (XAF) *</Label>
+              <Input
+                id="montant"
+                type="number"
+                value={formData.montant || ""}
+                onChange={(e) => setFormData({ ...formData, montant: parseFloat(e.target.value) || 0 })}
+                placeholder="2500"
+                required
+                min="0"
+                step="100"
+                data-testid="input-amount"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

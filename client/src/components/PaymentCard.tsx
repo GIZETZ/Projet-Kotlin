@@ -9,6 +9,7 @@ export interface Payment {
   id: number;
   payerName: string;
   montant: number;
+  montantDu?: number; // Amount due
   datePaiement: Date;
   methode: string;
   commentaire?: string;
@@ -50,10 +51,22 @@ export default function PaymentCard({ payment, onClick, onDelete }: PaymentCardP
             <p className="text-sm text-muted-foreground line-clamp-1">{payment.commentaire}</p>
           )}
         </div>
-        <div className="text-right">
+        <div className="text-right space-y-1">
           <p className="text-lg font-bold tabular-nums text-chart-2" data-testid="text-payment-amount">
             {new Intl.NumberFormat("fr-FR", { style: "currency", currency: "XAF" }).format(payment.montant)}
           </p>
+          {payment.montantDu && (
+            <div className="text-sm">
+              <p className="text-muted-foreground">
+                Dû: {new Intl.NumberFormat("fr-FR", { style: "currency", currency: "XAF" }).format(payment.montantDu)}
+              </p>
+              {payment.montant >= payment.montantDu ? (
+                <Badge variant="default" className="bg-green-500 hover:bg-green-600">Complet</Badge>
+              ) : (
+                <Badge variant="destructive">Partiel</Badge>
+              )}
+            </div>
+          )}
         </div>
       </div>
       {/* Actions */}
