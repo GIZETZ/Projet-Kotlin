@@ -12,9 +12,13 @@ interface QuickPaymentFormProps {
   onClose: () => void;
   onSubmit: (payment: PaymentFormData) => void;
   operations?: { id: number; nom: string }[];
+  initialData?: Partial<PaymentFormData>;
+  mode?: "create" | "edit";
+  onDelete?: () => void;
 }
 
 export interface PaymentFormData {
+  id?: number;
   operationId: number;
   payerName: string;
   montant: number;
@@ -23,35 +27,52 @@ export interface PaymentFormData {
   commentaire: string;
 }
 
-export default function QuickPaymentForm({ open, onClose, onSubmit, operations = [] }: QuickPaymentFormProps) {
-  const [formData, setFormData] = useState<PaymentFormData>({
+export default function QuickPaymentForm({ 
+  open, 
+  onClose, 
+  onSubmit, 
+  operations = [], 
+  initialData,
+  mode = "create",
+  onDelete
+}: QuickPaymentFormProps) {
+  const defaultFormData: PaymentFormData = {
     operationId: 0,
     payerName: "",
     montant: 0,
     datePaiement: new Date().toISOString().split('T')[0],
     methode: "especes",
     commentaire: "",
+  };
+
+  const [formData, setFormData] = useState<PaymentFormData>({
+    ...defaultFormData,
+    ...initialData,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
-    setFormData({
-      operationId: 0,
-      payerName: "",
-      montant: 0,
-      datePaiement: new Date().toISOString().split('T')[0],
-      methode: "especes",
-      commentaire: "",
-    });
+    if (mode === "create") {
+      setFormData(defaultFormData);
+    }
     onClose();
   };
+
+  // Update form data when initialData changes
+  useState(() => {
+    if (initialData) {
+      setFormData({ ...defaultFormData, ...initialData });
+    }
+  });
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Enregistrer un paiement</DialogTitle>
+          <DialogTitle className="text-2xl">
+            {mode === "edit" ? "Modifier le paiement" : "Enregistrer un paiement"}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
@@ -144,13 +165,20 @@ export default function QuickPaymentForm({ open, onClose, onSubmit, operations =
             />
           </div>
 
-          <div className="flex gap-3 pt-4">
-            <Button type="button" variant="outline" onClick={onClose} className="flex-1" data-testid="button-cancel">
-              Annuler
-            </Button>
-            <Button type="submit" className="flex-1" data-testid="button-save-payment">
-              Enregistrer
-            </Button>
+          <div className="flex flex-col gap-3 pt-4">
+            <div className="flex gap-3">
+              <Button type="button" variant="outline" onClick={onClose} className="flex-1" data-testid="button-cancel">
+                Annuler
+              </Button>
+              <Button type="submit" className="flex-1" data-testid="button-save-payment">
+                {mode === "edit" ? "Modifier" : "Enregistrer"}
+              </Button>
+            </div>
+            {mode === "edit" && onDelete && (
+              <Button type="button" variant="destructive" onClick={onDelete} className="w-full" data-testid="button-delete-payment">
+                Supprimer le paiement
+              </Button>
+            )}
           </div>
         </form>
       </DialogContent>

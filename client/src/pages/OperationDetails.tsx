@@ -7,8 +7,18 @@ import PaymentCard, { Payment } from "@/components/PaymentCard";
 import OperationBadge from "@/components/OperationBadge";
 import StatCard from "@/components/StatCard";
 import ProgressBar from "@/components/ProgressBar";
-import QuickPaymentForm from "@/components/QuickPaymentForm";
+import QuickPaymentForm, { PaymentFormData } from "@/components/QuickPaymentForm";
 import ExportModal from "@/components/ExportModal";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { ArrowLeft, Plus, Search, Share2, Edit, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -18,6 +28,8 @@ export default function OperationDetails() {
   const [searchQuery, setSearchQuery] = useState("");
   const [paymentFormOpen, setPaymentFormOpen] = useState(false);
   const [exportModalOpen, setExportModalOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   // todo: remove mock functionality - fetch real data
   const mockOperation = {
@@ -67,6 +79,40 @@ export default function OperationDetails() {
   let progressVariant: "primary" | "success" | "warning" = "primary";
   if (percentage >= 100) progressVariant = "success";
   else if (percentage >= 80) progressVariant = "warning";
+
+  const handlePaymentClick = (payment: Payment) => {
+    setSelectedPayment(payment);
+    setPaymentFormOpen(true);
+  };
+
+  const handleAddPayment = () => {
+    setSelectedPayment(null);
+    setPaymentFormOpen(true);
+  };
+
+  const handleSavePayment = (data: PaymentFormData) => {
+    if (selectedPayment) {
+      console.log("Updating payment:", selectedPayment.id, data);
+      // todo: remove mock functionality - update payment in backend
+    } else {
+      console.log("Creating payment:", data);
+      // todo: remove mock functionality - create payment in backend
+    }
+  };
+
+  const handleDeletePayment = () => {
+    if (selectedPayment) {
+      setPaymentFormOpen(false);
+      setDeleteDialogOpen(true);
+    }
+  };
+
+  const confirmDeletePayment = () => {
+    console.log("Deleting payment:", selectedPayment?.id);
+    // todo: remove mock functionality - delete payment from backend
+    setDeleteDialogOpen(false);
+    setSelectedPayment(null);
+  };
 
   return (
     <div className="min-h-screen bg-background pb-6">
@@ -147,7 +193,7 @@ export default function OperationDetails() {
                   data-testid="input-search-payments"
                 />
               </div>
-              <Button onClick={() => setPaymentFormOpen(true)} data-testid="button-add-payment">
+              <Button onClick={handleAddPayment} data-testid="button-add-payment">
                 <Plus className="w-4 h-4 mr-2" />
                 Ajouter
               </Button>
@@ -164,7 +210,7 @@ export default function OperationDetails() {
                   <PaymentCard
                     key={payment.id}
                     payment={payment}
-                    onClick={() => console.log("Payment clicked:", payment.id)}
+                    onClick={() => handlePaymentClick(payment)}
                   />
                 ))}
               </div>
@@ -176,9 +222,23 @@ export default function OperationDetails() {
       {/* Modals */}
       <QuickPaymentForm
         open={paymentFormOpen}
-        onClose={() => setPaymentFormOpen(false)}
-        onSubmit={(data) => console.log("Payment submitted:", data)}
+        onClose={() => {
+          setPaymentFormOpen(false);
+          setSelectedPayment(null);
+        }}
+        onSubmit={handleSavePayment}
         operations={[{ id: mockOperation.id, nom: mockOperation.nom }]}
+        mode={selectedPayment ? "edit" : "create"}
+        initialData={selectedPayment ? {
+          id: selectedPayment.id,
+          operationId: mockOperation.id,
+          payerName: selectedPayment.payerName,
+          montant: selectedPayment.montant,
+          datePaiement: format(selectedPayment.datePaiement, "yyyy-MM-dd"),
+          methode: selectedPayment.methode.toLowerCase(),
+          commentaire: selectedPayment.commentaire || "",
+        } : undefined}
+        onDelete={selectedPayment ? handleDeletePayment : undefined}
       />
 
       <ExportModal
@@ -187,6 +247,24 @@ export default function OperationDetails() {
         operationName={mockOperation.nom}
         onExport={(format) => console.log("Export:", format)}
       />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
+            <AlertDialogDescription>
+              Êtes-vous sûr de vouloir supprimer ce paiement de {selectedPayment?.payerName} ? Cette action est irréversible.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel data-testid="button-cancel-delete">Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeletePayment} data-testid="button-confirm-delete">
+              Supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
