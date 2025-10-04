@@ -17,11 +17,13 @@ export default function StatCard({ label, value, currency = true, variant = "def
     : value.toLocaleString("fr-FR");
 
   return (
-    <div className="space-y-2">
-      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{label}</p>
-      <p className={`text-xl font-bold tabular-nums leading-tight ${variantClasses[variant]}`} data-testid={`stat-${label.toLowerCase().replace(/\s+/g, '-')}`}>
-        {formattedValue}
-      </p>
+    <div className="flex flex-col gap-1.5 min-w-0">
+      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide truncate">{label}</p>
+      <div className="overflow-hidden">
+        <p className={`text-base sm:text-lg font-bold tabular-nums leading-tight break-words ${variantClasses[variant]}`} data-testid={`stat-${label.toLowerCase().replace(/\s+/g, '-')}`}>
+          {formattedValue}
+        </p>
+      </div>
     </div>
   );
 }

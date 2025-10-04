@@ -5,12 +5,18 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Dashboard from "@/components/Dashboard";
 import PINEntry from "@/components/PINEntry";
+import OperationDetails from "@/pages/OperationDetails";
+import EditOperation from "@/pages/EditOperation";
+import NewOperation from "@/pages/NewOperation";
 import { useState } from "react";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Dashboard} />
+      <Route path="/operation/new" component={NewOperation} />
+      <Route path="/operation/:id" component={OperationDetails} />
+      <Route path="/operation/:id/edit" component={EditOperation} />
       <Route component={Dashboard} />
     </Switch>
   );

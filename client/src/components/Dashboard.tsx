@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import OperationCard, { Operation } from "./OperationCard";
@@ -108,10 +109,12 @@ export default function Dashboard() {
                 data-testid="input-search"
               />
             </div>
-            <Button onClick={() => console.log("New operation")} className="hidden md:inline-flex whitespace-nowrap" data-testid="button-new-operation">
-              <Plus className="w-4 h-4 mr-2" />
-              Nouvelle opération
-            </Button>
+            <Link href="/operation/new">
+              <Button className="hidden md:inline-flex whitespace-nowrap" data-testid="button-new-operation">
+                <Plus className="w-4 h-4 mr-2" />
+                Nouvelle opération
+              </Button>
+            </Link>
           </div>
 
           {/* Operations Grid */}
@@ -126,13 +129,14 @@ export default function Dashboard() {
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {filteredOperations.map((operation) => (
-                <OperationCard
-                  key={operation.id}
-                  operation={operation}
-                  onViewDetails={() => console.log("View details:", operation.id)}
-                  onExport={() => handleExport(operation)}
-                  onEdit={() => console.log("Edit:", operation.id)}
-                />
+                <Link key={operation.id} href={`/operation/${operation.id}`}>
+                  <OperationCard
+                    operation={operation}
+                    onViewDetails={() => {}}
+                    onExport={() => handleExport(operation)}
+                    onEdit={() => {}}
+                  />
+                </Link>
               ))}
             </div>
           )}

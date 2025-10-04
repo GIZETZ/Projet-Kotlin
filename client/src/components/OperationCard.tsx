@@ -66,8 +66,8 @@ export default function OperationCard({ operation, onViewDetails, onExport, onEd
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-6">
-        <div className="grid grid-cols-3 gap-6">
+      <CardContent className="space-y-5">
+        <div className="grid grid-cols-3 gap-3 sm:gap-4">
           <StatCard label="Ciblé" value={operation.montantCible} />
           <StatCard label="Collecté" value={operation.montantCollecte} variant="success" />
           <StatCard label="Restant" value={montantRestant} variant={montantRestant > 0 ? "warning" : "success"} />
@@ -79,7 +79,7 @@ export default function OperationCard({ operation, onViewDetails, onExport, onEd
           variant={progressVariant}
         />
 
-        <div className="flex items-center gap-2 text-base">
+        <div className="flex items-center gap-2 text-sm sm:text-base">
           <span className="font-semibold text-foreground">{operation.nombrePayeurs}</span>
           <span className="text-muted-foreground">payeur{operation.nombrePayeurs > 1 ? "s" : ""}</span>
         </div>
