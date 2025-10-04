@@ -1,29 +1,19 @@
 import { db } from './db';
 import { users, operations, paiements, parametres } from '@shared/schema';
 import { eq, desc, sql, and } from 'drizzle-orm';
-import crypto from 'crypto';
 
-// Define User type if not already defined elsewhere, assuming it's part of '@shared/schema'
-// If User type is defined in '@shared/schema', you might not need this explicit type definition here.
-// For the purpose of this fix, we assume 'User' is a type that has at least 'email' and 'pin' properties.
 type User = typeof users.$inferSelect;
-
-
-function hashPin(pin: string): string {
-  return crypto.createHash('sha256').update(pin).digest('hex');
-}
 
 export const storage = {
   // Users
   async createUser(data: { nom: string; email: string; telephone?: string; organisation?: string; role?: string; pin: string }) {
-    const pinHash = hashPin(data.pin);
     const [user] = await db.insert(users).values({
       nom: data.nom,
       email: data.email,
       telephone: data.telephone,
       organisation: data.organisation,
       role: data.role || 'Membre',
-      pinHash,
+      pin: data.pin,
     }).returning();
     return user;
   },

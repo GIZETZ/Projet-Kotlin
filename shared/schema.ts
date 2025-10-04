@@ -11,7 +11,7 @@ export const users = sqliteTable("users", {
   telephone: text("telephone"),
   organisation: text("organisation"),
   role: text("role").notNull().default("Membre"),
-  pinHash: text("pin_hash").notNull(),
+  pin: text("pin").notNull(),
   createdAt: integer("created_at", { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
 });
 
