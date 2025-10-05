@@ -1,0 +1,78 @@
+> Task :app:compileDebugKotlin FAILED
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/DashboardActivity.kt:8:26 Unresolved reference 'viewModels'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/DashboardActivity.kt:20:50 Unresolved reference 'viewModels'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:8:26 Unresolved reference 'viewModels'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:18:45 Unresolved reference 'viewModels'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:65:29 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:66:13 Argument type mismatch: actual type is 'kotlin.Pair<A, B>', but 'T' was expected.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:66:13 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:66:21 Unresolved reference 'btn0'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:66:26 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:67:13 Argument type mismatch: actual type is 'kotlin.Pair<A, B>', but 'T' was expected.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:67:21 Unresolved reference 'btn1'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:67:26 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:68:13 Argument type mismatch: actual type is 'kotlin.Pair<A, B>', but 'T' was expected.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:68:21 Unresolved reference 'btn2'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:68:26 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:69:13 Argument type mismatch: actual type is 'kotlin.Pair<A, B>', but 'T' was expected.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:69:21 Unresolved reference 'btn3'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:69:26 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:70:13 Argument type mismatch: actual type is 'kotlin.Pair<A, B>', but 'T' was expected.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:70:21 Unresolved reference 'btn4'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:70:26 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:71:13 Argument type mismatch: actual type is 'kotlin.Pair<A, B>', but 'T' was expected.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:71:21 Unresolved reference 'btn5'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:71:26 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:72:13 Argument type mismatch: actual type is 'kotlin.Pair<A, B>', but 'T' was expected.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:72:21 Unresolved reference 'btn6'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:72:26 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:73:13 Argument type mismatch: actual type is 'kotlin.Pair<A, B>', but 'T' was expected.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:73:21 Unresolved reference 'btn7'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:73:26 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:74:13 Argument type mismatch: actual type is 'kotlin.Pair<A, B>', but 'T' was expected.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:74:21 Unresolved reference 'btn8'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:74:26 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:75:13 Argument type mismatch: actual type is 'kotlin.Pair<A, B>', but 'T' was expected.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:75:21 Unresolved reference 'btn9'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:75:26 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:78:23 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:78:23 Not enough information to infer type argument for 'T'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:78:33 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:78:33 Function 'component1()' is ambiguous for this expression: 
+fun <T> Array<out T>.component1(): T
+fun BooleanArray.component1(): Boolean
+fun ByteArray.component1(): Byte
+fun CharArray.component1(): Char
+fun DoubleArray.component1(): Double
+fun FloatArray.component1(): Float
+fun IntArray.component1(): Int
+fun LongArray.component1(): Long
+fun ShortArray.component1(): Short
+fun <T> List<T>.component1(): T
+fun <K, V> Map.Entry<K, V>.component1(): K
+fun UByteArray.component1(): UByte
+fun UIntArray.component1(): UInt
+fun ULongArray.component1(): ULong
+fun UShortArray.component1(): UShort.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:78:33 Function 'component2()' is ambiguous for this expression: 
+fun <T> Array<out T>.component2(): T
+fun BooleanArray.component2(): Boolean
+fun ByteArray.component2(): Byte
+fun CharArray.component2(): Char
+fun DoubleArray.component2(): Double
+fun FloatArray.component2(): Float
+fun IntArray.component2(): Int
+fun LongArray.component2(): Long
+fun ShortArray.component2(): Short
+fun <T> List<T>.component2(): T
+fun <K, V> Map.Entry<K, V>.component2(): V
+fun UByteArray.component2(): UByte
+fun UIntArray.component2(): UInt
+fun ULongArray.component2(): ULong
+fun UShortArray.component2(): UShort.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:79:20 Unresolved reference 'setOnClickListener'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:91:17 Unresolved reference 'btnDelete'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:98:17 Unresolved reference 'btnBack'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/RegisterActivity.kt:5:26 Unresolved reference 'viewModels'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/RegisterActivity.kt:13:45 Unresolved reference 'viewModels'.
+
