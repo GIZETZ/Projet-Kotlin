@@ -2,4 +2,16 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Primary colors -->
+    <color name="primary">#4169E1</color>
+    <color name="primary_dark">#3154B8</color>
+    <color name="primary_light">#6B8FFF</color>
+    
+    <!-- Background -->
+    <color name="background">#F5F5F7</color>
+    <color name="surface">#FFFFFF</color>
+    
+    <!-- Material Design colors -->
+    <color name="md_theme_light_outline">#E0E0E0</color>
 </resources>
