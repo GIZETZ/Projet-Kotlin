@@ -49,7 +49,7 @@ class AddPaymentDialog(
         payerViewModel.getAllPayers().observe(viewLifecycleOwner) { payers ->
             val payerNames = payers.map { it.nom }
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, payerNames)
-            binding.payerNameInput.setAdapter(adapter)
+            binding.payerInput.setAdapter(adapter)
         }
     }
 
@@ -72,9 +72,9 @@ class AddPaymentDialog(
     }
 
     private fun validateInputs(): Boolean {
-        val payerName = binding.payerNameInput.text.toString()
+        val payerName = binding.payerInput.text.toString()
         if (payerName.isBlank()) {
-            binding.payerNameInputLayout.error = "Le nom du payeur est requis"
+            binding.payerInputLayout.error = "Le nom du payeur est requis"
             return false
         }
 
@@ -94,12 +94,12 @@ class AddPaymentDialog(
     }
 
     private fun savePaiement() {
-        val payerName = binding.payerNameInput.text.toString()
+        val payerName = binding.payerInput.text.toString()
         val montant = binding.montantInput.text.toString().toDouble()
         val method = binding.methodInput.text.toString()
         val commentaire = binding.commentaireInput.text?.toString()
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             // First, check if payer exists or create new one
             val payers = payerViewModel.getAllPayersSync()
             var payerId = payers.find { it.nom.equals(payerName, ignoreCase = true) }?.id
