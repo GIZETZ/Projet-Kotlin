@@ -25,24 +25,24 @@ class RegisterActivity : AppCompatActivity() {
     private fun setupUI() {
         binding.registerButton.setOnClickListener {
             val nom = binding.nomInput.text.toString()
-            val prenom = binding.prenomInput.text.toString()
-            val username = binding.usernameInput.text.toString()
-            val telephone = binding.telephoneInput.text.toString()
+            val email = binding.emailInput.text.toString()
+            val telephone = binding.telephoneInput.text?.toString()
+            val organisation = binding.organisationInput.text?.toString()
             val pin = binding.pinInput.text.toString()
             
-            if (validateInputs(nom, prenom, username, telephone, pin)) {
-                viewModel.register(nom, prenom, username, telephone, pin)
+            if (validateInputs(nom, email, telephone, organisation, pin)) {
+                viewModel.register(nom, email, telephone, organisation, pin)
             }
         }
         
-        binding.loginLink.setOnClickListener {
+        binding.loginButton.setOnClickListener {
             finish()
         }
     }
     
-    private fun validateInputs(nom: String, prenom: String, username: String, telephone: String, pin: String): Boolean {
-        if (nom.isBlank() || prenom.isBlank() || username.isBlank() || telephone.isBlank() || pin.isBlank()) {
-            Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show()
+    private fun validateInputs(nom: String, email: String, telephone: String?, organisation: String?, pin: String): Boolean {
+        if (nom.isBlank() || email.isBlank() || pin.isBlank()) {
+            Toast.makeText(this, "Veuillez remplir tous les champs obligatoires", Toast.LENGTH_SHORT).show()
             return false
         }
         

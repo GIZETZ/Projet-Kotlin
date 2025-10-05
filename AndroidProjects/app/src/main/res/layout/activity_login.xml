@@ -114,7 +114,9 @@
                 </LinearLayout>
 
                 <!-- PIN Keypad -->
-                <include layout="@layout/pin_keypad" />
+                <include 
+                    android:id="@+id/pinKeypad"
+                    layout="@layout/pin_keypad" />
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton

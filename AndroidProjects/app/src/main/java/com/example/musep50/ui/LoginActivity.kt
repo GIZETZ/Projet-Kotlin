@@ -30,16 +30,16 @@ class LoginActivity : AppCompatActivity() {
     
     private fun setupPinStep() {
         val pinButtons = listOf(
-            binding.pinLayout.btn0,
-            binding.pinLayout.btn1,
-            binding.pinLayout.btn2,
-            binding.pinLayout.btn3,
-            binding.pinLayout.btn4,
-            binding.pinLayout.btn5,
-            binding.pinLayout.btn6,
-            binding.pinLayout.btn7,
-            binding.pinLayout.btn8,
-            binding.pinLayout.btn9
+            binding.pinKeypad.btn0,
+            binding.pinKeypad.btn1,
+            binding.pinKeypad.btn2,
+            binding.pinKeypad.btn3,
+            binding.pinKeypad.btn4,
+            binding.pinKeypad.btn5,
+            binding.pinKeypad.btn6,
+            binding.pinKeypad.btn7,
+            binding.pinKeypad.btn8,
+            binding.pinKeypad.btn9
         )
         
         pinButtons.forEachIndexed { index, button ->
@@ -48,11 +48,11 @@ class LoginActivity : AppCompatActivity() {
             }
         }
         
-        binding.pinLayout.btnDelete.setOnClickListener {
+        binding.pinKeypad.btnDelete.setOnClickListener {
             removePinDigit()
         }
         
-        binding.pinLayout.btnBack.setOnClickListener {
+        binding.pinKeypad.btnBack.setOnClickListener {
             showEmailStep()
         }
     }
@@ -62,7 +62,8 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.emailInput.text.toString()
             if (email.isNotEmpty()) {
                 currentEmail = email
-                viewModel.checkUserExists(email)
+                // Vérifier si l'utilisateur existe en tentant la connexion
+                showPinStep()
             } else {
                 Toast.makeText(this, "Veuillez entrer votre email", Toast.LENGTH_SHORT).show()
             }
@@ -93,10 +94,10 @@ class LoginActivity : AppCompatActivity() {
     
     private fun updatePinDots() {
         val dots = listOf(
-            binding.pinLayout.pinDot1,
-            binding.pinLayout.pinDot2,
-            binding.pinLayout.pinDot3,
-            binding.pinLayout.pinDot4
+            binding.pinDot1,
+            binding.pinDot2,
+            binding.pinDot3,
+            binding.pinDot4
         )
         
         dots.forEachIndexed { index, dot ->
@@ -110,7 +111,7 @@ class LoginActivity : AppCompatActivity() {
     
     private fun showEmailStep() {
         binding.emailInputLayout.visibility = View.VISIBLE
-        binding.pinLayout.root.visibility = View.GONE
+        binding.pinLayout.visibility = View.GONE
         binding.continueButton.visibility = View.VISIBLE
         binding.registerButton.visibility = View.VISIBLE
         binding.subtitleText.text = "Entrez votre adresse email"
@@ -120,21 +121,13 @@ class LoginActivity : AppCompatActivity() {
     
     private fun showPinStep() {
         binding.emailInputLayout.visibility = View.GONE
-        binding.pinLayout.root.visibility = View.VISIBLE
+        binding.pinLayout.visibility = View.VISIBLE
         binding.continueButton.visibility = View.GONE
         binding.registerButton.visibility = View.GONE
         binding.subtitleText.text = "Entrez votre code PIN"
     }
     
     private fun observeViewModel() {
-        viewModel.userExists.observe(this) { exists ->
-            if (exists) {
-                showPinStep()
-            } else {
-                Toast.makeText(this, "Utilisateur introuvable. Veuillez vous inscrire.", Toast.LENGTH_SHORT).show()
-            }
-        }
-        
         viewModel.loginResult.observe(this) { result ->
             when (result) {
                 is LoginResult.Success -> {
