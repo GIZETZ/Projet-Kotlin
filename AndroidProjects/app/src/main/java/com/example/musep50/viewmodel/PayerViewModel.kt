@@ -16,6 +16,10 @@ class PayerViewModel(application: Application) : AndroidViewModel(application) {
         return repository.getAllPayers()
     }
 
+    suspend fun getAllPayersSync(): List<Payer> {
+        return repository.getAllPayersSync()
+    }
+
     fun searchPayers(query: String): LiveData<List<Payer>> {
         return repository.searchPayers(query)
     }

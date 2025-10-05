@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.musep50.databinding.ActivityProfileBinding
 import com.example.musep50.viewmodel.AuthViewModel
+import kotlinx.coroutines.launch
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
@@ -33,11 +35,15 @@ class ProfileActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("musep50_prefs", MODE_PRIVATE)
         val userId = sharedPreferences.getLong("current_user_id", -1L)
 
-        viewModel.getUserById(userId).observe(this) { user ->
+        viewModel.currentUser.observe(this) { user ->
             user?.let {
                 binding.userName.text = it.nom
                 binding.userEmail.text = it.email
             }
+        }
+
+        lifecycleScope.launch {
+            viewModel.loadUserById(userId)
         }
     }
 

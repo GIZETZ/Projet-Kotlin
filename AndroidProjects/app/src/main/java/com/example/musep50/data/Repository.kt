@@ -29,6 +29,10 @@ class Repository(private val database: AppDatabase) {
     // Payer methods
     fun getAllPayers(): LiveData<List<Payer>> = database.payerDao().getAllPayers()
 
+    suspend fun getAllPayersSync(): List<Payer> {
+        return database.payerDao().getAllPayersSync()
+    }
+
     suspend fun getPayerById(id: Long): Payer? = database.payerDao().getPayerById(id)
 
     fun searchPayers(query: String): LiveData<List<Payer>> =
@@ -73,7 +77,7 @@ class Repository(private val database: AppDatabase) {
 
     suspend fun insertUser(user: User): Long =
         database.userDao().insert(user)
-    
+
     fun getAllUsers(): LiveData<List<User>> =
         database.userDao().getAllUsers()
 }

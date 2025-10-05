@@ -49,7 +49,7 @@ class AddPaymentDialog(
         payerViewModel.getAllPayers().observe(viewLifecycleOwner) { payers ->
             val payerNames = payers.map { it.nom }
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, payerNames)
-            binding.payerNameInput.setAdapter(adapter)
+            binding.payerInput.setAdapter(adapter)
         }
     }
 
@@ -99,8 +99,9 @@ class AddPaymentDialog(
         val method = binding.methodInput.text.toString()
         val commentaire = binding.commentaireInput.text?.toString()
 
-        // First, check if payer exists or create new one
-        payerViewModel.getAllPayers().observe(viewLifecycleOwner) { payers ->
+        lifecycleScope.launch {
+            // First, check if payer exists or create new one
+            val payers = payerViewModel.getAllPayersSync()
             var payerId = payers.find { it.nom.equals(payerName, ignoreCase = true) }?.id
             
             if (payerId == null) {
@@ -111,53 +112,29 @@ class AddPaymentDialog(
                     note = null
                 )
                 
-                lifecycleScope.launch {
-                    payerId = payerViewModel.insertPayer(newPayer)
-                    
-                    val paiement = Paiement(
-                        operationId = operationId,
-                        payerId = payerId!!,
-                        montant = montant,
-                        datePaiement = System.currentTimeMillis(),
-                        methodePaiement = method,
-                        commentaire = commentaire,
-                        statut = "Validé"
-                    )
-
-                    paiementViewModel.insertPaiement(paiement,
-                        onSuccess = {
-                            Toast.makeText(requireContext(), "Paiement enregistré", Toast.LENGTH_SHORT).show()
-                            onPaymentAdded()
-                            dismiss()
-                        },
-                        onError = { error ->
-                            Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
-                        }
-                    )
-                }
-            } else {
-                // Use existing payer
-                val paiement = Paiement(
-                    operationId = operationId,
-                    payerId = payerId!!,
-                    montant = montant,
-                    datePaiement = System.currentTimeMillis(),
-                    methodePaiement = method,
-                    commentaire = commentaire,
-                    statut = "Validé"
-                )
-
-                paiementViewModel.insertPaiement(paiement,
-                    onSuccess = {
-                        Toast.makeText(requireContext(), "Paiement enregistré", Toast.LENGTH_SHORT).show()
-                        onPaymentAdded()
-                        dismiss()
-                    },
-                    onError = { error ->
-                        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
-                    }
-                )
+                payerId = payerViewModel.insertPayer(newPayer)
             }
+            
+            val paiement = Paiement(
+                operationId = operationId,
+                payerId = payerId,
+                montant = montant,
+                datePaiement = System.currentTimeMillis(),
+                methodePaiement = method,
+                commentaire = commentaire,
+                statut = "Validé"
+            )
+
+            paiementViewModel.insertPaiement(paiement,
+                onSuccess = {
+                    Toast.makeText(requireContext(), "Paiement enregistré", Toast.LENGTH_SHORT).show()
+                    onPaymentAdded()
+                    dismiss()
+                },
+                onError = { error ->
+                    Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+                }
+            )
         }
     }
 
