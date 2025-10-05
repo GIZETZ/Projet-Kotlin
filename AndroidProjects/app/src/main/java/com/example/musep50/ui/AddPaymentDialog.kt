@@ -1,3 +1,4 @@
+
 package com.example.musep50.ui
 
 import android.app.Dialog
@@ -9,27 +10,21 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.musep50.R
 import com.example.musep50.data.entities.Paiement
-import com.example.musep50.data.entities.User
 import com.example.musep50.databinding.DialogAddPaymentBinding
 import com.example.musep50.viewmodel.PaiementViewModel
+import com.example.musep50.viewmodel.PayerViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.launch
 
 class AddPaymentDialog(
     private val operationId: Long,
-    private val allUsers: List<User>,
     private val onPaymentAdded: () -> Unit
 ) : DialogFragment() {
 
     private var _binding: DialogAddPaymentBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: PaiementViewModel by viewModels()
-    private var selectedUser: User? = null
+    private val paiementViewModel: PaiementViewModel by viewModels()
+    private val payerViewModel: PayerViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,18 +38,17 @@ class AddPaymentDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupUserDropdown()
+        setupPayerInput()
         setupMethodDropdown()
         setupButtons()
     }
 
-    private fun setupUserDropdown() {
-        val userNames = allUsers.map { it.nom }
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, userNames)
-        binding.userInput.setAdapter(adapter)
-
-        binding.userInput.setOnItemClickListener { _, _, position, _ ->
-            selectedUser = allUsers[position]
+    private fun setupPayerInput() {
+        // User can type a new payer name or select from existing
+        payerViewModel.getAllPayers().observe(viewLifecycleOwner) { payers ->
+            val payerNames = payers.map { it.nom }
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, payerNames)
+            binding.payerNameInput.setAdapter(adapter)
         }
     }
 
@@ -77,8 +71,9 @@ class AddPaymentDialog(
     }
 
     private fun validateInputs(): Boolean {
-        if (selectedUser == null) {
-            Toast.makeText(requireContext(), "Veuillez sélectionner un payeur", Toast.LENGTH_SHORT).show()
+        val payerName = binding.payerNameInput.text.toString()
+        if (payerName.isBlank()) {
+            binding.payerNameInputLayout.error = "Le nom du payeur est requis"
             return false
         }
 
@@ -98,18 +93,58 @@ class AddPaymentDialog(
     }
 
     private fun savePaiement() {
+        val payerName = binding.payerNameInput.text.toString()
         val montant = binding.montantInput.text.toString().toDouble()
         val method = binding.methodInput.text.toString()
         val commentaire = binding.commentaireInput.text?.toString()
 
-        val paiement = Paiement(
-            operationId = operationId,
-            userId = selectedUser!!.id,
-            montant = montant,
-            methodePaiement = method,
-            commentaire = commentaire,
-            statut = "Validé"
-        )
+        // First, check if payer exists or create new one
+        payerViewModel.getAllPayers().observe(viewLifecycleOwner) { payers ->
+            var payerId = payers.find { it.nom.equals(payerName, ignoreCase = true) }?.id
+            
+            if (payerId == null) {
+                // Create new payer
+                val newPayer = com.example.musep50.data.entities.Payer(
+                    nom = payerName,
+                    contact = binding.contactInput.text?.toString(),
+                    note = null
+                )
+                
+                androidx.lifecycle.lifecycleScope.launch {
+                    payerId = payerViewModel.insertPayer(newPayer)
+                    
+                    val paiement = Paiement(
+                        operationId = operationId,
+                        payerId = payerId!!,
+                        montant = montant,
+                        datePaiement = System.currentTimeMillis(),
+                        methodePaiement = method,
+                        commentaire = commentaire,
+                        statut = "Validé"
+                    )
+
+                    paiementViewModel.insertPaiement(paiement,
+                        onSuccess = {
+                            Toast.makeText(requireContext(), "Paiement enregistré", Toast.LENGTH_SHORT).show()
+                            onPaymentAdded()
+                            dismiss()
+                        },
+                        onError = { error ->
+                            Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            } else {
+                // Use existing payer
+                val paiement = Paiement(
+                    operationId = operationId,
+                    payerId = payerId!!,
+                    montant = montant,
+                    datePaiement = System.currentTimeMillis(),
+                    methodePaiement = method,
+                    commentaire = commentaire,
+                    statut = "Validé"
+                )
 
                 paiementViewModel.insertPaiement(paiement,
                     onSuccess = {
@@ -121,8 +156,6 @@ class AddPaymentDialog(
                         Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
                     }
                 )
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Erreur: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
