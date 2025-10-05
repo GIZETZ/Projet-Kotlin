@@ -161,13 +161,30 @@
                         android:layout_marginTop="12dp"
                         tools:text="13 payeurs" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnPublish"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="📤 Publier et Exporter"
-                        app:icon="@drawable/ic_launcher_foreground" />
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPublish"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:text="📤 Publier"
+                            app:icon="@drawable/ic_launcher_foreground" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnRetardataires"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="⏰ Rappels"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            app:icon="@drawable/ic_launcher_foreground" />
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

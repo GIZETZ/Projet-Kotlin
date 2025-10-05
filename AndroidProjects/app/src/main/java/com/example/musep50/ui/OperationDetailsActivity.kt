@@ -81,6 +81,12 @@ class OperationDetailsActivity : AppCompatActivity() {
             intent.putExtra("operation_id", currentOperationId)
             startActivity(intent)
         }
+
+        binding.btnRetardataires.setOnClickListener {
+            val intent = android.content.Intent(this, RetardatairesActivity::class.java)
+            intent.putExtra("operation_id", currentOperationId)
+            startActivity(intent)
+        }
     }
 
     private fun filterPayments(query: String) {
