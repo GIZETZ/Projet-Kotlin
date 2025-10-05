@@ -12,13 +12,13 @@ import kotlinx.coroutines.launch
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: Repository = Repository(AppDatabase.getDatabase(application))
-    
+
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
-    
+
     private val _registerResult = MutableLiveData<RegisterResult>()
     val registerResult: LiveData<RegisterResult> = _registerResult
-    
+
     fun login(email: String, pin: String) {
         viewModelScope.launch {
             try {
@@ -33,7 +33,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-    
+
     fun register(nom: String, email: String, telephone: String?, organisation: String?, pin: String) {
         viewModelScope.launch {
             try {
@@ -42,7 +42,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                     _registerResult.value = RegisterResult.Error("Un compte avec cet email existe déjà")
                     return@launch
                 }
-                
+
                 val user = User(
                     nom = nom,
                     email = email,
@@ -58,6 +58,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+    fun getUserById(userId: Long) = repository.getUserById(userId)
 }
 
 sealed class LoginResult {
