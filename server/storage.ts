@@ -49,7 +49,7 @@ export const storage = {
     return user;
   },
 
-  async updateUser(id: number, data: Partial<{ nom: string; email: string; telephone: string; organisation: string; role: string }>) {
+  async updateUser(id: number, data: Partial<{ nom: string; email: string; telephone: string; organisation: string; role: string; pin: string }>) {
     const [updated] = await db.update(users).set(data).where(eq(users.id, id)).returning();
     return updated;
   },

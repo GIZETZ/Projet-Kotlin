@@ -15,7 +15,7 @@ sqlite.exec(`
     telephone TEXT,
     organisation TEXT,
     role TEXT NOT NULL DEFAULT 'Membre',
-    pin_hash TEXT NOT NULL,
+    pin TEXT NOT NULL,
     created_at INTEGER NOT NULL DEFAULT (unixepoch())
   );
 
