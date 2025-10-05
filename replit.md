@@ -48,4 +48,12 @@ To develop this app, you need:
   - ✅ Partage vers autres applications
   - ✅ Copie dans le presse-papiers
   - ✅ Export CSV avec toutes les données
-- **Prochaines étapes**: Option C (Retardataires)
+- **Option C - Retardataires**: ✅ COMPLÉTÉ
+  - ✅ Détection automatique des membres n'ayant pas payé
+  - ✅ Affichage avec sélection multiple
+  - ✅ Messages de rappel personnalisés
+  - ✅ Envoi individuel ou groupé via WhatsApp
+  - ✅ Bouton d'accès dans les détails de l'opération
+
+## 🎉 Projet Terminé
+Toutes les fonctionnalités demandées ont été implémentées avec succès. L'application est prête pour compilation et test dans Android Studio.
