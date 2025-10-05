@@ -1,0 +1,73 @@
+> Task :app:compileDebugKotlin FAILED
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/data/Repository.kt:20:60 Return type mismatch: expected 'androidx.lifecycle.LiveData<com.example.musep50.data.entities.Operation?>', actual 'com.example.musep50.data.entities.Operation?'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/data/Repository.kt:20:84 Suspend function 'suspend fun getOperationById(id: Long): Operation?' should be called only from a coroutine or another suspend function.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/data/Repository.kt:21:98 Unresolved reference 'getOperationsByState'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:51:21 Unresolved reference 'payerNameInput'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:74:33 Unresolved reference 'payerNameInput'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:76:21 Unresolved reference 'payerNameInputLayout'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:96:33 Unresolved reference 'payerNameInput'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:109:39 Unresolved reference 'contactInput'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:113:36 Unresolved reference 'lifecycleScope'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:114:46 Suspend function 'suspend fun insertPayer(payer: Payer): Long' should be called only from a coroutine or another suspend function.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/OperationDetailsActivity.kt:8:37 Unresolved reference 'PaiementWithUser'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/OperationDetailsActivity.kt:25:38 Unresolved reference 'PaiementWithUser'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/OperationDetailsActivity.kt:87:24 Not enough information to infer type argument for 'K'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/OperationDetailsActivity.kt:90:25 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/OperationDetailsActivity.kt:90:25 Not enough information to infer type argument for 'T'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/OperationDetailsActivity.kt:90:34 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/OperationDetailsActivity.kt:91:25 Unresolved reference 'payerName'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/OperationDetailsActivity.kt:92:25 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:15:37 Unresolved reference 'PaiementWithUser'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:32:35 Unresolved reference 'PaiementWithUser'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:92:76 Unresolved reference 'PaiementWithUser'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:103:38 None of the following candidates is applicable:
+fun <T> Iterable<T>.sumOf(selector: (T) -> BigDecimal): BigDecimal
+fun <T> Iterable<T>.sumOf(selector: (T) -> BigInteger): BigInteger
+fun <T> Iterable<T>.sumOf(selector: (T) -> Double): Double
+fun <T> Iterable<T>.sumOf(selector: (T) -> Int): Int
+fun <T> Iterable<T>.sumOf(selector: (T) -> Long): Long
+fun <T> Iterable<T>.sumOf(selector: (T) -> UInt): UInt
+fun <T> Iterable<T>.sumOf(selector: (T) -> ULong): ULong
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:103:44 Unresolved reference 'montant'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:103:46 Unresolved reference 'it'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:119:22 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:119:22 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T> Iterable<T>.forEachIndexed(action: (@ParameterName(...) Int, T) -> Unit): Unit
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:119:46 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:121:70 Unresolved reference 'payerName'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:122:88 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:123:86 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:124:71 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:125:39 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:126:72 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:186:30 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:186:30 Not enough information to infer type argument for 'T'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:186:40 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:187:61 Unresolved reference 'payerName'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:188:61 Unresolved reference 'payerEmail'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:189:59 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:190:79 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:191:61 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:192:61 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/adapter/PaymentAdapter.kt:9:37 Unresolved reference 'PaiementWithUser'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/viewmodel/AuthViewModel.kt:25:39 Unresolved reference 'verifyCredentials'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/viewmodel/AuthViewModel.kt:27:62 Argument type mismatch: actual type is 'kotlin.Any', but 'com.example.musep50.data.entities.User' was expected.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/viewmodel/DashboardViewModel.kt:30:43 Argument type mismatch: actual type is 'kotlin.Double?', but 'kotlin.Double' was expected.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/viewmodel/DashboardViewModel.kt:32:43 Unresolved reference 'montantCible'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/viewmodel/PaiementViewModel.kt:9:37 Unresolved reference 'PaiementWithUser'.
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 14s
+55 actionable tasks: 55 executed
