@@ -46,6 +46,31 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Téléphone (optionnel)">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/telephoneInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Organisation (optionnel)">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/organisationInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:hint="Code PIN (4 chiffres)">
 
@@ -62,6 +87,15 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:text="S'inscrire"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/loginButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Déjà un compte ? Se connecter"
+            android:textAllCaps="false"
+            style="@style/Widget.Material3.Button.TextButton" />
     </LinearLayout>
 </ScrollView>
