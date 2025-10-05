@@ -184,7 +184,12 @@ class PublishActivity : AppCompatActivity() {
 
                     payments.forEach { payment ->
                         writer.append("\"${payment.payerName}\",")
-                        writer.append("\"${payment.payer.contact ?: ""}\",")
+                        val payerInfo = if (payment.payerContact.isNullOrBlank()) {
+                            payment.payerName
+                        } else {
+                            "${payment.payerName} (${payment.payerContact})"
+                        }
+                        writer.append("\"${payerInfo}\",")
                         writer.append("${payment.paiement.montant},")
                         writer.append("\"${dateFormat.format(payment.paiement.datePaiement)}\",")
                         writer.append("\"${payment.paiement.methodePaiement}\",")

@@ -50,7 +50,7 @@ class Repository(private val database: AppDatabase) {
     fun getPaiementsByOperation(operationId: Long): LiveData<List<Paiement>> =
         database.paiementDao().getPaiementsByOperation(operationId)
 
-    fun getPaiementsWithPayerByOperation(operationId: Long): LiveData<List<PaiementWithPayer>> =
+    fun getPaiementsWithPayerByOperation(operationId: Long): LiveData<List<com.example.musep50.data.dao.PaiementWithPayer>> =
         database.paiementDao().getPaiementsWithPayerByOperation(operationId)
 
     suspend fun getTotalByOperation(operationId: Long): Double? =

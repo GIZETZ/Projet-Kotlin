@@ -46,7 +46,7 @@ interface PaiementDao {
         WHERE paiements.operationId = :operationId 
         ORDER BY paiements.datePaiement DESC
     """)
-    fun getPaiementsWithPayersForOperation(operationId: Long): LiveData<List<PaiementWithPayer>>
+    fun getPaiementsWithPayerByOperation(operationId: Long): LiveData<List<PaiementWithPayer>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(paiement: Paiement): Long
