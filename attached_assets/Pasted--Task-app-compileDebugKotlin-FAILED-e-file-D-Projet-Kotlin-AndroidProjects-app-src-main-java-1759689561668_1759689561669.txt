@@ -1,0 +1,56 @@
+> Task :app:compileDebugKotlin FAILED
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/data/Repository.kt:19:33 Unresolved reference 'getOperationsByEtat'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/data/Repository.kt:46:32 Unresolved reference 'getPaiementsWithPayersForOperation'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/data/Repository.kt:49:32 Unresolved reference 'getTotalCollected'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:51:21 Unresolved reference 'payerInput'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:74:33 Unresolved reference 'payerInput'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:76:21 Unresolved reference 'payerInputLayout'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:96:33 Unresolved reference 'payerInput'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:109:39 Unresolved reference 'contactInput'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:113:36 Unresolved reference 'lifecycleScope'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/AddPaymentDialog.kt:114:46 Suspend function 'suspend fun insertPayer(payer: Payer): Long' should be called only from a coroutine or another suspend function.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/OperationDetailsActivity.kt:143:20 Unresolved reference 'getAllUsers'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/OperationDetailsActivity.kt:143:50 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:92:76 Unresolved reference 'PaiementWithUser'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:103:38 None of the following candidates is applicable:
+fun <T> Iterable<T>.sumOf(selector: (T) -> BigDecimal): BigDecimal
+fun <T> Iterable<T>.sumOf(selector: (T) -> BigInteger): BigInteger
+fun <T> Iterable<T>.sumOf(selector: (T) -> Double): Double
+fun <T> Iterable<T>.sumOf(selector: (T) -> Int): Int
+fun <T> Iterable<T>.sumOf(selector: (T) -> Long): Long
+fun <T> Iterable<T>.sumOf(selector: (T) -> UInt): UInt
+fun <T> Iterable<T>.sumOf(selector: (T) -> ULong): ULong
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:103:44 Unresolved reference 'montant'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:103:46 Unresolved reference 'it'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:119:22 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:119:22 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T> Iterable<T>.forEachIndexed(action: (@ParameterName(...) Int, T) -> Unit): Unit
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:119:46 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:121:70 Unresolved reference 'payerName'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:122:88 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:123:86 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:124:71 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:125:39 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:126:72 Unresolved reference 'paiement'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/PublishActivity.kt:188:61 Unresolved reference 'payerEmail'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/RetardatairesActivity.kt:91:20 Unresolved reference 'getAllUsers'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/RetardatairesActivity.kt:91:50 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/ui/adapter/PaymentAdapter.kt:9:37 Unresolved reference 'PaiementWithUser'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/viewmodel/DashboardViewModel.kt:25:40 Unresolved reference 'getTotalByOperation'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/viewmodel/DashboardViewModel.kt:26:40 Unresolved reference 'getCountByOperation'.
+e: file:///D:/Projet-Kotlin/AndroidProjects/app/src/main/java/com/example/musep50/viewmodel/PaiementViewModel.kt:17:27 Unresolved reference 'getPaiementsWithPayerByOperation'.
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 6s
