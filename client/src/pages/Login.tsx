@@ -53,6 +53,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           description: `Bienvenue ${data.user.nom}`,
         });
         onLoginSuccess(data.user);
+        window.location.href = "/";
       } else {
         toast({
           title: "Erreur",
