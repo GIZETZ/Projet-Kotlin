@@ -160,6 +160,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         tools:text="13 payeurs" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPublish"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="📤 Publier et Exporter"
+                        app:icon="@drawable/ic_launcher_foreground" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

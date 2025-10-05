@@ -75,6 +75,12 @@ class OperationDetailsActivity : AppCompatActivity() {
                 dialog.show(supportFragmentManager, AddPaymentDialog.TAG)
             }
         }
+
+        binding.btnPublish.setOnClickListener {
+            val intent = android.content.Intent(this, PublishActivity::class.java)
+            intent.putExtra("operation_id", currentOperationId)
+            startActivity(intent)
+        }
     }
 
     private fun filterPayments(query: String) {
