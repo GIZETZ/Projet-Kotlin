@@ -8,22 +8,22 @@ class Repository(private val database: AppDatabase) {
     // Operation methods
     fun getAllOperations(): LiveData<List<Operation>> = database.operationDao().getAllOperations()
 
-    fun getOperationsByType(type: String): LiveData<List<Operation>> = 
+    fun getOperationsByType(type: String): LiveData<List<Operation>> =
         database.operationDao().getOperationsByType(type)
 
-    suspend fun getOperationById(id: Long): Operation? = 
+    suspend fun getOperationById(id: Long): Operation? =
         database.operationDao().getOperationById(id)
 
-    fun getOperationsByEtat(etat: String): LiveData<List<Operation>> = 
+    fun getOperationsByEtat(etat: String): LiveData<List<Operation>> =
         database.operationDao().getOperationsByEtat(etat)
 
-    suspend fun insertOperation(operation: Operation): Long = 
+    suspend fun insertOperation(operation: Operation): Long =
         database.operationDao().insert(operation)
 
-    suspend fun updateOperation(operation: Operation) = 
+    suspend fun updateOperation(operation: Operation) =
         database.operationDao().update(operation)
 
-    suspend fun deleteOperation(operation: Operation) = 
+    suspend fun deleteOperation(operation: Operation) =
         database.operationDao().delete(operation)
 
     // Payer methods
@@ -31,7 +31,7 @@ class Repository(private val database: AppDatabase) {
 
     suspend fun getPayerById(id: Long): Payer? = database.payerDao().getPayerById(id)
 
-    fun searchPayers(query: String): LiveData<List<Payer>> = 
+    fun searchPayers(query: String): LiveData<List<Payer>> =
         database.payerDao().searchPayers(query)
 
     suspend fun insertPayer(payer: Payer): Long = database.payerDao().insert(payer)
@@ -41,28 +41,36 @@ class Repository(private val database: AppDatabase) {
     suspend fun deletePayer(payer: Payer) = database.payerDao().delete(payer)
 
     // Paiement methods
-    fun getPaiementsForOperation(operationId: Long) = 
-        database.paiementDao().getPaiementsWithPayersForOperation(operationId)
+    fun getAllPaiements(): LiveData<List<Paiement>> = database.paiementDao().getAllPaiements()
 
-    suspend fun getTotalCollected(operationId: Long): Double = 
-        database.paiementDao().getTotalCollected(operationId) ?: 0.0
+    fun getPaiementsByOperation(operationId: Long): LiveData<List<Paiement>> =
+        database.paiementDao().getPaiementsByOperation(operationId)
 
-    suspend fun insertPaiement(paiement: Paiement): Long = 
+    fun getPaiementsWithPayerByOperation(operationId: Long): LiveData<List<PaiementWithPayer>> =
+        database.paiementDao().getPaiementsWithPayerByOperation(operationId)
+
+    suspend fun getTotalByOperation(operationId: Long): Double? =
+        database.paiementDao().getTotalByOperation(operationId)
+
+    suspend fun getCountByOperation(operationId: Long): Int =
+        database.paiementDao().getCountByOperation(operationId)
+
+    suspend fun insertPaiement(paiement: Paiement): Long =
         database.paiementDao().insert(paiement)
 
-    suspend fun updatePaiement(paiement: Paiement) = 
+    suspend fun updatePaiement(paiement: Paiement) =
         database.paiementDao().update(paiement)
 
-    suspend fun deletePaiement(paiement: Paiement) = 
+    suspend fun deletePaiement(paiement: Paiement) =
         database.paiementDao().delete(paiement)
 
     // User methods
-    suspend fun getUserByEmail(email: String): User? = 
+    suspend fun getUserByEmail(email: String): User? =
         database.userDao().getUserByEmail(email)
 
-    suspend fun getUserById(id: Long): User? = 
+    suspend fun getUserById(id: Long): User? =
         database.userDao().getUserById(id)
 
-    suspend fun insertUser(user: User): Long = 
+    suspend fun insertUser(user: User): Long =
         database.userDao().insert(user)
 }
