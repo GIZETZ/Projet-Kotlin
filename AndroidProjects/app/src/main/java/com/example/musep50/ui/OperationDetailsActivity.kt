@@ -5,7 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.musep50.data.dao.PaiementWithUser
+import com.example.musep50.data.dao.PaiementWithPayer
 import com.example.musep50.data.entities.User
 import com.example.musep50.databinding.ActivityOperationDetailsBinding
 import com.example.musep50.ui.adapter.PaymentAdapter
@@ -22,7 +22,7 @@ class OperationDetailsActivity : AppCompatActivity() {
     private val paiementViewModel: PaiementViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
     private lateinit var adapter: PaymentAdapter
-    private var allPayments = listOf<PaiementWithUser>()
+    private var allPayments = listOf<PaiementWithPayer>()
     private var allUsers = listOf<User>()
     private val dateFormat = SimpleDateFormat("d MMM yyyy", Locale.FRANCE)
     private val formatter = NumberFormat.getNumberInstance(Locale.FRANCE)

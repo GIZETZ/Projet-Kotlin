@@ -12,12 +12,12 @@ import kotlinx.coroutines.launch
 
 class DashboardViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: Repository = Repository(AppDatabase.getDatabase(application))
-    
+
     val allOperations: LiveData<List<Operation>> = repository.getAllOperations()
-    
+
     private val _operationStats = MutableLiveData<Map<Long, OperationStats>>()
     val operationStats: LiveData<Map<Long, OperationStats>> = _operationStats
-    
+
     fun loadOperationStats(operationIds: List<Long>) {
         viewModelScope.launch {
             val stats = mutableMapOf<Long, OperationStats>()
@@ -45,7 +45,7 @@ data class OperationStats(
 ) {
     val montantRestant: Double
         get() = montantCible - montantCollecte
-    
+
     val pourcentage: Int
         get() = if (montantCible > 0) ((montantCollecte / montantCible) * 100).toInt() else 0
 }

@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.musep50.data.AppDatabase
 import com.example.musep50.data.Repository
-import com.example.musep50.data.dao.PaiementWithUser
+import com.example.musep50.data.dao.PaiementWithPayer
 import com.example.musep50.data.entities.Operation
 import com.example.musep50.databinding.ActivityPublishBinding
 import com.example.musep50.viewmodel.DashboardViewModel
@@ -29,7 +29,7 @@ class PublishActivity : AppCompatActivity() {
     private val dashboardViewModel: DashboardViewModel by viewModels()
     private val paiementViewModel: PaiementViewModel by viewModels()
     private var currentOperation: Operation? = null
-    private var payments = listOf<PaiementWithUser>()
+    private var payments = listOf<PaiementWithPayer>()
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
     private val formatter = NumberFormat.getNumberInstance(Locale.FRANCE)
 

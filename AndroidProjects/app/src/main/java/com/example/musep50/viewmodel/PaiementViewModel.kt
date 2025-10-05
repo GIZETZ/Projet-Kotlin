@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.musep50.data.AppDatabase
 import com.example.musep50.data.Repository
-import com.example.musep50.data.dao.PaiementWithUser
+import com.example.musep50.data.dao.PaiementWithPayer
 import com.example.musep50.data.entities.Paiement
 import kotlinx.coroutines.launch
 

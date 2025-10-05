@@ -21,15 +21,11 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun login(email: String, pin: String) {
         viewModelScope.launch {
-            try {
-                val user = repository.verifyCredentials(email, pin)
-                if (user != null) {
-                    _loginResult.value = LoginResult.Success(user)
-                } else {
-                    _loginResult.value = LoginResult.Error("Email ou PIN incorrect")
-                }
-            } catch (e: Exception) {
-                _loginResult.value = LoginResult.Error("Erreur de connexion: ${e.message}")
+            val user = repository.getUserByEmail(email)
+            if (user != null && user.pin == pin) {
+                _loginResult.value = LoginResult.Success(user)
+            } else {
+                _loginResult.value = LoginResult.Error("Email ou PIN incorrect")
             }
         }
     }
