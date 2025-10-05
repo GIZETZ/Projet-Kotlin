@@ -42,4 +42,10 @@ To develop this app, you need:
   - ✅ Affichage des paiements avec noms des payeurs
   - ✅ Statistiques en temps réel (montant ciblé/collecté/restant)
   - ✅ Recherche et filtrage des paiements
-- **Prochaines étapes**: Option B (Publication/Export) et Option C (Retardataires)
+- **Option B - Publication et Export**: ✅ COMPLÉTÉ
+  - ✅ Génération de liste formatée (texte avec statistiques)
+  - ✅ Partage WhatsApp en un clic
+  - ✅ Partage vers autres applications
+  - ✅ Copie dans le presse-papiers
+  - ✅ Export CSV avec toutes les données
+- **Prochaines étapes**: Option C (Retardataires)
