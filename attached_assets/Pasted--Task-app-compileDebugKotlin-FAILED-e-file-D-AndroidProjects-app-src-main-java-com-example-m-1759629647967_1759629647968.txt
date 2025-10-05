@@ -1,0 +1,40 @@
+> Task :app:compileDebugKotlin FAILED
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:32:26 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:33:13 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:33:31 Unresolved reference 'btn0'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:34:31 Unresolved reference 'btn1'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:35:31 Unresolved reference 'btn2'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:36:31 Unresolved reference 'btn3'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:37:31 Unresolved reference 'btn4'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:38:31 Unresolved reference 'btn5'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:39:31 Unresolved reference 'btn6'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:40:31 Unresolved reference 'btn7'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:41:31 Unresolved reference 'btn8'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:42:31 Unresolved reference 'btn9'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:45:20 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:45:20 Not enough information to infer type argument for 'T'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:45:44 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:46:20 Unresolved reference 'setOnClickListener'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:51:27 Unresolved reference 'btnDelete'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:55:27 Unresolved reference 'btnBack'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:65:27 Unresolved reference 'checkUserExists'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:95:20 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:96:13 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:96:31 Unresolved reference 'pinDot1'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:97:31 Unresolved reference 'pinDot2'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:98:31 Unresolved reference 'pinDot3'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:99:31 Unresolved reference 'pinDot4'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:102:14 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:102:14 Not enough information to infer type argument for 'T'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:102:38 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:104:21 Unresolved reference 'setBackgroundResource'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:106:21 Unresolved reference 'setBackgroundResource'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:113:27 Unresolved reference 'root'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:123:27 Unresolved reference 'root'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:130:19 Unresolved reference 'userExists'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/LoginActivity.kt:130:46 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/RegisterActivity.kt:28:34 Unresolved reference 'prenomInput'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/RegisterActivity.kt:29:36 Unresolved reference 'usernameInput'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/RegisterActivity.kt:30:37 Unresolved reference 'telephoneInput'.
+e: file:///D:/AndroidProjects/app/src/main/java/com/example/musep50/ui/RegisterActivity.kt:38:17 Unresolved reference 'loginLink'.
+
