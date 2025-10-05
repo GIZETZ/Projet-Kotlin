@@ -77,8 +77,8 @@ class PublishActivity : AppCompatActivity() {
             updatePreview()
         }
 
-        paiementViewModel.getPaiementsWithUserByOperation(operationId).observe(this) { paymentsList ->
-            payments = paymentsList
+        paiementViewModel.getPaiementsWithPayerByOperation(operationId).observe(this) { paymentsData ->
+            payments = paymentsData
             updatePreview()
         }
     }
@@ -91,7 +91,7 @@ class PublishActivity : AppCompatActivity() {
 
     private fun generateFormattedList(operation: Operation, payments: List<PaiementWithUser>): String {
         val builder = StringBuilder()
-        
+
         builder.appendLine("═══════════════════════════")
         builder.appendLine("📋 MUSEP50 - ${operation.nom}")
         builder.appendLine("═══════════════════════════")
@@ -99,20 +99,20 @@ class PublishActivity : AppCompatActivity() {
         builder.appendLine("📅 Période: ${dateFormat.format(operation.dateDebut)} - ${operation.dateFin?.let { dateFormat.format(it) } ?: "N/A"}")
         builder.appendLine("💰 Montant ciblé: ${formatter.format(operation.montantCible)} FCFA")
         builder.appendLine()
-        
+
         val totalCollecte = payments.sumOf { it.paiement.montant }
         val montantRestant = operation.montantCible - totalCollecte
-        
+
         builder.appendLine("📊 STATISTIQUES")
         builder.appendLine("───────────────────────────")
         builder.appendLine("✅ Montant collecté: ${formatter.format(totalCollecte)} FCFA")
         builder.appendLine("⏳ Montant restant: ${formatter.format(montantRestant)} FCFA")
         builder.appendLine("👥 Nombre de payeurs: ${payments.size}")
         builder.appendLine()
-        
+
         builder.appendLine("📝 LISTE DES PAIEMENTS")
         builder.appendLine("───────────────────────────")
-        
+
         if (payments.isEmpty()) {
             builder.appendLine("Aucun paiement enregistré")
         } else {
@@ -127,12 +127,12 @@ class PublishActivity : AppCompatActivity() {
                 }
             }
         }
-        
+
         builder.appendLine()
         builder.appendLine("═══════════════════════════")
         builder.appendLine("Généré le ${dateFormat.format(Date())}")
         builder.appendLine("═══════════════════════════")
-        
+
         return builder.toString()
     }
 
@@ -179,10 +179,10 @@ class PublishActivity : AppCompatActivity() {
             try {
                 val fileName = "musep50_${operation.nom.replace(" ", "_")}_${System.currentTimeMillis()}.csv"
                 val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
-                
+
                 FileWriter(file).use { writer ->
                     writer.append("Nom du payeur,Email,Montant (FCFA),Date,Méthode,Commentaire\n")
-                    
+
                     payments.forEach { paiementWithUser ->
                         writer.append("\"${paiementWithUser.payerName}\",")
                         writer.append("\"${paiementWithUser.payerEmail}\",")
@@ -192,7 +192,7 @@ class PublishActivity : AppCompatActivity() {
                         writer.append("\"${paiementWithUser.paiement.commentaire ?: ""}\"\n")
                     }
                 }
-                
+
                 Toast.makeText(
                     this@PublishActivity,
                     "CSV exporté: ${file.absolutePath}",

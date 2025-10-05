@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 class PaiementViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: Repository = Repository(AppDatabase.getDatabase(application))
 
-    fun getPaiementsWithUserByOperation(operationId: Long): LiveData<List<PaiementWithUser>> {
-        return repository.getPaiementsWithUserByOperation(operationId)
+    fun getPaiementsWithPayerByOperation(operationId: Long): LiveData<List<com.example.musep50.data.dao.PaiementWithPayer>> {
+        return repository.getPaiementsWithPayerByOperation(operationId)
     }
 
     fun insertPaiement(paiement: Paiement, onSuccess: () -> Unit, onError: (String) -> Unit) {

@@ -64,16 +64,10 @@ class OperationDetailsActivity : AppCompatActivity() {
 
     private fun setupFab() {
         binding.fabAddPayment.setOnClickListener {
-            if (allUsers.isNotEmpty()) {
-                val dialog = AddPaymentDialog(
-                    operationId = currentOperationId,
-                    allUsers = allUsers,
-                    onPaymentAdded = {
-                        dashboardViewModel.loadOperationStats(listOf(currentOperationId))
-                    }
-                )
-                dialog.show(supportFragmentManager, AddPaymentDialog.TAG)
+            val dialog = AddPaymentDialog(operationId = currentOperationId) {
+                dashboardViewModel.loadOperationStats(listOf(currentOperationId))
             }
+            dialog.show(supportFragmentManager, AddPaymentDialog.TAG)
         }
 
         binding.btnPublish.setOnClickListener {
@@ -103,8 +97,8 @@ class OperationDetailsActivity : AppCompatActivity() {
 
     private fun observeViewModels() {
         authViewModel.loginResult.observe(this) { }
-        
-        paiementViewModel.getPaiementsWithUserByOperation(currentOperationId).observe(this) { payments ->
+
+        paiementViewModel.getPaiementsWithPayerByOperation(currentOperationId).observe(this) { payments ->
             allPayments = payments
             adapter.submitList(payments)
         }
@@ -118,7 +112,7 @@ class OperationDetailsActivity : AppCompatActivity() {
                     it.dateFin?.let { date -> dateFormat.format(date) } ?: "N/A"
                 }"
                 binding.montantCible.text = "${formatter.format(it.montantCible)} FCFA"
-                
+
                 dashboardViewModel.loadOperationStats(listOf(currentOperationId))
             }
         }
@@ -141,11 +135,11 @@ class OperationDetailsActivity : AppCompatActivity() {
 
     private fun loadAllUsers() {
         authViewModel.loginResult.observe(this) { }
-        
+
         val sharedPrefs = getSharedPreferences("musep50_prefs", MODE_PRIVATE)
         val database = com.example.musep50.data.AppDatabase.getDatabase(this)
         val repository = com.example.musep50.data.Repository(database)
-        
+
         repository.getAllUsers().observe(this) { users ->
             allUsers = users
         }

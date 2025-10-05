@@ -42,7 +42,7 @@ class AddPaymentDialog(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         setupUserDropdown()
         setupMethodDropdown()
         setupButtons()
@@ -52,7 +52,7 @@ class AddPaymentDialog(
         val userNames = allUsers.map { it.nom }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, userNames)
         binding.userInput.setAdapter(adapter)
-        
+
         binding.userInput.setOnItemClickListener { _, _, position, _ ->
             selectedUser = allUsers[position]
         }
@@ -111,17 +111,20 @@ class AddPaymentDialog(
             statut = "Validé"
         )
 
-        viewModel.insertPaiement(
-            paiement = paiement,
-            onSuccess = {
-                Toast.makeText(requireContext(), "Paiement enregistré avec succès", Toast.LENGTH_SHORT).show()
-                onPaymentAdded()
-                dismiss()
-            },
-            onError = { error ->
-                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+                paiementViewModel.insertPaiement(paiement,
+                    onSuccess = {
+                        Toast.makeText(requireContext(), "Paiement enregistré", Toast.LENGTH_SHORT).show()
+                        onPaymentAdded()
+                        dismiss()
+                    },
+                    onError = { error ->
+                        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+                    }
+                )
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Erreur: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-        )
+        }
     }
 
     override fun onDestroyView() {

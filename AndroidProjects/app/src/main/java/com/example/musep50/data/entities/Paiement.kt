@@ -1,3 +1,4 @@
+
 package com.example.musep50.data.entities
 
 import androidx.room.Entity
@@ -15,22 +16,22 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = User::class,
+            entity = Payer::class,
             parentColumns = ["id"],
-            childColumns = ["userId"],
+            childColumns = ["payerId"],
             onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [
         Index("operationId"),
-        Index("userId")
+        Index("payerId")
     ]
 )
 data class Paiement(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val operationId: Long,
-    val userId: Long,
+    val payerId: Long,
     val montant: Double,
     val montantDu: Double? = null,
     val methodePaiement: String, // "Espèces", "Mobile Money", "Virement", "Autre"

@@ -93,8 +93,8 @@ class RetardatairesActivity : AppCompatActivity() {
             calculateRetardataires(operationId)
         }
 
-        paiementViewModel.getPaiementsWithUserByOperation(operationId).observe(this) { payments ->
-            val payerIds = payments.map { it.paiement.userId }.toSet()
+        paiementViewModel.getPaiementsWithPayerByOperation(operationId).observe(this) { payments ->
+            val payerIds = payments.map { it.paiement.payerId }.toSet()
             retardataires = allUsers.filter { !payerIds.contains(it.id) }
             adapter.submitList(retardataires)
             updateRetardatairesCount()
@@ -102,8 +102,8 @@ class RetardatairesActivity : AppCompatActivity() {
     }
 
     private fun calculateRetardataires(operationId: Long) {
-        paiementViewModel.getPaiementsWithUserByOperation(operationId).observe(this) { payments ->
-            val payerIds = payments.map { it.paiement.userId }.toSet()
+        paiementViewModel.getPaiementsWithPayerByOperation(operationId).observe(this) { payments ->
+            val payerIds = payments.map { it.paiement.payerId }.toSet()
             retardataires = allUsers.filter { !payerIds.contains(it.id) }
             adapter.submitList(retardataires)
             updateRetardatairesCount()

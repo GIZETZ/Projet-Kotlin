@@ -1,3 +1,4 @@
+
 package com.example.musep50.data
 
 import android.content.Context
@@ -12,16 +13,16 @@ import com.example.musep50.data.entities.*
         User::class,
         Operation::class,
         Paiement::class,
-        Parametre::class
+        Payer::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun operationDao(): OperationDao
     abstract fun paiementDao(): PaiementDao
-    abstract fun parametreDao(): ParametreDao
+    abstract fun payerDao(): PayerDao
 
     companion object {
         @Volatile

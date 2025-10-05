@@ -1,4 +1,3 @@
-
 package com.example.musep50.ui
 
 import android.app.DatePickerDialog
@@ -78,13 +77,14 @@ class NewOperationActivity : AppCompatActivity() {
             val nom = binding.nomInput.text.toString()
             val type = binding.typeInput.text.toString()
             val montantStr = binding.montantInput.text.toString()
+            val montant = montantStr.toDouble()
 
             if (validateInputs(nom, type, montantStr)) {
                 val operation = Operation(
                     nom = nom,
                     type = type,
-                    montantCible = montantStr.toDouble(),
-                    dateDebut = dateDebut!!.time,
+                    montantCible = montant,
+                    dateDebut = dateDebut?.time ?: System.currentTimeMillis(),
                     dateFin = dateFin?.time,
                     statut = "EN_COURS"
                 )
