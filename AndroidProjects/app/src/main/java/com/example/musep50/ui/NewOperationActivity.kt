@@ -84,8 +84,8 @@ class NewOperationActivity : AppCompatActivity() {
                     nom = nom,
                     type = type,
                     montantCible = montantStr.toDouble(),
-                    dateDebut = dateDebut!!,
-                    dateFin = dateFin!!,
+                    dateDebut = dateDebut!!.time,
+                    dateFin = dateFin?.time,
                     statut = "EN_COURS"
                 )
 
