@@ -123,7 +123,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
               <div className="text-center">
                 <Button
                   type="button"
-                  variant="link"
+                  variant="ghost"
                   onClick={() => setLocation("/register")}
                   className="text-sm"
                 >
