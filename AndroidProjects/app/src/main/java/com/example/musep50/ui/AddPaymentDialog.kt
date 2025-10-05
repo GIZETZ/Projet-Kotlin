@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.musep50.data.entities.Paiement
 import com.example.musep50.databinding.DialogAddPaymentBinding
 import com.example.musep50.viewmodel.PaiementViewModel
@@ -48,7 +49,7 @@ class AddPaymentDialog(
         payerViewModel.getAllPayers().observe(viewLifecycleOwner) { payers ->
             val payerNames = payers.map { it.nom }
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, payerNames)
-            binding.payerNameInput.setAdapter(adapter)
+            binding.payerInput.setAdapter(adapter)
         }
     }
 
@@ -71,9 +72,9 @@ class AddPaymentDialog(
     }
 
     private fun validateInputs(): Boolean {
-        val payerName = binding.payerNameInput.text.toString()
+        val payerName = binding.payerInput.text.toString()
         if (payerName.isBlank()) {
-            binding.payerNameInputLayout.error = "Le nom du payeur est requis"
+            binding.payerInputLayout.error = "Le nom du payeur est requis"
             return false
         }
 
@@ -93,7 +94,7 @@ class AddPaymentDialog(
     }
 
     private fun savePaiement() {
-        val payerName = binding.payerNameInput.text.toString()
+        val payerName = binding.payerInput.text.toString()
         val montant = binding.montantInput.text.toString().toDouble()
         val method = binding.methodInput.text.toString()
         val commentaire = binding.commentaireInput.text?.toString()
@@ -111,7 +112,7 @@ class AddPaymentDialog(
                     note = null
                 )
                 
-                androidx.lifecycle.viewModelScope.launch {
+                androidx.lifecycle.lifecycleScope.launch {
                     payerId = payerViewModel.insertPayer(newPayer)
                     
                     val paiement = Paiement(

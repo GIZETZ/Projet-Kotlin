@@ -33,9 +33,9 @@ interface OperationDao {
     @Query("UPDATE operations SET statut = 'Clôturé' WHERE id = :operationId")
     suspend fun closeOperation(operationId: Long)
 
-    @Query("SELECT * FROM operations WHERE etat = :etat ORDER BY dateDebut DESC")
-    fun getOperationsByState(etat: String): LiveData<List<Operation>>
+    @Query("SELECT * FROM operations WHERE statut = :statut ORDER BY dateDebut DESC")
+    fun getOperationsByState(statut: String): LiveData<List<Operation>>
 
-    @Query("SELECT * FROM operations WHERE etat = :etat ORDER BY dateDebut DESC")
-    fun getOperationsByEtat(etat: String): LiveData<List<Operation>>
+    @Query("SELECT * FROM operations WHERE statut = :statut ORDER BY dateDebut DESC")
+    fun getOperationsByEtat(statut: String): LiveData<List<Operation>>
 }
