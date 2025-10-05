@@ -16,17 +16,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        val sharedPreferences = getSharedPreferences("musep50_prefs", MODE_PRIVATE)
-        val userId = sharedPreferences.getLong("current_user_id", -1L)
-        
-        // Si l'utilisateur est déjà connecté, aller directement au Dashboard
-        if (userId != -1L) {
-            startActivity(Intent(this, DashboardActivity::class.java))
-            finish()
-            return
-        }
-        
-        // Sinon, afficher l'écran d'intro avec vidéo
+        // Toujours afficher l'écran d'intro avec vidéo à chaque lancement
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
