@@ -45,6 +45,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
+    implementation("androidx.activity:activity-ktx:1.8.0")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation(libs.androidx.constraintlayout)
     
     // Room
