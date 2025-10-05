@@ -118,8 +118,7 @@ class PublishActivity : AppCompatActivity() {
         } else {
             payments.forEachIndexed { index, paiementWithUser ->
                 builder.appendLine()
-                builder.appendLine("${index + 1}. ${paiementWithUser.payer.nom}")
-                builder.appendLine("   💵 Montant: ${formatter.format(paiementWithUser.paiement.montant)} FCFA")
+                builder.appendLine("${index + 1}. ${paiementWithUser.payerName} - ${formatter.format(paiementWithUser.paiement.montant)} FCFA")
                 builder.appendLine("   📅 Date: ${dateFormat.format(paiementWithUser.paiement.datePaiement)}")
                 builder.appendLine("   💳 Méthode: ${paiementWithUser.paiement.methodePaiement}")
                 if (!paiementWithUser.paiement.commentaire.isNullOrBlank()) {
@@ -184,7 +183,7 @@ class PublishActivity : AppCompatActivity() {
                     writer.append("Nom du payeur,Contact,Montant (FCFA),Date,Méthode,Commentaire\n")
 
                     payments.forEach { payment ->
-                        writer.append("\"${payment.payer.nom}\",")
+                        writer.append("\"${payment.payerName}\",")
                         writer.append("\"${payment.payer.contact ?: ""}\",")
                         writer.append("${payment.paiement.montant},")
                         writer.append("\"${dateFormat.format(payment.paiement.datePaiement)}\",")

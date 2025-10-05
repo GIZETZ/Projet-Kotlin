@@ -28,13 +28,16 @@ interface PaiementDao {
     suspend fun getCountByOperation(operationId: Long): Int
 
     @Query("""
-        SELECT p.*, payer.nom as payerName 
+        SELECT p.*, payer.nom as payerName, payer.contact as payerContact 
         FROM paiements p 
         LEFT JOIN payers payer ON p.payerId = payer.id 
         WHERE p.operationId = :operationId 
         ORDER BY p.datePaiement DESC
     """)
     fun getPaiementsWithPayerByOperation(operationId: Long): LiveData<List<PaiementWithPayer>>
+    
+    @Query("SELECT * FROM paiements ORDER BY datePaiement DESC")
+    fun getAllPaiements(): LiveData<List<Paiement>>
 
     @Query("""
         SELECT paiements.*, payers.nom as payerName, payers.contact as payerContact 

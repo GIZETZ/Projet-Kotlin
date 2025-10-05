@@ -73,4 +73,7 @@ class Repository(private val database: AppDatabase) {
 
     suspend fun insertUser(user: User): Long =
         database.userDao().insert(user)
+    
+    fun getAllUsers(): LiveData<List<User>> =
+        database.userDao().getAllUsers()
 }

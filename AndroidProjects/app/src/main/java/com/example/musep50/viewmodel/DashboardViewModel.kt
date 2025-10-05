@@ -22,7 +22,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             val stats = mutableMapOf<Long, OperationStats>()
             operationIds.forEach { id ->
-                val total = repository.getTotalByOperation(id)
+                val total = repository.getTotalByOperation(id) ?: 0.0
                 val count = repository.getCountByOperation(id)
                 val operation = repository.getOperationById(id)
                 operation?.let {

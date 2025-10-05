@@ -55,13 +55,20 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getAllUsers(): LiveData<List<User>> {
-        return repository.getAllUsers()
+    fun insertUser(user: User, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            try {
+                repository.insertUser(user)
+                onSuccess()
+            } catch (e: Exception) {
+                onError(e.message ?: "Erreur lors de la création de l'utilisateur")
+            }
+        }
     }
 
-    suspend fun getUserByIdSuspend(userId: Long): User? {
-        return repository.getUserById(userId)
-    }
+    fun getAllUsers(): LiveData<List<User>> = repository.getAllUsers()
+
+    suspend fun getUserById(id: Long): User? = repository.getUserById(id)
 }
 
 sealed class LoginResult {
