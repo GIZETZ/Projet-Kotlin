@@ -55,12 +55,12 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getUserById(userId: Long): LiveData<User?> {
-        val result = MutableLiveData<User?>()
-        viewModelScope.launch {
-            result.value = repository.getUserById(userId)
-        }
-        return result
+    fun getAllUsers(): LiveData<List<User>> {
+        return repository.getAllUsers()
+    }
+
+    suspend fun getUserByIdSuspend(userId: Long): User? {
+        return repository.getUserById(userId)
     }
 }
 

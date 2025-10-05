@@ -89,7 +89,7 @@ class PublishActivity : AppCompatActivity() {
         binding.previewText.text = text
     }
 
-    private fun generateFormattedList(operation: Operation, payments: List<PaiementWithUser>): String {
+    private fun generateFormattedList(operation: Operation, payments: List<PaiementWithPayer>): String {
         val builder = StringBuilder()
 
         builder.appendLine("═══════════════════════════")
@@ -118,7 +118,7 @@ class PublishActivity : AppCompatActivity() {
         } else {
             payments.forEachIndexed { index, paiementWithUser ->
                 builder.appendLine()
-                builder.appendLine("${index + 1}. ${paiementWithUser.payerName}")
+                builder.appendLine("${index + 1}. ${paiementWithUser.payer.nom}")
                 builder.appendLine("   💵 Montant: ${formatter.format(paiementWithUser.paiement.montant)} FCFA")
                 builder.appendLine("   📅 Date: ${dateFormat.format(paiementWithUser.paiement.datePaiement)}")
                 builder.appendLine("   💳 Méthode: ${paiementWithUser.paiement.methodePaiement}")
@@ -181,15 +181,15 @@ class PublishActivity : AppCompatActivity() {
                 val file = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
 
                 FileWriter(file).use { writer ->
-                    writer.append("Nom du payeur,Email,Montant (FCFA),Date,Méthode,Commentaire\n")
+                    writer.append("Nom du payeur,Contact,Montant (FCFA),Date,Méthode,Commentaire\n")
 
-                    payments.forEach { paiementWithUser ->
-                        writer.append("\"${paiementWithUser.payerName}\",")
-                        writer.append("\"${paiementWithUser.payerEmail}\",")
-                        writer.append("${paiementWithUser.paiement.montant},")
-                        writer.append("\"${dateFormat.format(paiementWithUser.paiement.datePaiement)}\",")
-                        writer.append("\"${paiementWithUser.paiement.methodePaiement}\",")
-                        writer.append("\"${paiementWithUser.paiement.commentaire ?: ""}\"\n")
+                    payments.forEach { payment ->
+                        writer.append("\"${payment.payer.nom}\",")
+                        writer.append("\"${payment.payer.contact ?: ""}\",")
+                        writer.append("${payment.paiement.montant},")
+                        writer.append("\"${dateFormat.format(payment.paiement.datePaiement)}\",")
+                        writer.append("\"${payment.paiement.methodePaiement}\",")
+                        writer.append("\"${payment.paiement.commentaire ?: ""}\"\n")
                     }
                 }
 

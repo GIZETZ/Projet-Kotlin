@@ -48,7 +48,7 @@ class AddPaymentDialog(
         payerViewModel.getAllPayers().observe(viewLifecycleOwner) { payers ->
             val payerNames = payers.map { it.nom }
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, payerNames)
-            binding.payerInput.setAdapter(adapter)
+            binding.payerNameInput.setAdapter(adapter)
         }
     }
 
@@ -71,9 +71,9 @@ class AddPaymentDialog(
     }
 
     private fun validateInputs(): Boolean {
-        val payerName = binding.payerInput.text.toString()
+        val payerName = binding.payerNameInput.text.toString()
         if (payerName.isBlank()) {
-            binding.payerInputLayout.error = "Le nom du payeur est requis"
+            binding.payerNameInputLayout.error = "Le nom du payeur est requis"
             return false
         }
 
@@ -93,10 +93,11 @@ class AddPaymentDialog(
     }
 
     private fun savePaiement() {
-        val payerName = binding.payerInput.text.toString()
+        val payerName = binding.payerNameInput.text.toString()
         val montant = binding.montantInput.text.toString().toDouble()
         val method = binding.methodInput.text.toString()
         val commentaire = binding.commentaireInput.text?.toString()
+        val contact = binding.contactInput.text?.toString()
 
         // First, check if payer exists or create new one
         payerViewModel.getAllPayers().observe(viewLifecycleOwner) { payers ->
@@ -106,11 +107,11 @@ class AddPaymentDialog(
                 // Create new payer
                 val newPayer = com.example.musep50.data.entities.Payer(
                     nom = payerName,
-                    contact = binding.contactInput.text?.toString(),
+                    contact = contact,
                     note = null
                 )
                 
-                androidx.lifecycle.lifecycleScope.launch {
+                androidx.lifecycle.viewModelScope.launch {
                     payerId = payerViewModel.insertPayer(newPayer)
                     
                     val paiement = Paiement(

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.musep50.data.dao.PaiementWithUser
+import com.example.musep50.data.dao.PaiementWithPayer
 import com.example.musep50.databinding.ItemPaymentBinding
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
