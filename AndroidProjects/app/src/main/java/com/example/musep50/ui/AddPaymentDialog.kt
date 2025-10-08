@@ -1,4 +1,3 @@
-
 package com.example.musep50.ui
 
 import android.app.Dialog
@@ -55,6 +54,20 @@ class AddPaymentDialog(
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, payerNames)
             binding.userInput.setAdapter(adapter)
         }
+
+        binding.btnAddPayer.setOnClickListener {
+            // Show dialog to add new payer
+            AddPayerDialog { payerName ->
+                // Add the new payer to the adapter and select it
+                payerViewModel.insertPayer(com.example.musep50.data.entities.Payer(nom = payerName, contact = null, note = null))
+                payerViewModel.getAllPayers().observe(viewLifecycleOwner) { payers ->
+                    val payerNames = payers.map { it.nom }
+                    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, payerNames)
+                    binding.userInput.setAdapter(adapter)
+                    binding.userInput.setText(payerName, false)
+                }
+            }.show(parentFragmentManager, AddPayerDialog.TAG)
+        }
     }
 
     private fun setupMethodDropdown() {
@@ -107,7 +120,7 @@ class AddPaymentDialog(
             // First, check if payer exists or create new one
             val payers = payerViewModel.getAllPayersSync()
             var payerId = payers.find { it.nom.equals(payerName, ignoreCase = true) }?.id
-            
+
             if (payerId == null) {
                 // Create new payer
                 val newPayer = com.example.musep50.data.entities.Payer(
@@ -115,10 +128,10 @@ class AddPaymentDialog(
                     contact = null,
                     note = null
                 )
-                
+
                 payerId = payerViewModel.insertPayer(newPayer)
             }
-            
+
             val paiement = Paiement(
                 operationId = operationId,
                 payerId = payerId,
