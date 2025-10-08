@@ -18,6 +18,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _registerResult = MutableLiveData<RegisterResult>()
     val registerResult: LiveData<RegisterResult> = _registerResult
+    
+    private val _currentUser = MutableLiveData<User?>()
+    val currentUser: LiveData<User?> = _currentUser
 
     fun login(email: String, pin: String) {
         viewModelScope.launch {
@@ -69,6 +72,13 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun getAllUsers(): LiveData<List<User>> = repository.getAllUsers()
 
     suspend fun getUserById(id: Long): User? = repository.getUserById(id)
+    
+    fun loadUserById(userId: Long) {
+        viewModelScope.launch {
+            val user = repository.getUserById(userId)
+            _currentUser.value = user
+        }
+    }
 }
 
 sealed class LoginResult {

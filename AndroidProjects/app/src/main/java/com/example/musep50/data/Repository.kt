@@ -1,6 +1,7 @@
 package com.example.musep50.data
 
 import androidx.lifecycle.LiveData
+import com.example.musep50.data.dao.PaiementWithPayer
 import com.example.musep50.data.entities.*
 
 class Repository(private val database: AppDatabase) {

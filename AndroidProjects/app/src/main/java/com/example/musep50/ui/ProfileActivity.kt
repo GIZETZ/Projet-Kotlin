@@ -42,7 +42,7 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
 
-        lifecycleScope.launch {
+        if (userId != -1L) {
             viewModel.loadUserById(userId)
         }
     }
