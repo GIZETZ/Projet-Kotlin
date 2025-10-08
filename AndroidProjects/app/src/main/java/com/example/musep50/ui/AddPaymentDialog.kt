@@ -97,7 +97,7 @@ class AddPaymentDialog(
         val payerName = binding.userInput.text.toString()
         val montant = binding.montantInput.text.toString().toDouble()
         val method = binding.methodInput.text.toString()
-        val commentaire = binding.commentaireInput.text?.toString()
+        val commentaire = binding.commentaireInput.text?.toString()()
 
         viewLifecycleOwner.lifecycleScope.launch {
             // First, check if payer exists or create new one
