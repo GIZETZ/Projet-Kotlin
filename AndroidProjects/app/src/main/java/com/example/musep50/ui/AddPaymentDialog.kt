@@ -16,6 +16,7 @@ import com.example.musep50.databinding.DialogAddPaymentBinding
 import com.example.musep50.viewmodel.PaiementViewModel
 import com.example.musep50.viewmodel.PayerViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 
 class AddPaymentDialog(
     private val operationId: Long,
