@@ -13,7 +13,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_launcher_foreground"
+            app:navigationIcon="@drawable/ic_arrow_back"
             app:title="Détails de l'opération" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -174,7 +174,7 @@
                             android:layout_weight="1"
                             android:layout_marginEnd="8dp"
                             android:text="📤 Publier"
-                            app:icon="@drawable/ic_launcher_foreground" />
+                            app:icon="@drawable/ic_share" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnRetardataires"
@@ -183,7 +183,7 @@
                             android:layout_weight="1"
                             android:text="⏰ Rappels"
                             style="@style/Widget.Material3.Button.OutlinedButton"
-                            app:icon="@drawable/ic_launcher_foreground" />
+                            app:icon="@drawable/ic_notification" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -214,7 +214,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:hint="Rechercher un payeur"
-                        app:startIconDrawable="@drawable/ic_launcher_foreground">
+                        app:startIconDrawable="@drawable/ic_search">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/searchInput"
@@ -239,5 +239,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        app:srcCompat="@drawable/ic_add" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
