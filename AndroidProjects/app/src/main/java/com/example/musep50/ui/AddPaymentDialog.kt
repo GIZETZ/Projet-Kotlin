@@ -40,6 +40,9 @@ class AddPaymentDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Set dialog style
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
         setupPayerInput()
         setupMethodDropdown()
         setupButtons()
@@ -142,12 +145,6 @@ class AddPaymentDialog(
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialAlertDialogBuilder(requireContext())
-            .setView(binding.root)
-            .create()
     }
 
     companion object {
