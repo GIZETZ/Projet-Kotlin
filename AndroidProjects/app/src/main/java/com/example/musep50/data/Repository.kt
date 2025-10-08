@@ -46,7 +46,9 @@ class Repository(private val database: AppDatabase) {
     suspend fun deletePayer(payer: Payer) = database.payerDao().delete(payer)
 
     // Paiement methods
-    fun getAllPaiements(): LiveData<List<Paiement>> = database.paiementDao().getAllPaiements()
+    fun getAllPaiements(): LiveData<List<Paiement>> {
+        return database.paiementDao().getAllPaiements()
+    }
 
     fun getPaiementsByOperation(operationId: Long): LiveData<List<Paiement>> =
         database.paiementDao().getPaiementsByOperation(operationId)
