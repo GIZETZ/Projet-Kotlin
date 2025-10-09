@@ -57,14 +57,16 @@ class AddPaymentDialog(
 
         binding.btnAddPayer.setOnClickListener {
             // Show dialog to add new payer
-            AddPayerDialog { payerName ->
-                // Add the new payer to the adapter and select it
-                payerViewModel.insertPayer(com.example.musep50.data.entities.Payer(nom = payerName, contact = null, note = null))
+            AddPayerDialog {
+                // Refresh the payer list after adding
                 payerViewModel.getAllPayers().observe(viewLifecycleOwner) { payers ->
                     val payerNames = payers.map { it.nom }
                     val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, payerNames)
                     binding.userInput.setAdapter(adapter)
-                    binding.userInput.setText(payerName, false)
+                    // Select the last added payer
+                    if (payerNames.isNotEmpty()) {
+                        binding.userInput.setText(payerNames.last(), false)
+                    }
                 }
             }.show(parentFragmentManager, AddPayerDialog.TAG)
         }

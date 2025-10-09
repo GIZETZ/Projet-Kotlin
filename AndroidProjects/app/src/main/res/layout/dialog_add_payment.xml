@@ -14,19 +14,36 @@
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/userInputLayout"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Sélectionner le payeur">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <AutoCompleteTextView
-            android:id="@+id/userInput"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/userInputLayout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="none" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight="1"
+            android:hint="Sélectionner le payeur">
+
+            <AutoCompleteTextView
+                android:id="@+id/userInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddPayer"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Ajouter un payeur"
+            app:icon="@drawable/ic_add" />
+    </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/montantInputLayout"

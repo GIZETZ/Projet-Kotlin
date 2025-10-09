@@ -93,4 +93,3 @@ class AddPayerDialog(
         const val TAG = "AddPayerDialog"
     }
 }
-```
