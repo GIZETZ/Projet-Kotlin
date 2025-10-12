@@ -6,6 +6,26 @@ import com.example.musep50.data.entities.*
 
 class Repository(private val database: AppDatabase) {
 
+    // Event methods
+    fun getAllEvents(): LiveData<List<Event>> = database.eventDao().getAllEvents()
+
+    suspend fun getEventById(id: Long): Event? = database.eventDao().getEventById(id)
+
+    fun getEventByIdLive(id: Long): LiveData<Event?> = database.eventDao().getEventByIdLive(id)
+
+    fun getActiveEvents(): LiveData<List<Event>> = database.eventDao().getActiveEvents()
+
+    fun getEventsByState(statut: String): LiveData<List<Event>> =
+        database.eventDao().getEventsByState(statut)
+
+    suspend fun insertEvent(event: Event): Long = database.eventDao().insert(event)
+
+    suspend fun updateEvent(event: Event) = database.eventDao().update(event)
+
+    suspend fun deleteEvent(event: Event) = database.eventDao().delete(event)
+
+    suspend fun archiveEvent(eventId: Long) = database.eventDao().archiveEvent(eventId)
+
     // Operation methods
     fun getAllOperations(): LiveData<List<Operation>> = database.operationDao().getAllOperations()
 
@@ -17,6 +37,9 @@ class Repository(private val database: AppDatabase) {
 
     fun getOperationsByEtat(etat: String): LiveData<List<Operation>> =
         database.operationDao().getOperationsByEtat(etat)
+
+    fun getOperationsByEvent(eventId: Long): LiveData<List<Operation>> =
+        database.operationDao().getOperationsByEvent(eventId)
 
     suspend fun insertOperation(operation: Operation): Long =
         database.operationDao().insert(operation)
