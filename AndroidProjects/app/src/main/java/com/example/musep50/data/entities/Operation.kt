@@ -1,12 +1,26 @@
 package com.example.musep50.data.entities
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "operations")
+@Entity(
+    tableName = "operations",
+    foreignKeys = [
+        ForeignKey(
+            entity = Event::class,
+            parentColumns = ["id"],
+            childColumns = ["eventId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index("eventId")]
+)
 data class Operation(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
+    val eventId: Long, // Référence à l'événement parent
     val nom: String,
     val type: String, // ADHESION, COTISATION_EXCEPTIONNELLE, FONDS_CAISSE
     val montantCible: Double,
