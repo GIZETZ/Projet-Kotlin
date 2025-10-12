@@ -38,4 +38,7 @@ interface OperationDao {
 
     @Query("SELECT * FROM operations WHERE statut = :statut ORDER BY dateDebut DESC")
     fun getOperationsByEtat(statut: String): LiveData<List<Operation>>
+
+    @Query("SELECT * FROM operations WHERE eventId = :eventId ORDER BY createdAt DESC")
+    fun getOperationsByEvent(eventId: Long): LiveData<List<Operation>>
 }
