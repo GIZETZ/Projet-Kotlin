@@ -44,6 +44,12 @@
         <activity
             android:name=".ui.RetardatairesActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.EventOperationsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.NewEventActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
