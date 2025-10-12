@@ -10,15 +10,17 @@ import com.example.musep50.data.entities.*
 @Database(
     entities = [
         User::class,
+        Event::class,
         Operation::class,
         Paiement::class,
         Payer::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun eventDao(): EventDao
     abstract fun operationDao(): OperationDao
     abstract fun paiementDao(): PaiementDao
     abstract fun payerDao(): PayerDao
