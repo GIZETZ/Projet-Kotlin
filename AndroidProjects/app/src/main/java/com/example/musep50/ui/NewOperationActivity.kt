@@ -19,11 +19,20 @@ class NewOperationActivity : AppCompatActivity() {
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
     private var dateDebut: Date? = null
     private var dateFin: Date? = null
+    private var eventId: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNewOperationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        eventId = intent.getLongExtra("event_id", -1)
+
+        if (eventId == -1L) {
+            Toast.makeText(this, "Erreur: Aucun événement sélectionné", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
         setupToolbar()
         setupTypeDropdown()
@@ -81,12 +90,13 @@ class NewOperationActivity : AppCompatActivity() {
 
             if (validateInputs(nom, type, montantStr)) {
                 val operation = Operation(
+                    eventId = eventId,
                     nom = nom,
                     type = type,
                     montantCible = montant,
                     dateDebut = dateDebut?.time ?: System.currentTimeMillis(),
                     dateFin = dateFin?.time,
-                    statut = "EN_COURS"
+                    statut = "En cours"
                 )
 
                 viewModel.insertOperation(operation)
