@@ -9,8 +9,8 @@ interface EventDao {
     @Query("SELECT * FROM events ORDER BY createdAt DESC")
     fun getAllEvents(): LiveData<List<Event>>
 
-    @Query("SELECT * FROM events WHERE id = :id")
-    suspend fun getEventById(id: Long): Event?
+    @Query("SELECT * FROM events WHERE id = :eventId")
+    suspend fun getEventById(eventId: Long): Event?
 
     @Query("SELECT * FROM events WHERE id = :id")
     fun getEventByIdLive(id: Long): LiveData<Event?>

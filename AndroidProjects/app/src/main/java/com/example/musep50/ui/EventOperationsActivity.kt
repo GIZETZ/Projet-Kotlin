@@ -1,3 +1,4 @@
+
 package com.example.musep50.ui
 
 import android.content.Intent
@@ -14,12 +15,13 @@ import com.example.musep50.data.entities.Operation
 import com.example.musep50.databinding.ActivityEventOperationsBinding
 import com.example.musep50.ui.adapter.OperationAdapter
 import com.example.musep50.viewmodel.DashboardViewModel
+import com.example.musep50.viewmodel.EventViewModel
 import kotlinx.coroutines.launch
 
 class EventOperationsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEventOperationsBinding
     private lateinit var repository: Repository
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var eventViewModel: EventViewModel
     private lateinit var adapter: OperationAdapter
     private var eventId: Long = -1
     
@@ -36,7 +38,7 @@ class EventOperationsActivity : AppCompatActivity() {
         }
         
         repository = Repository(AppDatabase.getDatabase(this))
-        dashboardViewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
+        eventViewModel = ViewModelProvider(this)[EventViewModel::class.java]
         
         setupToolbar()
         setupRecyclerView()
@@ -76,27 +78,27 @@ class EventOperationsActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val event = repository.getEventById(eventId)
             event?.let {
-                binding.eventName.text = it.nom
-                binding.eventDescription.text = it.description ?: "Aucune description"
+                binding.eventName.text = it.name
+                binding.eventDescription.text = it.description
             }
         }
     }
     
     private fun observeOperations() {
-        repository.getOperationsByEvent(eventId).observe(this) { operations ->
-            adapter.submitList(operations)
-            updateEmptyState(operations.isEmpty())
-            
-            dashboardViewModel.loadOperationStats(operations.map { it.id })
-        }
-        
-        dashboardViewModel.operationStats.observe(this) { stats ->
-            adapter.setOperationStats(stats)
+        eventViewModel.getOperationsByEvent(eventId).observe(this) { operations ->
+            if (operations.isEmpty()) {
+                binding.emptyStateLayout.visibility = View.VISIBLE
+                binding.operationsRecyclerView.visibility = View.GONE
+            } else {
+                binding.emptyStateLayout.visibility = View.GONE
+                binding.operationsRecyclerView.visibility = View.VISIBLE
+                adapter.submitList(operations)
+            }
         }
     }
     
-    private fun updateEmptyState(isEmpty: Boolean) {
-        binding.emptyStateLayout.visibility = if (isEmpty) View.VISIBLE else View.GONE
-        binding.operationsRecyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
+    override fun onResume() {
+        super.onResume()
+        loadEventData()
     }
 }

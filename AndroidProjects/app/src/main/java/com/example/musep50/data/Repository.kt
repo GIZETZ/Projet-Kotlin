@@ -9,14 +9,9 @@ class Repository(private val database: AppDatabase) {
     // Event methods
     fun getAllEvents(): LiveData<List<Event>> = database.eventDao().getAllEvents()
 
-    suspend fun getEventById(id: Long): Event? = database.eventDao().getEventById(id)
-
-    fun getEventByIdLive(id: Long): LiveData<Event?> = database.eventDao().getEventByIdLive(id)
-
-    fun getActiveEvents(): LiveData<List<Event>> = database.eventDao().getActiveEvents()
-
-    fun getEventsByState(statut: String): LiveData<List<Event>> =
-        database.eventDao().getEventsByState(statut)
+    suspend fun getEventById(eventId: Long): Event? {
+        return database.eventDao().getEventById(eventId)
+    }
 
     suspend fun insertEvent(event: Event): Long = database.eventDao().insert(event)
 
