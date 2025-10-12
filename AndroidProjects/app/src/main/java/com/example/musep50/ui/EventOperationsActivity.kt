@@ -78,7 +78,7 @@ class EventOperationsActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val event = repository.getEventById(eventId)
             event?.let {
-                binding.eventName.text = it.name
+                binding.eventName.text = it.nom
                 binding.eventDescription.text = it.description
             }
         }
