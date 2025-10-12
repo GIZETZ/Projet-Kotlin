@@ -11,16 +11,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.musep50.R
-import com.example.musep50.data.entities.Operation
+import com.example.musep50.data.entities.Event
 import com.example.musep50.databinding.ActivityDashboardBinding
-import com.example.musep50.ui.adapter.OperationAdapter
-import com.example.musep50.viewmodel.DashboardViewModel
+import com.example.musep50.ui.adapter.EventAdapter
+import com.example.musep50.viewmodel.EventViewModel
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDashboardBinding
-    private val viewModel: DashboardViewModel by viewModels()
-    private lateinit var adapter: OperationAdapter
-    private var allOperations = listOf<Operation>()
+    private val viewModel: EventViewModel by viewModels()
+    private lateinit var adapter: EventAdapter
+    private var allEvents = listOf<Event>()
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,35 +36,35 @@ class DashboardActivity : AppCompatActivity() {
     }
     
     private fun setupRecyclerView() {
-        adapter = OperationAdapter { operation ->
-            val intent = Intent(this, OperationDetailsActivity::class.java)
-            intent.putExtra("operation_id", operation.id)
+        adapter = EventAdapter { event ->
+            val intent = Intent(this, EventOperationsActivity::class.java)
+            intent.putExtra("event_id", event.id)
             startActivity(intent)
         }
         
-        binding.operationsRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.operationsRecyclerView.adapter = adapter
+        binding.eventsRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.eventsRecyclerView.adapter = adapter
     }
     
     private fun setupSearchBar() {
         binding.searchInput.doOnTextChanged { text, _, _, _ ->
-            filterOperations(text.toString())
+            filterEvents(text.toString())
         }
     }
     
     private fun setupFab() {
-        binding.fabNewOperation.setOnClickListener {
-            startActivity(Intent(this, NewOperationActivity::class.java))
+        binding.fabNewEvent.setOnClickListener {
+            startActivity(Intent(this, NewEventActivity::class.java))
         }
     }
     
-    private fun filterOperations(query: String) {
+    private fun filterEvents(query: String) {
         val filtered = if (query.isBlank()) {
-            allOperations
+            allEvents
         } else {
-            allOperations.filter {
+            allEvents.filter {
                 it.nom.contains(query, ignoreCase = true) ||
-                it.type.contains(query, ignoreCase = true)
+                (it.description?.contains(query, ignoreCase = true) == true)
             }
         }
         adapter.submitList(filtered)
@@ -73,20 +73,14 @@ class DashboardActivity : AppCompatActivity() {
     
     private fun updateEmptyState(isEmpty: Boolean) {
         binding.emptyStateLayout.visibility = if (isEmpty) View.VISIBLE else View.GONE
-        binding.operationsRecyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        binding.eventsRecyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
     }
     
     private fun observeViewModel() {
-        viewModel.allOperations.observe(this) { operations ->
-            allOperations = operations
-            adapter.submitList(operations)
-            updateEmptyState(operations.isEmpty())
-            
-            viewModel.loadOperationStats(operations.map { it.id })
-        }
-        
-        viewModel.operationStats.observe(this) { stats ->
-            adapter.setOperationStats(stats)
+        viewModel.allEvents.observe(this) { events ->
+            allEvents = events
+            adapter.submitList(events)
+            updateEmptyState(events.isEmpty())
         }
     }
     

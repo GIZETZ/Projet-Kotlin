@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="Rechercher une opération..."
+                android:hint="Rechercher un événement..."
                 app:startIconDrawable="@android:drawable/ic_menu_search">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -45,12 +45,12 @@
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Operations List -->
+            <!-- Events List -->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/operationsRecyclerView"
+                android:id="@+id/eventsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/item_operation" />
+                tools:listitem="@layout/item_event" />
 
             <!-- Empty State -->
             <LinearLayout
@@ -74,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Aucune opération trouvée"
+                    android:text="Aucun événement trouvé"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -82,21 +82,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Essayez de modifier votre recherche"
+                    android:text="Créez votre premier événement"
                     android:textSize="14sp"
                     android:textColor="@android:color/darker_gray" />
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- FAB for New Operation -->
+    <!-- FAB for New Event -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabNewOperation"
+        android:id="@+id/fabNewEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="Nouvelle opération"
+        android:contentDescription="Nouvel événement"
         android:src="@android:drawable/ic_input_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
