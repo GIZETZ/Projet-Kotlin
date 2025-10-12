@@ -86,9 +86,9 @@ class NewOperationActivity : AppCompatActivity() {
             val nom = binding.nomInput.text.toString()
             val type = binding.typeInput.text.toString()
             val montantStr = binding.montantInput.text.toString()
-            val montant = montantStr.toDouble()
 
             if (validateInputs(nom, type, montantStr)) {
+                val montant = montantStr.toDouble()
                 val operation = Operation(
                     eventId = eventId,
                     nom = nom,
