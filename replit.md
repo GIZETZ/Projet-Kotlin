@@ -97,5 +97,47 @@ To develop this app, you need:
   2. Ajouter des opérations à l'événement
   3. Gérer les paiements pour chaque opération
 
+## 🆕 Gestion des Participants par Événement (October 13, 2025)
+**Nouvelle fonctionnalité : Participants/Payeurs au niveau de l'événement**
+
+### Changements majeurs :
+- **Participants liés aux événements** : Les payeurs peuvent maintenant être associés à un événement spécifique
+- **Gestion centralisée** : Un bouton dans l'écran des opérations d'un événement permet de gérer la liste des participants
+- **Simplification de l'ajout de paiements** : Les participants d'un événement sont automatiquement disponibles lors de l'ajout d'un paiement dans une opération
+
+### Nouveaux composants créés :
+1. **Base de données** :
+   - Migration MIGRATION_3_4 - Ajout de la colonne `eventId` dans la table `payers`
+   - Relation optionnelle Event-Payer (nullable pour compatibilité avec les anciens payeurs)
+   - Version de la base de données : 4
+
+2. **Couche données** :
+   - `PayerDao` enrichi avec méthodes pour récupérer les payeurs par événement
+   - `Repository` et `PayerViewModel` mis à jour avec méthodes de gestion par événement
+
+3. **Interface utilisateur** :
+   - `dialog_manage_participants.xml` - Dialog pour gérer les participants d'un événement
+   - `item_participant.xml` - Layout pour afficher un participant dans la liste
+   - `ManageParticipantsDialog.kt` - Dialog permettant d'ajouter/supprimer des participants
+   - `ParticipantAdapter.kt` - Adapter pour afficher la liste des participants
+   - Bouton FAB "Gérer les participants" dans `EventOperationsActivity`
+   - `AddPaymentDialog` modifié pour charger automatiquement les participants de l'événement
+
+### Flux de travail :
+1. **Gestion des participants** :
+   - Ouvrir un événement dans le dashboard
+   - Cliquer sur le bouton "Gérer les participants" (icône calendrier en bas à gauche)
+   - Ajouter/supprimer des participants pour cet événement
+
+2. **Ajout de paiements** :
+   - Dans une opération, cliquer sur "Ajouter un paiement"
+   - La liste déroulante affiche automatiquement les participants de l'événement parent
+   - Possibilité d'ajouter rapidement un nouveau participant via le bouton "+"
+
+### Avantages :
+- **Productivité améliorée** : Plus besoin de retaper les noms des participants pour chaque opération
+- **Cohérence des données** : Les participants sont partagés entre toutes les opérations d'un même événement
+- **Flexibilité** : Les anciens payeurs sans événement continuent de fonctionner (eventId nullable)
+
 ## 🎉 État du Projet
-Toutes les fonctionnalités demandées ont été implémentées avec succès. La nouvelle architecture hiérarchique permet une meilleure organisation des opérations par événement. L'application est prête pour compilation et test dans Android Studio.
+Toutes les fonctionnalités demandées ont été implémentées avec succès. La nouvelle architecture hiérarchique permet une meilleure organisation des opérations par événement. La gestion des participants au niveau de l'événement facilite grandement l'ajout de paiements. L'application est prête pour compilation et test dans Android Studio.
