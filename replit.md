@@ -139,5 +139,53 @@ To develop this app, you need:
 - **Cohérence des données** : Les participants sont partagés entre toutes les opérations d'un même événement
 - **Flexibilité** : Les anciens payeurs sans événement continuent de fonctionner (eventId nullable)
 
+## ✏️ CRUD Complet - Édition et Suppression (October 13, 2025)
+**Fonctionnalités CRUD complètes pour Événements et Opérations**
+
+### Changements majeurs :
+- **Menus contextuels (3 points)** : Ajout d'un bouton menu dans chaque carte d'événement et d'opération
+- **Édition complète** : Possibilité de modifier tous les champs d'un événement ou d'une opération
+- **Suppression sécurisée** : Dialogue de confirmation avant suppression avec avertissement sur les données liées
+- **Architecture MVVM respectée** : Toutes les opérations passent par Repository → ViewModel → Activity
+
+### Nouveaux composants créés :
+1. **Menus XML** :
+   - `event_item_menu.xml` - Menu contextuel pour événements (Modifier/Supprimer)
+   - `operation_item_menu.xml` - Menu contextuel pour opérations (Modifier/Supprimer)
+
+2. **Activités d'édition** :
+   - `EditEventActivity.kt` - Activité pour modifier un événement existant
+   - `EditOperationActivity.kt` - Activité pour modifier une opération existante
+   - `activity_edit_event.xml` - Layout pour l'édition d'événement
+   - `activity_edit_operation.xml` - Layout pour l'édition d'opération
+
+3. **Adapters mis à jour** :
+   - `EventAdapter` - Ajout de callbacks onEditClick et onDeleteClick avec menu popup
+   - `OperationAdapter` - Ajout de callbacks onEditClick et onDeleteClick avec menu popup
+
+4. **ViewModels enrichis** :
+   - `EventViewModel.getEventById()` - Récupération d'un événement spécifique (LiveData)
+   - `OperationViewModel.getOperationById()` - Récupération d'une opération spécifique (LiveData)
+   - Repository expose `getEventByIdLive()` et `getOperationByIdLive()` pour respecter l'abstraction MVVM
+
+### Flux de travail :
+1. **Modifier un événement/opération** :
+   - Cliquer sur le bouton menu (3 points) sur une carte
+   - Sélectionner "Modifier"
+   - Tous les champs sont pré-remplis avec les données existantes
+   - Modifier les champs souhaités
+   - Cliquer sur "Enregistrer les modifications"
+
+2. **Supprimer un événement/opération** :
+   - Cliquer sur le bouton menu (3 points) sur une carte
+   - Sélectionner "Supprimer"
+   - Confirmer la suppression dans le dialogue
+   - Les données liées (opérations/paiements) sont également supprimées
+
+### Améliorations :
+- **Expérience utilisateur améliorée** : Actions contextuelles accessibles directement depuis les listes
+- **Intégrité des données** : Confirmations avant suppression pour éviter les pertes accidentelles
+- **Code maintenable** : Architecture MVVM strictement respectée avec séparation des couches
+
 ## 🎉 État du Projet
-Toutes les fonctionnalités demandées ont été implémentées avec succès. La nouvelle architecture hiérarchique permet une meilleure organisation des opérations par événement. La gestion des participants au niveau de l'événement facilite grandement l'ajout de paiements. L'application est prête pour compilation et test dans Android Studio.
+Toutes les fonctionnalités demandées ont été implémentées avec succès. La nouvelle architecture hiérarchique permet une meilleure organisation des opérations par événement. La gestion des participants au niveau de l'événement facilite grandement l'ajout de paiements. Les fonctionnalités CRUD complètes permettent une gestion complète des événements et opérations. L'application est prête pour compilation et test dans Android Studio.
