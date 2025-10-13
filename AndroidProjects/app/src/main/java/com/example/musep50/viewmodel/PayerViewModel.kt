@@ -20,8 +20,20 @@ class PayerViewModel(application: Application) : AndroidViewModel(application) {
         return repository.getAllPayersSync()
     }
 
+    fun getPayersByEvent(eventId: Long): LiveData<List<Payer>> {
+        return repository.getPayersByEvent(eventId)
+    }
+
+    suspend fun getPayersByEventSync(eventId: Long): List<Payer> {
+        return repository.getPayersByEventSync(eventId)
+    }
+
     fun searchPayers(query: String): LiveData<List<Payer>> {
         return repository.searchPayers(query)
+    }
+
+    fun searchPayersByEvent(eventId: Long, query: String): LiveData<List<Payer>> {
+        return repository.searchPayersByEvent(eventId, query)
     }
 
     suspend fun insertPayer(payer: Payer): Long {

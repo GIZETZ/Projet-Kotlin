@@ -54,8 +54,17 @@ class Repository(private val database: AppDatabase) {
 
     suspend fun getPayerById(id: Long): Payer? = database.payerDao().getPayerById(id)
 
+    fun getPayersByEvent(eventId: Long): LiveData<List<Payer>> =
+        database.payerDao().getPayersByEvent(eventId)
+
+    suspend fun getPayersByEventSync(eventId: Long): List<Payer> =
+        database.payerDao().getPayersByEventSync(eventId)
+
     fun searchPayers(query: String): LiveData<List<Payer>> =
         database.payerDao().searchPayers(query)
+
+    fun searchPayersByEvent(eventId: Long, query: String): LiveData<List<Payer>> =
+        database.payerDao().searchPayersByEvent(eventId, query)
 
     suspend fun insertPayer(payer: Payer): Long = database.payerDao().insert(payer)
 
