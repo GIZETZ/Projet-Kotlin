@@ -13,6 +13,10 @@ class Repository(private val database: AppDatabase) {
         return database.eventDao().getEventById(eventId)
     }
 
+    fun getEventByIdLive(eventId: Long): LiveData<Event?> {
+        return database.eventDao().getEventByIdLive(eventId)
+    }
+
     suspend fun insertEvent(event: Event): Long = database.eventDao().insert(event)
 
     suspend fun updateEvent(event: Event) = database.eventDao().update(event)
@@ -29,6 +33,9 @@ class Repository(private val database: AppDatabase) {
 
     suspend fun getOperationById(id: Long): Operation? =
         database.operationDao().getOperationById(id)
+
+    fun getOperationByIdLive(id: Long): LiveData<Operation?> =
+        database.operationDao().getOperationByIdLive(id)
 
     fun getOperationsByEtat(etat: String): LiveData<List<Operation>> =
         database.operationDao().getOperationsByEtat(etat)

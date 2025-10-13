@@ -12,6 +12,8 @@ import kotlinx.coroutines.launch
 class OperationViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: Repository = Repository(AppDatabase.getDatabase(application))
 
+    fun getOperationById(operationId: Long) = repository.getOperationByIdLive(operationId)
+
     fun insertOperation(operation: Operation) {
         viewModelScope.launch {
             repository.insertOperation(operation)

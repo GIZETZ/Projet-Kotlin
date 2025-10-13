@@ -16,6 +16,10 @@ class EventViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getOperationsByEvent(eventId: Long) = repository.getOperationsByEvent(eventId)
 
+    fun getEventById(eventId: Long): LiveData<Event?> {
+        return repository.getEventByIdLive(eventId)
+    }
+
     suspend fun insertEvent(event: Event): Long {
         return repository.insertEvent(event)
     }

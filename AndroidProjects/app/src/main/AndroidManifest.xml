@@ -50,6 +50,12 @@
         <activity
             android:name=".ui.NewEventActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.EditEventActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.EditOperationActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/primary"
-            app:title="Nouvel événement"
+            app:title="Modifier l'événement"
             app:titleTextColor="@color/white"
             app:navigationIcon="@drawable/ic_arrow_back" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -107,10 +107,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCreateEvent"
+                android:id="@+id/btnSaveEvent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Créer l'événement"
+                android:text="Enregistrer les modifications"
                 android:textSize="16sp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
