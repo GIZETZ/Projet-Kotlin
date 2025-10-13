@@ -106,6 +106,16 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabManageParticipants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/secondary"
+        android:contentDescription="Gérer les participants"
+        android:src="@android:drawable/ic_menu_my_calendar" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabNewOperation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

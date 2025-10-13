@@ -72,6 +72,16 @@ class EventOperationsActivity : AppCompatActivity() {
             intent.putExtra("event_id", eventId)
             startActivity(intent)
         }
+
+        binding.fabManageParticipants.setOnClickListener {
+            lifecycleScope.launch {
+                val event = repository.getEventById(eventId)
+                event?.let {
+                    val dialog = ManageParticipantsDialog(eventId, it.nom)
+                    dialog.show(supportFragmentManager, ManageParticipantsDialog.TAG)
+                }
+            }
+        }
     }
     
     private fun loadEventData() {
