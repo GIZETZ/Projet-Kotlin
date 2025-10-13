@@ -15,8 +15,17 @@ interface PayerDao {
     @Query("SELECT * FROM payers WHERE id = :id")
     suspend fun getPayerById(id: Long): Payer?
 
+    @Query("SELECT * FROM payers WHERE eventId = :eventId ORDER BY nom ASC")
+    fun getPayersByEvent(eventId: Long): LiveData<List<Payer>>
+
+    @Query("SELECT * FROM payers WHERE eventId = :eventId ORDER BY nom ASC")
+    suspend fun getPayersByEventSync(eventId: Long): List<Payer>
+
     @Query("SELECT * FROM payers WHERE nom LIKE '%' || :searchQuery || '%' ORDER BY nom ASC")
     fun searchPayers(searchQuery: String): LiveData<List<Payer>>
+
+    @Query("SELECT * FROM payers WHERE eventId = :eventId AND nom LIKE '%' || :searchQuery || '%' ORDER BY nom ASC")
+    fun searchPayersByEvent(eventId: Long, searchQuery: String): LiveData<List<Payer>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(payer: Payer): Long

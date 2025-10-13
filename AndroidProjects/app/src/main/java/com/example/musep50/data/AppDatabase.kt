@@ -17,7 +17,7 @@ import com.example.musep50.data.entities.*
         Paiement::class,
         Payer::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -81,6 +81,39 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // Créer une nouvelle table payers avec la colonne eventId
+                database.execSQL("""
+                    CREATE TABLE IF NOT EXISTS payers_new (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        eventId INTEGER,
+                        nom TEXT NOT NULL,
+                        contact TEXT,
+                        note TEXT,
+                        createdAt INTEGER NOT NULL,
+                        FOREIGN KEY(eventId) REFERENCES events(id) ON DELETE CASCADE
+                    )
+                """.trimIndent())
+
+                // Créer l'index pour eventId
+                database.execSQL("""
+                    CREATE INDEX IF NOT EXISTS index_payers_eventId ON payers_new(eventId)
+                """.trimIndent())
+
+                // Copier les données existantes (eventId sera NULL pour les anciens payeurs)
+                database.execSQL("""
+                    INSERT INTO payers_new (id, eventId, nom, contact, note, createdAt)
+                    SELECT id, NULL, nom, contact, note, createdAt
+                    FROM payers
+                """.trimIndent())
+
+                // Supprimer l'ancienne table et renommer la nouvelle
+                database.execSQL("DROP TABLE payers")
+                database.execSQL("ALTER TABLE payers_new RENAME TO payers")
+            }
+        }
+
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -88,7 +121,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "musep50_database"
                 )
-                    .addMigrations(MIGRATION_2_3)
+                    .addMigrations(MIGRATION_2_3, MIGRATION_3_4)
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
