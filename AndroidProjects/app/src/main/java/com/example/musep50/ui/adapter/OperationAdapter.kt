@@ -2,6 +2,7 @@ package com.example.musep50.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,9 @@ import java.text.NumberFormat
 import java.util.Locale
 
 class OperationAdapter(
-    private val onItemClick: (Operation) -> Unit
+    private val onItemClick: (Operation) -> Unit,
+    private val onEditClick: (Operation) -> Unit,
+    private val onDeleteClick: (Operation) -> Unit
 ) : ListAdapter<Operation, OperationAdapter.OperationViewHolder>(OperationDiffCallback()) {
     
     private var operationStats = mapOf<Long, OperationStats>()
@@ -61,6 +64,29 @@ class OperationAdapter(
             binding.root.setOnClickListener {
                 onItemClick(operation)
             }
+
+            binding.btnOperationMenu.setOnClickListener {
+                showPopupMenu(it, operation)
+            }
+        }
+
+        private fun showPopupMenu(view: android.view.View, operation: Operation) {
+            val popup = PopupMenu(view.context, view)
+            popup.menuInflater.inflate(R.menu.operation_item_menu, popup.menu)
+            popup.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_edit_operation -> {
+                        onEditClick(operation)
+                        true
+                    }
+                    R.id.action_delete_operation -> {
+                        onDeleteClick(operation)
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popup.show()
         }
     }
 }

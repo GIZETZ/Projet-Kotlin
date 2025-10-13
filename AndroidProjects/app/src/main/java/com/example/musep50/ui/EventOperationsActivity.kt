@@ -4,6 +4,7 @@ package com.example.musep50.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -56,14 +57,46 @@ class EventOperationsActivity : AppCompatActivity() {
     }
     
     private fun setupRecyclerView() {
-        adapter = OperationAdapter { operation ->
-            val intent = Intent(this, OperationDetailsActivity::class.java)
-            intent.putExtra("operation_id", operation.id)
-            startActivity(intent)
-        }
+        adapter = OperationAdapter(
+            onItemClick = { operation ->
+                val intent = Intent(this, OperationDetailsActivity::class.java)
+                intent.putExtra("operation_id", operation.id)
+                startActivity(intent)
+            },
+            onEditClick = { operation ->
+                editOperation(operation)
+            },
+            onDeleteClick = { operation ->
+                confirmDeleteOperation(operation)
+            }
+        )
         
         binding.operationsRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.operationsRecyclerView.adapter = adapter
+    }
+
+    private fun editOperation(operation: Operation) {
+        val intent = Intent(this, EditOperationActivity::class.java)
+        intent.putExtra("operation_id", operation.id)
+        intent.putExtra("event_id", eventId)
+        startActivity(intent)
+    }
+
+    private fun confirmDeleteOperation(operation: Operation) {
+        AlertDialog.Builder(this)
+            .setTitle("Supprimer l'opération")
+            .setMessage("Êtes-vous sûr de vouloir supprimer \"${operation.nom}\" ? Tous les paiements associés seront également supprimés.")
+            .setPositiveButton("Supprimer") { _, _ ->
+                deleteOperation(operation)
+            }
+            .setNegativeButton("Annuler", null)
+            .show()
+    }
+
+    private fun deleteOperation(operation: Operation) {
+        lifecycleScope.launch {
+            repository.deleteOperation(operation)
+        }
     }
     
     private fun setupFab() {

@@ -6,20 +6,26 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.musep50.R
+import com.example.musep50.data.AppDatabase
+import com.example.musep50.data.Repository
 import com.example.musep50.data.entities.Event
 import com.example.musep50.databinding.ActivityDashboardBinding
 import com.example.musep50.ui.adapter.EventAdapter
 import com.example.musep50.viewmodel.EventViewModel
+import kotlinx.coroutines.launch
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDashboardBinding
     private val viewModel: EventViewModel by viewModels()
     private lateinit var adapter: EventAdapter
+    private lateinit var repository: Repository
     private var allEvents = listOf<Event>()
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +35,8 @@ class DashboardActivity : AppCompatActivity() {
         
         setSupportActionBar(binding.toolbar)
         
+        repository = Repository(AppDatabase.getDatabase(this))
+        
         setupRecyclerView()
         setupSearchBar()
         setupFab()
@@ -36,14 +44,45 @@ class DashboardActivity : AppCompatActivity() {
     }
     
     private fun setupRecyclerView() {
-        adapter = EventAdapter { event ->
-            val intent = Intent(this, EventOperationsActivity::class.java)
-            intent.putExtra("event_id", event.id)
-            startActivity(intent)
-        }
+        adapter = EventAdapter(
+            onItemClick = { event ->
+                val intent = Intent(this, EventOperationsActivity::class.java)
+                intent.putExtra("event_id", event.id)
+                startActivity(intent)
+            },
+            onEditClick = { event ->
+                editEvent(event)
+            },
+            onDeleteClick = { event ->
+                confirmDeleteEvent(event)
+            }
+        )
         
         binding.eventsRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.eventsRecyclerView.adapter = adapter
+    }
+
+    private fun editEvent(event: Event) {
+        val intent = Intent(this, EditEventActivity::class.java)
+        intent.putExtra("event_id", event.id)
+        startActivity(intent)
+    }
+
+    private fun confirmDeleteEvent(event: Event) {
+        AlertDialog.Builder(this)
+            .setTitle("Supprimer l'événement")
+            .setMessage("Êtes-vous sûr de vouloir supprimer \"${event.nom}\" ? Toutes les opérations associées seront également supprimées.")
+            .setPositiveButton("Supprimer") { _, _ ->
+                deleteEvent(event)
+            }
+            .setNegativeButton("Annuler", null)
+            .show()
+    }
+
+    private fun deleteEvent(event: Event) {
+        lifecycleScope.launch {
+            repository.deleteEvent(event)
+        }
     }
     
     private fun setupSearchBar() {

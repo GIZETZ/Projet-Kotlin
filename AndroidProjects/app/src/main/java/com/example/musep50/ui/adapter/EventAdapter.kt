@@ -2,9 +2,11 @@ package com.example.musep50.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.musep50.R
 import com.example.musep50.data.entities.Event
 import com.example.musep50.databinding.ItemEventBinding
 import java.text.SimpleDateFormat
@@ -12,7 +14,9 @@ import java.util.Date
 import java.util.Locale
 
 class EventAdapter(
-    private val onItemClick: (Event) -> Unit
+    private val onItemClick: (Event) -> Unit,
+    private val onEditClick: (Event) -> Unit,
+    private val onDeleteClick: (Event) -> Unit
 ) : ListAdapter<Event, EventAdapter.EventViewHolder>(EventDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
@@ -45,6 +49,29 @@ class EventAdapter(
             binding.root.setOnClickListener {
                 onItemClick(event)
             }
+
+            binding.btnEventMenu.setOnClickListener {
+                showPopupMenu(it, event)
+            }
+        }
+
+        private fun showPopupMenu(view: android.view.View, event: Event) {
+            val popup = PopupMenu(view.context, view)
+            popup.menuInflater.inflate(R.menu.event_item_menu, popup.menu)
+            popup.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_edit_event -> {
+                        onEditClick(event)
+                        true
+                    }
+                    R.id.action_delete_event -> {
+                        onDeleteClick(event)
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popup.show()
         }
     }
 }
