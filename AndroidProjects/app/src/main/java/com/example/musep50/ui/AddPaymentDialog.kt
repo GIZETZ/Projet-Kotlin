@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.example.musep50.data.AppDatabase
+import com.example.musep50.data.Repository
 import com.example.musep50.data.entities.Paiement
 import com.example.musep50.databinding.DialogAddPaymentBinding
 import com.example.musep50.viewmodel.PaiementViewModel
@@ -26,6 +28,8 @@ class AddPaymentDialog(
     private val binding get() = _binding!!
     private val paiementViewModel: PaiementViewModel by viewModels()
     private val payerViewModel: PayerViewModel by viewModels()
+    private lateinit var repository: Repository
+    private var eventId: Long = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,33 +46,40 @@ class AddPaymentDialog(
         // Set dialog style
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        setupPayerInput()
+        repository = Repository(AppDatabase.getDatabase(requireContext()))
+
+        loadEventId()
         setupMethodDropdown()
         setupButtons()
     }
 
+    private fun loadEventId() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val operation = repository.getOperationById(operationId)
+            operation?.let {
+                eventId = it.eventId
+                setupPayerInput()
+            }
+        }
+    }
+
     private fun setupPayerInput() {
-        // User can type a new payer name or select from existing
-        payerViewModel.getAllPayers().observe(viewLifecycleOwner) { payers ->
+        // Load payers from the event
+        payerViewModel.getPayersByEvent(eventId).observe(viewLifecycleOwner) { payers ->
             val payerNames = payers.map { it.nom }
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, payerNames)
             binding.userInput.setAdapter(adapter)
         }
 
         binding.btnAddPayer.setOnClickListener {
-            // Show dialog to add new payer
-            AddPayerDialog {
-                // Refresh the payer list after adding
-                payerViewModel.getAllPayers().observe(viewLifecycleOwner) { payers ->
-                    val payerNames = payers.map { it.nom }
-                    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, payerNames)
-                    binding.userInput.setAdapter(adapter)
-                    // Select the last added payer
-                    if (payerNames.isNotEmpty()) {
-                        binding.userInput.setText(payerNames.last(), false)
-                    }
+            // Show dialog to add new payer for this event
+            lifecycleScope.launch {
+                val event = repository.getEventById(eventId)
+                event?.let {
+                    val dialog = ManageParticipantsDialog(eventId, it.nom)
+                    dialog.show(parentFragmentManager, ManageParticipantsDialog.TAG)
                 }
-            }.show(parentFragmentManager, AddPayerDialog.TAG)
+            }
         }
     }
 
@@ -119,13 +130,14 @@ class AddPaymentDialog(
         val commentaire = binding.commentaireInput.text?.toString()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            // First, check if payer exists or create new one
-            val payers = payerViewModel.getAllPayersSync()
+            // First, check if payer exists in this event or create new one
+            val payers = payerViewModel.getPayersByEventSync(eventId)
             var payerId = payers.find { it.nom.equals(payerName, ignoreCase = true) }?.id
 
             if (payerId == null) {
-                // Create new payer
+                // Create new payer for this event
                 val newPayer = com.example.musep50.data.entities.Payer(
+                    eventId = eventId,
                     nom = payerName,
                     contact = null,
                     note = null
