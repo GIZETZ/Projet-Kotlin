@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_launcher_foreground"
+            app:navigationIcon="@drawable/ic_arrow_back"
             app:title="Nouvelle opération" />
 
         <com.google.android.material.card.MaterialCardView
@@ -37,7 +37,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Nom de l'opération"
-                    app:startIconDrawable="@drawable/ic_launcher_foreground">
+                    app:startIconDrawable="@drawable/ic_add">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/nomInput"
@@ -98,7 +98,7 @@
                     android:layout_marginTop="16dp"
                     android:hint="Date de début"
                     app:endIconMode="custom"
-                    app:endIconDrawable="@drawable/ic_launcher_foreground">
+                    app:endIconDrawable="@android:drawable/ic_menu_my_calendar">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/dateDebutInput"
@@ -115,7 +115,7 @@
                     android:layout_marginTop="16dp"
                     android:hint="Date de fin"
                     app:endIconMode="custom"
-                    app:endIconDrawable="@drawable/ic_launcher_foreground">
+                    app:endIconDrawable="@android:drawable/ic_menu_my_calendar">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/dateFinInput"

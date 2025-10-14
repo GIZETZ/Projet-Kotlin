@@ -146,11 +146,12 @@ class LoginActivity : AppCompatActivity() {
         biometricAuthManager.authenticate(
             onSuccess = {
                 // Connexion réussie avec empreinte digitale
-                // On simule l'authentification en utilisant l'email stocké
                 val sharedPrefs = getSharedPreferences("musep50_prefs", MODE_PRIVATE)
                 val savedPin = sharedPrefs.getString("pin_${currentEmail}", null)
 
                 if (savedPin != null) {
+                    // Mettre à jour currentPin pour éviter l'erreur
+                    currentPin = savedPin
                     viewModel.login(currentEmail, savedPin)
                 } else {
                     Toast.makeText(this, "Veuillez vous connecter une fois avec votre PIN", Toast.LENGTH_SHORT).show()
