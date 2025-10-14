@@ -42,6 +42,6 @@ data class Paiement(
     val commentaire: String? = null,
     val referenceRecu: String? = null,
     val datePaiement: Long = System.currentTimeMillis(),
-    val createdAt: Long = System.currentTimeMillis
+    val createdAt: Long = System.currentTimeMillis()
 ) : Parcelable()
 )
