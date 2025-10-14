@@ -187,5 +187,61 @@ To develop this app, you need:
 - **Intégrité des données** : Confirmations avant suppression pour éviter les pertes accidentelles
 - **Code maintenable** : Architecture MVVM strictement respectée avec séparation des couches
 
+## 💰 Amélioration Retardataires et Gestion des Montants (October 14, 2025)
+**Refonte de la logique des retardataires basée sur les montants réels dus et payés**
+
+### Problèmes corrigés :
+- **Ancienne logique incorrecte** : Les retardataires étaient simplement ceux qui n'avaient fait AUCUN paiement, même s'ils avaient payé partiellement
+- **Messages de rappel avec montant 0 FCFA** : Le montant affiché dans les rappels WhatsApp était toujours 0 FCFA
+- **Pas de gestion du montant par défaut par payeur** : Impossible de définir combien chaque participant doit payer
+
+### Changements majeurs :
+
+1. **Nouvelle logique de calcul des retardataires** :
+   - Calcul du montant total payé par chaque participant pour une opération
+   - Comparaison avec le solde fixe à payer (montantPersonnalise OU montantParDefautParPayeur)
+   - Identification comme retardataire si : `montant payé < solde fixe`
+   - Calcul du montant restant dû : `solde fixe - montant payé`
+
+2. **Message de rappel WhatsApp amélioré** :
+   - Affiche le montant total à payer
+   - Affiche le montant déjà payé (si > 0)
+   - **Affiche le montant restant dû** au lieu de simplement le montant total
+   - Message clair et détaillé pour le participant
+
+3. **Gestion du montant par défaut de l'opération** :
+   - Ajout du champ `montantParDefautParPayeur` dans NewOperationActivity
+   - Ajout du champ `montantParDefautParPayeur` dans EditOperationActivity
+   - Ce montant définit ce que chaque participant doit payer par défaut
+   - Validation robuste acceptant virgules et points comme séparateurs décimaux
+
+4. **Gestion du montant personnalisé par participant** :
+   - Utilisation du champ `montantPersonnalise` dans ManageParticipantsDialog
+   - Chaque participant peut avoir un montant différent à payer
+   - Affichage du montant personnalisé dans la liste des participants
+   - Validation robuste avec support des formats français (virgule comme séparateur)
+
+### Validation robuste pour format français :
+- **Support des virgules ET des points** : "1000,50" ou "1000.50" sont tous les deux acceptés
+- **Messages d'erreur clairs** : Guide l'utilisateur avec des exemples de format valide
+- **Réinitialisation des erreurs** : Les messages d'erreur disparaissent quand les données deviennent valides
+- **Vérification des valeurs positives** : Les montants doivent être > 0
+
+### Fichiers modifiés :
+- `RetardatairesActivity.kt` - Nouvelle logique de calcul et messages améliorés
+- `NewOperationActivity.kt` - Ajout du champ montant par défaut par payeur avec validation
+- `EditOperationActivity.kt` - Ajout du champ montant par défaut par payeur avec validation
+- `ManageParticipantsDialog.kt` - Support du montant personnalisé avec validation
+- `ParticipantAdapter.kt` - Affichage du montant personnalisé
+- `activity_edit_operation.xml` - Champ montant par défaut par payeur
+- `item_participant.xml` - Affichage du montant personnalisé
+
+### Flux de travail complet :
+1. **Créer une opération** : Définir le montant ciblé total ET le montant par défaut par payeur
+2. **Gérer les participants** : Ajouter des participants avec optionnellement un montant personnalisé (différent du montant par défaut)
+3. **Ajouter des paiements** : Les participants paient progressivement
+4. **Voir les retardataires** : Le système identifie automatiquement ceux qui n'ont pas soldé leur cotisation
+5. **Envoyer des rappels** : Messages WhatsApp détaillés avec montant restant dû
+
 ## 🎉 État du Projet
-Toutes les fonctionnalités demandées ont été implémentées avec succès. La nouvelle architecture hiérarchique permet une meilleure organisation des opérations par événement. La gestion des participants au niveau de l'événement facilite grandement l'ajout de paiements. Les fonctionnalités CRUD complètes permettent une gestion complète des événements et opérations. L'application est prête pour compilation et test dans Android Studio.
+Toutes les fonctionnalités demandées ont été implémentées avec succès. La nouvelle architecture hiérarchique permet une meilleure organisation des opérations par événement. La gestion des participants au niveau de l'événement facilite grandement l'ajout de paiements. Les fonctionnalités CRUD complètes permettent une gestion complète des événements et opérations. La fonctionnalité des retardataires a été complètement refondue pour être basée sur les montants réels dus et payés, avec des messages de rappel détaillés. L'application supporte maintenant les formats numériques français (virgules) et est prête pour compilation et test dans Android Studio.
