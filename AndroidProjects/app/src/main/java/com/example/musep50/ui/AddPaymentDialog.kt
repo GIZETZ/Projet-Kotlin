@@ -43,9 +43,6 @@ class AddPaymentDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Set dialog style
-        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-
         repository = Repository(AppDatabase.getDatabase(requireContext()))
 
         loadEventId()
