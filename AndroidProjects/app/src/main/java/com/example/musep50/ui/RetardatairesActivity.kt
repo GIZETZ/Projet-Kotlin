@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.musep50.data.AppDatabase
 import com.example.musep50.data.Repository
 import com.example.musep50.data.entities.Operation
-import com.example.musep50.data.entities.User
+import com.example.musep50.data.entities.Payer
 import com.example.musep50.databinding.ActivityRetardatairesBinding
 import com.example.musep50.ui.adapter.RetardataireAdapter
 import com.example.musep50.viewmodel.DashboardViewModel
@@ -26,9 +26,9 @@ class RetardatairesActivity : AppCompatActivity() {
     private val paiementViewModel: PaiementViewModel by viewModels()
     private lateinit var adapter: RetardataireAdapter
     private var currentOperation: Operation? = null
-    private var allUsers = listOf<User>()
-    private var retardataires = listOf<User>()
-    private var selectedRetardataires = listOf<User>()
+    private var allPayers = listOf<Payer>()
+    private var retardataires = listOf<Payer>()
+    private var selectedRetardataires = listOf<Payer>()
     private val formatter = NumberFormat.getNumberInstance(Locale.FRANCE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,16 +86,17 @@ class RetardatairesActivity : AppCompatActivity() {
 
         dashboardViewModel.allOperations.observe(this) { operations ->
             currentOperation = operations.find { it.id == operationId }
-        }
-
-        repository.getAllUsers().observe(this) { users ->
-            allUsers = users
-            calculateRetardataires(operationId)
+            currentOperation?.let { operation ->
+                repository.getPayersByEvent(operation.eventId).observe(this) { payers ->
+                    allPayers = payers
+                    calculateRetardataires(operationId)
+                }
+            }
         }
 
         paiementViewModel.getPaiementsWithPayerByOperation(operationId).observe(this) { payments ->
             val payerIds = payments.map { it.paiement.payerId }.toSet()
-            retardataires = allUsers.filter { !payerIds.contains(it.id) }
+            retardataires = allPayers.filter { !payerIds.contains(it.id) }
             adapter.submitList(retardataires)
             updateRetardatairesCount()
         }
@@ -104,7 +105,7 @@ class RetardatairesActivity : AppCompatActivity() {
     private fun calculateRetardataires(operationId: Long) {
         paiementViewModel.getPaiementsWithPayerByOperation(operationId).observe(this) { payments ->
             val payerIds = payments.map { it.paiement.payerId }.toSet()
-            retardataires = allUsers.filter { !payerIds.contains(it.id) }
+            retardataires = allPayers.filter { !payerIds.contains(it.id) }
             adapter.submitList(retardataires)
             updateRetardatairesCount()
         }
@@ -131,22 +132,21 @@ class RetardatairesActivity : AppCompatActivity() {
         }
     }
 
-    private fun generateReminderMessage(user: User): String {
+    private fun generateReminderMessage(payer: Payer): String {
         val operation = currentOperation ?: return ""
-        
-        val montant = lifecycleScope.launch {
-            val repository = Repository(AppDatabase.getDatabase(this@RetardatairesActivity))
-            val montantDu = operation.montantCible / allUsers.size
-            montantDu
+        val montantDu = if (allPayers.isNotEmpty()) {
+            operation.montantCible / allPayers.size
+        } else {
+            operation.montantCible
         }
-        
+
         return """
-            Bonjour ${user.nom},
+            Bonjour ${payer.nom},
             
             Nous n'avons pas encore reçu votre paiement pour l'opération "${operation.nom}" (${operation.type}).
             
             📅 Date limite: À confirmer
-            💰 Montant attendu: À confirmer FCFA
+            💰 Montant attendu: ${formatter.format(montantDu)} FCFA
             
             Merci de bien vouloir régulariser votre situation dans les meilleurs délais.
             
@@ -155,9 +155,14 @@ class RetardatairesActivity : AppCompatActivity() {
         """.trimIndent()
     }
 
-    private fun sendReminderToUser(user: User) {
-        val message = generateReminderMessage(user)
-        shareOnWhatsApp(message, user.telephone)
+    private fun sendReminderToUser(payer: Payer) {
+        val message = generateReminderMessage(payer)
+        val phoneNumber = if (!payer.contact.isNullOrBlank()) {
+            "+225${payer.contact}"
+        } else {
+            null
+        }
+        shareOnWhatsApp(message, phoneNumber)
     }
 
     private fun sendRemindersToSelected() {
@@ -166,8 +171,8 @@ class RetardatairesActivity : AppCompatActivity() {
         if (selectedRetardataires.size == 1) {
             sendReminderToUser(selectedRetardataires[0])
         } else {
-            val messages = selectedRetardataires.joinToString("\n\n---\n\n") { user ->
-                generateReminderMessage(user)
+            val messages = selectedRetardataires.joinToString("\n\n---\n\n") { payer ->
+                generateReminderMessage(payer)
             }
             shareOnWhatsApp(messages, null)
         }
@@ -175,21 +180,21 @@ class RetardatairesActivity : AppCompatActivity() {
 
     private fun shareOnWhatsApp(message: String, phoneNumber: String?) {
         try {
-            val sendIntent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, message)
-                type = "text/plain"
-                
-                if (!phoneNumber.isNullOrBlank()) {
-                    val cleanNumber = phoneNumber.replace(Regex("[^0-9+]"), "")
-                    val uri = Uri.parse("https://wa.me/$cleanNumber?text=${Uri.encode(message)}")
-                    data = uri
-                    setPackage("com.whatsapp")
-                } else {
+            if (!phoneNumber.isNullOrBlank()) {
+                val cleanNumber = phoneNumber.replace(Regex("[^0-9+]"), "")
+                val whatsappUrl = "https://wa.me/$cleanNumber?text=${Uri.encode(message)}"
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(whatsappUrl)
+                startActivity(intent)
+            } else {
+                val sendIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, message)
+                    type = "text/plain"
                     setPackage("com.whatsapp")
                 }
+                startActivity(sendIntent)
             }
-            startActivity(sendIntent)
         } catch (e: Exception) {
             val sendIntent = Intent().apply {
                 action = Intent.ACTION_SEND

@@ -4,9 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     
     <!-- Primary colors -->
-    <color name="primary">#4169E1</color>
-    <color name="primary_dark">#3154B8</color>
-    <color name="primary_light">#6B8FFF</color>
+    <color name="primary">#F44336</color>
+    <color name="primary_dark">#FF7000</color>
+    <color name="primary_light">#3F51B5</color>
     
     <!-- Secondary colors -->
     <color name="secondary">#FF9800</color>

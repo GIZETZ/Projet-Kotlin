@@ -16,6 +16,7 @@ import com.example.musep50.data.entities.Operation
 import com.example.musep50.databinding.ActivityEventOperationsBinding
 import com.example.musep50.ui.adapter.OperationAdapter
 import com.example.musep50.viewmodel.DashboardViewModel
+import com.example.musep50.viewmodel.OperationStats
 import com.example.musep50.viewmodel.EventViewModel
 import kotlinx.coroutines.launch
 
@@ -25,29 +26,29 @@ class EventOperationsActivity : AppCompatActivity() {
     private lateinit var eventViewModel: EventViewModel
     private lateinit var adapter: OperationAdapter
     private var eventId: Long = -1
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEventOperationsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         eventId = intent.getLongExtra("event_id", -1)
-        
+
         if (eventId == -1L) {
             finish()
             return
         }
-        
+
         repository = Repository(AppDatabase.getDatabase(this))
         eventViewModel = ViewModelProvider(this)[EventViewModel::class.java]
-        
+
         setupToolbar()
         setupRecyclerView()
         setupFab()
         loadEventData()
         observeOperations()
     }
-    
+
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -55,7 +56,7 @@ class EventOperationsActivity : AppCompatActivity() {
             finish()
         }
     }
-    
+
     private fun setupRecyclerView() {
         adapter = OperationAdapter(
             onItemClick = { operation ->
@@ -70,7 +71,7 @@ class EventOperationsActivity : AppCompatActivity() {
                 confirmDeleteOperation(operation)
             }
         )
-        
+
         binding.operationsRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.operationsRecyclerView.adapter = adapter
     }
@@ -98,7 +99,7 @@ class EventOperationsActivity : AppCompatActivity() {
             repository.deleteOperation(operation)
         }
     }
-    
+
     private fun setupFab() {
         binding.fabNewOperation.setOnClickListener {
             val intent = Intent(this, NewOperationActivity::class.java)
@@ -116,7 +117,7 @@ class EventOperationsActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     private fun loadEventData() {
         lifecycleScope.launch {
             val event = repository.getEventById(eventId)
@@ -126,7 +127,7 @@ class EventOperationsActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     private fun observeOperations() {
         eventViewModel.getOperationsByEvent(eventId).observe(this) { operations ->
             if (operations.isEmpty()) {
@@ -136,10 +137,20 @@ class EventOperationsActivity : AppCompatActivity() {
                 binding.emptyStateLayout.visibility = View.GONE
                 binding.operationsRecyclerView.visibility = View.VISIBLE
                 adapter.submitList(operations)
+
+                // Load statistics for each operation
+                lifecycleScope.launch {
+                    val stats = mutableMapOf<Long, OperationStats>()
+                    operations.forEach { operation ->
+                        val operationStats = repository.getOperationStats(operation.id)
+                        stats[operation.id] = operationStats
+                    }
+                    adapter.setOperationStats(stats)
+                }
             }
         }
     }
-    
+
     override fun onResume() {
         super.onResume()
         loadEventData()

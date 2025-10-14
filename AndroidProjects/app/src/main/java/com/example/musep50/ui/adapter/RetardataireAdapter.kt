@@ -6,15 +6,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.musep50.data.entities.User
+import com.example.musep50.data.entities.Payer
 import com.example.musep50.databinding.ItemRetardataireBinding
 
 class RetardataireAdapter(
-    private val onSelectionChanged: (List<User>) -> Unit,
-    private val onSendIndividual: (User) -> Unit
-) : ListAdapter<User, RetardataireAdapter.RetardataireViewHolder>(RetardataireDiffCallback()) {
+    private val onSelectionChanged: (List<Payer>) -> Unit,
+    private val onSendIndividual: (Payer) -> Unit
+) : ListAdapter<Payer, RetardataireAdapter.RetardataireViewHolder>(RetardataireDiffCallback()) {
 
-    private val selectedUsers = mutableSetOf<Long>()
+    private val selectedPayers = mutableSetOf<Long>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RetardataireViewHolder {
         val binding = ItemRetardataireBinding.inflate(
@@ -30,20 +30,20 @@ class RetardataireAdapter(
     }
 
     fun selectAll() {
-        selectedUsers.clear()
-        currentList.forEach { selectedUsers.add(it.id) }
+        selectedPayers.clear()
+        currentList.forEach { selectedPayers.add(it.id) }
         notifyDataSetChanged()
         notifySelectionChanged()
     }
 
     fun clearSelection() {
-        selectedUsers.clear()
+        selectedPayers.clear()
         notifyDataSetChanged()
         notifySelectionChanged()
     }
 
     private fun notifySelectionChanged() {
-        val selected = currentList.filter { selectedUsers.contains(it.id) }
+        val selected = currentList.filter { selectedPayers.contains(it.id) }
         onSelectionChanged(selected)
     }
 
@@ -51,40 +51,38 @@ class RetardataireAdapter(
         private val binding: ItemRetardataireBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(user: User) {
-            binding.userName.text = user.nom
-            binding.userEmail.text = user.email
-            
-            if (!user.telephone.isNullOrBlank()) {
-                binding.userPhone.visibility = View.VISIBLE
-                binding.userPhone.text = "📞 ${user.telephone}"
+        fun bind(payer: Payer) {
+            binding.userName.text = payer.nom
+            binding.userEmail.text = if (!payer.contact.isNullOrBlank()) {
+                "+225${payer.contact}"
             } else {
-                binding.userPhone.visibility = View.GONE
+                "Pas de contact"
             }
+            binding.checkbox.isChecked = selectedPayers.contains(payer.id)
 
-            binding.checkbox.isChecked = selectedUsers.contains(user.id)
-            binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    selectedUsers.add(user.id)
+            binding.root.setOnClickListener {
+                if (selectedPayers.contains(payer.id)) {
+                    selectedPayers.remove(payer.id)
                 } else {
-                    selectedUsers.remove(user.id)
+                    selectedPayers.add(payer.id)
                 }
+                binding.checkbox.isChecked = selectedPayers.contains(payer.id)
                 notifySelectionChanged()
             }
 
             binding.btnSendIndividual.setOnClickListener {
-                onSendIndividual(user)
+                onSendIndividual(payer)
             }
         }
     }
 }
 
-class RetardataireDiffCallback : DiffUtil.ItemCallback<User>() {
-    override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+class RetardataireDiffCallback : DiffUtil.ItemCallback<Payer>() {
+    override fun areItemsTheSame(oldItem: Payer, newItem: Payer): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+    override fun areContentsTheSame(oldItem: Payer, newItem: Payer): Boolean {
         return oldItem == newItem
     }
 }
