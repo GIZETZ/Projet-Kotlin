@@ -134,11 +134,8 @@ class RetardatairesActivity : AppCompatActivity() {
 
     private fun generateReminderMessage(payer: Payer): String {
         val operation = currentOperation ?: return ""
-        val montantDu = if (allPayers.isNotEmpty()) {
-            operation.montantCible / allPayers.size
-        } else {
-            operation.montantCible
-        }
+        // Utiliser le montant personnalisé du payeur, sinon le montant par défaut de l'opération
+        val montantDu = payer.montantPersonnalise ?: operation.montantParDefautParPayeur
 
         return """
             Bonjour ${payer.nom},

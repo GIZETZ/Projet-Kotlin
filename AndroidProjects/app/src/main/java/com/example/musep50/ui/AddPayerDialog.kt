@@ -15,6 +15,7 @@ import com.example.musep50.viewmodel.PayerViewModel
 import kotlinx.coroutines.launch
 
 class AddPayerDialog(
+    private val eventId: Long,
     private val onPayerAdded: () -> Unit
 ) : DialogFragment() {
 
@@ -68,6 +69,7 @@ class AddPayerDialog(
 
         viewLifecycleOwner.lifecycleScope.launch {
             val newPayer = Payer(
+                eventId = eventId,
                 nom = payerName,
                 contact = contact,
                 note = note

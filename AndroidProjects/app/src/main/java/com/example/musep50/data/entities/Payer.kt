@@ -1,4 +1,3 @@
-
 package com.example.musep50.data.entities
 
 import androidx.room.Entity
@@ -16,14 +15,15 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index(value = ["eventId"])]
+    indices = [Index("eventId")]
 )
 data class Payer(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val eventId: Long? = null, // Nullable pour les anciens payeurs non liés à un événement
+    val eventId: Long,
     val nom: String,
-    val contact: String? = null, // Téléphone ou email
+    val contact: String? = null,
     val note: String? = null,
+    val montantPersonnalise: Double? = null, // Montant personnalisé pour ce payeur (si différent du montant par défaut)
     val createdAt: Long = System.currentTimeMillis()
 )

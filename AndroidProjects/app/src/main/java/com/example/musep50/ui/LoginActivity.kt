@@ -1,4 +1,3 @@
-
 package com.example.musep50.ui
 
 import android.content.Intent
@@ -17,17 +16,17 @@ class LoginActivity : AppCompatActivity() {
     private val viewModel: AuthViewModel by viewModels()
     private var currentPin = ""
     private var currentEmail = ""
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         setupEmailStep()
         setupPinStep()
         observeViewModel()
     }
-    
+
     private fun setupPinStep() {
         val pinButtons = listOf(
             binding.pinKeypad.btn0,
@@ -41,22 +40,22 @@ class LoginActivity : AppCompatActivity() {
             binding.pinKeypad.btn8,
             binding.pinKeypad.btn9
         )
-        
+
         pinButtons.forEachIndexed { index, button ->
             button.setOnClickListener {
                 addPinDigit(index.toString())
             }
         }
-        
+
         binding.pinKeypad.btnDelete.setOnClickListener {
             removePinDigit()
         }
-        
+
         binding.pinKeypad.btnBack.setOnClickListener {
             showEmailStep()
         }
     }
-    
+
     private fun setupEmailStep() {
         binding.continueButton.setOnClickListener {
             val email = binding.emailInput.text.toString()
@@ -68,30 +67,30 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Veuillez entrer votre email", Toast.LENGTH_SHORT).show()
             }
         }
-        
+
         binding.registerButton.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
-    
+
     private fun addPinDigit(digit: String) {
         if (currentPin.length < 4) {
             currentPin += digit
             updatePinDots()
-            
+
             if (currentPin.length == 4) {
                 viewModel.login(currentEmail, currentPin)
             }
         }
     }
-    
+
     private fun removePinDigit() {
         if (currentPin.isNotEmpty()) {
             currentPin = currentPin.dropLast(1)
             updatePinDots()
         }
     }
-    
+
     private fun updatePinDots() {
         val dots = listOf(
             binding.pinDot1,
@@ -99,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
             binding.pinDot3,
             binding.pinDot4
         )
-        
+
         dots.forEachIndexed { index, dot ->
             if (index < currentPin.length) {
                 dot.setBackgroundResource(R.drawable.pin_dot_filled)
@@ -108,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     private fun showEmailStep() {
         binding.emailInputLayout.visibility = View.VISIBLE
         binding.pinLayout.visibility = View.GONE
@@ -118,7 +117,7 @@ class LoginActivity : AppCompatActivity() {
         currentPin = ""
         updatePinDots()
     }
-    
+
     private fun showPinStep() {
         binding.emailInputLayout.visibility = View.GONE
         binding.pinLayout.visibility = View.VISIBLE
@@ -126,21 +125,28 @@ class LoginActivity : AppCompatActivity() {
         binding.registerButton.visibility = View.GONE
         binding.subtitleText.text = "Entrez votre code PIN"
     }
-    
+
     private fun observeViewModel() {
         viewModel.loginResult.observe(this) { result ->
             when (result) {
                 is LoginResult.Success -> {
-                    val sharedPreferences = getSharedPreferences("musep50_prefs", MODE_PRIVATE)
-                    sharedPreferences.edit().putLong("current_user_id", result.user.id).apply()
-                    
-                    startActivity(Intent(this, DashboardActivity::class.java))
-                    finish()
+                    try {
+                        Toast.makeText(this, "Connexion réussie", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, DashboardActivity::class.java).apply {
+                            putExtra("user_id", result.user.id)
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        startActivity(intent)
+                        finish()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(this, "Erreur de navigation: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
                 }
                 is LoginResult.Error -> {
+                    Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
                     currentPin = ""
                     updatePinDots()
-                    Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }

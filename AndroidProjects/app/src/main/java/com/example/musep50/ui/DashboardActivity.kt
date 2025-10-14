@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -27,22 +28,40 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var adapter: EventAdapter
     private lateinit var repository: Repository
     private var allEvents = listOf<Event>()
-    
+    private var currentUserId: Long = -1L
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDashboardBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        
-        setSupportActionBar(binding.toolbar)
-        
-        repository = Repository(AppDatabase.getDatabase(this))
-        
-        setupRecyclerView()
-        setupSearchBar()
-        setupFab()
-        observeViewModel()
+
+        try {
+            binding = ActivityDashboardBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+
+            currentUserId = intent.getLongExtra("user_id", -1L)
+
+            if (currentUserId == -1L) {
+                Toast.makeText(this, "Erreur de connexion", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+                return
+            }
+
+            setSupportActionBar(binding.toolbar)
+
+            repository = Repository(AppDatabase.getDatabase(this))
+
+            setupRecyclerView()
+            setupSearchBar()
+            setupFab()
+            observeViewModel()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Erreur: ${e.message}", Toast.LENGTH_LONG).show()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
     }
-    
+
     private fun setupRecyclerView() {
         adapter = EventAdapter(
             onItemClick = { event ->
@@ -57,7 +76,7 @@ class DashboardActivity : AppCompatActivity() {
                 confirmDeleteEvent(event)
             }
         )
-        
+
         binding.eventsRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.eventsRecyclerView.adapter = adapter
     }
@@ -84,37 +103,37 @@ class DashboardActivity : AppCompatActivity() {
             repository.deleteEvent(event)
         }
     }
-    
+
     private fun setupSearchBar() {
         binding.searchInput.doOnTextChanged { text, _, _, _ ->
             filterEvents(text.toString())
         }
     }
-    
+
     private fun setupFab() {
         binding.fabNewEvent.setOnClickListener {
             startActivity(Intent(this, NewEventActivity::class.java))
         }
     }
-    
+
     private fun filterEvents(query: String) {
         val filtered = if (query.isBlank()) {
             allEvents
         } else {
             allEvents.filter {
                 it.nom.contains(query, ignoreCase = true) ||
-                (it.description?.contains(query, ignoreCase = true) == true)
+                        (it.description?.contains(query, ignoreCase = true) == true)
             }
         }
         adapter.submitList(filtered)
         updateEmptyState(filtered.isEmpty())
     }
-    
+
     private fun updateEmptyState(isEmpty: Boolean) {
         binding.emptyStateLayout.visibility = if (isEmpty) View.VISIBLE else View.GONE
         binding.eventsRecyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
     }
-    
+
     private fun observeViewModel() {
         viewModel.allEvents.observe(this) { events ->
             allEvents = events
@@ -122,16 +141,18 @@ class DashboardActivity : AppCompatActivity() {
             updateEmptyState(events.isEmpty())
         }
     }
-    
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.dashboard_menu, menu)
         return true
     }
-    
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_profile -> {
-                startActivity(Intent(this, ProfileActivity::class.java))
+                val intent = Intent(this, ProfileActivity::class.java)
+                intent.putExtra("user_id", currentUserId)
+                startActivity(intent)
                 true
             }
             R.id.action_settings -> {

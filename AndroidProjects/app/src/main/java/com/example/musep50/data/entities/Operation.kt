@@ -24,6 +24,7 @@ data class Operation(
     val nom: String,
     val type: String, // ADHESION, COTISATION_EXCEPTIONNELLE, FONDS_CAISSE
     val montantCible: Double,
+    val montantParDefautParPayeur: Double = 0.0, // Montant par défaut que chaque payeur doit payer
     val dateDebut: Long,
     val dateFin: Long? = null,
     val statut: String = "En cours", // "En cours", "Terminé", "Clôturé"

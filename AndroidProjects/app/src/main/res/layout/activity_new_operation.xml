@@ -77,6 +77,21 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/montantParPayeurInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="Montant par défaut par payeur (FCFA)"
+                    app:prefixText="FCFA ">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/montantParPayeurInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/dateDebutInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
