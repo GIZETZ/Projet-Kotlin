@@ -28,6 +28,14 @@ class OperationDetailsActivity : AppCompatActivity() {
     private val formatter = NumberFormat.getNumberInstance(Locale.FRANCE)
     private var currentOperationId: Long = -1L
 
+    private fun onPaymentClick(paiementWithPayer: PaiementWithPayer) {
+        val dialog = EditPaymentDialog.newInstance(
+            operationId = currentOperationId,
+            paiementWithPayer = paiementWithPayer
+        )
+        dialog.show(supportFragmentManager, "EditPaymentDialog")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOperationDetailsBinding.inflate(layoutInflater)
@@ -51,7 +59,9 @@ class OperationDetailsActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = PaymentAdapter()
+        adapter = PaymentAdapter { paiementWithPayer ->
+            onPaymentClick(paiementWithPayer)
+        }
         binding.paymentsRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.paymentsRecyclerView.adapter = adapter
     }

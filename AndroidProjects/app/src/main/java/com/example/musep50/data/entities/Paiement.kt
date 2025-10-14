@@ -1,11 +1,14 @@
 
 package com.example.musep50.data.entities
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(
     tableName = "paiements",
     foreignKeys = [
@@ -39,5 +42,6 @@ data class Paiement(
     val commentaire: String? = null,
     val referenceRecu: String? = null,
     val datePaiement: Long = System.currentTimeMillis(),
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis
+) : Parcelable()
 )
