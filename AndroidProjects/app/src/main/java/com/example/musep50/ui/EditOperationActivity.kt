@@ -110,6 +110,7 @@ class EditOperationActivity : AppCompatActivity() {
         binding.nomInput.setText(operation.nom)
         binding.typeInput.setText(operation.type, false)
         binding.montantInput.setText(operation.montantCible.toString())
+        binding.montantParDefautParPayeurInput.setText(operation.montantParDefautParPayeur.toString())
         binding.statutInput.setText(operation.statut, false)
 
         dateDebut = Date(operation.dateDebut)
@@ -126,20 +127,22 @@ class EditOperationActivity : AppCompatActivity() {
             val nom = binding.nomInput.text.toString()
             val type = binding.typeInput.text.toString()
             val montantStr = binding.montantInput.text.toString()
+            val montantParDefautStr = binding.montantParDefautParPayeurInput.text.toString()
             val statut = binding.statutInput.text.toString()
 
-            if (validateInputs(nom, type, montantStr)) {
-                updateOperation(nom, type, montantStr.toDouble(), statut)
+            if (validateInputs(nom, type, montantStr, montantParDefautStr)) {
+                updateOperation(nom, type, montantStr.replace(",", ".").toDouble(), montantParDefautStr.replace(",", ".").toDouble(), statut)
             }
         }
     }
 
-    private fun updateOperation(nom: String, type: String, montant: Double, statut: String) {
+    private fun updateOperation(nom: String, type: String, montant: Double, montantParDefaut: Double, statut: String) {
         currentOperation?.let { operation ->
             val updatedOperation = operation.copy(
                 nom = nom,
                 type = type,
                 montantCible = montant,
+                montantParDefautParPayeur = montantParDefaut,
                 dateDebut = dateDebut?.time ?: operation.dateDebut,
                 dateFin = dateFin?.time,
                 statut = statut.ifEmpty { "En cours" }
@@ -157,7 +160,12 @@ class EditOperationActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateInputs(nom: String, type: String, montantStr: String): Boolean {
+    private fun validateInputs(nom: String, type: String, montantStr: String, montantParDefautStr: String): Boolean {
+        binding.nomInputLayout.error = null
+        binding.typeInputLayout.error = null
+        binding.montantInputLayout.error = null
+        binding.montantParDefautParPayeurInputLayout.error = null
+
         if (nom.isBlank()) {
             binding.nomInputLayout.error = "Le nom est requis"
             return false
@@ -170,6 +178,35 @@ class EditOperationActivity : AppCompatActivity() {
 
         if (montantStr.isBlank()) {
             binding.montantInputLayout.error = "Le montant est requis"
+            return false
+        }
+
+        // Accepter les virgules et les points comme séparateurs décimaux
+        val montant = montantStr.replace(",", ".").toDoubleOrNull()
+        if (montant == null) {
+            binding.montantInputLayout.error = "Veuillez entrer un montant valide (ex: 1000 ou 1000.50)"
+            return false
+        }
+
+        if (montant <= 0) {
+            binding.montantInputLayout.error = "Le montant doit être supérieur à 0"
+            return false
+        }
+
+        if (montantParDefautStr.isBlank()) {
+            binding.montantParDefautParPayeurInputLayout.error = "Le montant par défaut par payeur est requis"
+            return false
+        }
+
+        // Accepter les virgules et les points comme séparateurs décimaux
+        val montantParDefaut = montantParDefautStr.replace(",", ".").toDoubleOrNull()
+        if (montantParDefaut == null) {
+            binding.montantParDefautParPayeurInputLayout.error = "Veuillez entrer un montant valide (ex: 500 ou 500.50)"
+            return false
+        }
+
+        if (montantParDefaut <= 0) {
+            binding.montantParDefautParPayeurInputLayout.error = "Le montant doit être supérieur à 0"
             return false
         }
 

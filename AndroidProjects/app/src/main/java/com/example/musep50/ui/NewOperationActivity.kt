@@ -86,14 +86,17 @@ class NewOperationActivity : AppCompatActivity() {
             val nom = binding.nomInput.text.toString()
             val type = binding.typeInput.text.toString()
             val montantStr = binding.montantInput.text.toString()
+            val montantParPayeurStr = binding.montantParPayeurInput.text.toString()
 
-            if (validateInputs(nom, type, montantStr)) {
-                val montant = montantStr.toDouble()
+            if (validateInputs(nom, type, montantStr, montantParPayeurStr)) {
+                val montant = montantStr.replace(",", ".").toDouble()
+                val montantParPayeur = montantParPayeurStr.replace(",", ".").toDouble()
                 val operation = Operation(
                     eventId = eventId,
                     nom = nom,
                     type = type,
                     montantCible = montant,
+                    montantParDefautParPayeur = montantParPayeur,
                     dateDebut = dateDebut?.time ?: System.currentTimeMillis(),
                     dateFin = dateFin?.time,
                     statut = "En cours"
@@ -106,7 +109,12 @@ class NewOperationActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateInputs(nom: String, type: String, montantStr: String): Boolean {
+    private fun validateInputs(nom: String, type: String, montantStr: String, montantParPayeurStr: String): Boolean {
+        binding.nomInputLayout.error = null
+        binding.typeInputLayout.error = null
+        binding.montantInputLayout.error = null
+        binding.montantParPayeurInputLayout.error = null
+
         if (nom.isBlank()) {
             binding.nomInputLayout.error = "Le nom est requis"
             return false
@@ -119,6 +127,35 @@ class NewOperationActivity : AppCompatActivity() {
 
         if (montantStr.isBlank()) {
             binding.montantInputLayout.error = "Le montant est requis"
+            return false
+        }
+
+        // Accepter les virgules et les points comme séparateurs décimaux
+        val montant = montantStr.replace(",", ".").toDoubleOrNull()
+        if (montant == null) {
+            binding.montantInputLayout.error = "Veuillez entrer un montant valide (ex: 1000 ou 1000.50)"
+            return false
+        }
+
+        if (montant <= 0) {
+            binding.montantInputLayout.error = "Le montant doit être supérieur à 0"
+            return false
+        }
+
+        if (montantParPayeurStr.isBlank()) {
+            binding.montantParPayeurInputLayout.error = "Le montant par payeur est requis"
+            return false
+        }
+
+        // Accepter les virgules et les points comme séparateurs décimaux
+        val montantParPayeur = montantParPayeurStr.replace(",", ".").toDoubleOrNull()
+        if (montantParPayeur == null) {
+            binding.montantParPayeurInputLayout.error = "Veuillez entrer un montant valide (ex: 500 ou 500.50)"
+            return false
+        }
+
+        if (montantParPayeur <= 0) {
+            binding.montantParPayeurInputLayout.error = "Le montant doit être supérieur à 0"
             return false
         }
 

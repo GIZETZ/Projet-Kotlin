@@ -97,12 +97,32 @@ class ManageParticipantsDialog(
     private fun addParticipant() {
         val participantName = binding.payerNameInput.text.toString()
         val contact = binding.payerContactInput.text?.toString()
+        val montantStr = binding.payerMontantInput.text?.toString()
+        
+        // Accepter les virgules et les points comme séparateurs décimaux
+        val montantPersonnalise = if (!montantStr.isNullOrBlank()) {
+            val montant = montantStr.replace(",", ".").toDoubleOrNull()
+            if (montant != null && montant <= 0) {
+                binding.payerMontantInputLayout.error = "Le montant doit être supérieur à 0"
+                return
+            }
+            if (montant == null && montantStr.isNotBlank()) {
+                binding.payerMontantInputLayout.error = "Veuillez entrer un montant valide (ex: 500 ou 500.50)"
+                return
+            }
+            montant
+        } else {
+            null
+        }
+        
+        binding.payerMontantInputLayout.error = null
 
         viewLifecycleOwner.lifecycleScope.launch {
             val newParticipant = Payer(
                 eventId = eventId,
                 nom = participantName,
-                contact = contact
+                contact = contact,
+                montantPersonnalise = montantPersonnalise
             )
 
             try {
@@ -111,6 +131,7 @@ class ManageParticipantsDialog(
                 
                 binding.payerNameInput.text?.clear()
                 binding.payerContactInput.text?.clear()
+                binding.payerMontantInput.text?.clear()
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Erreur: ${e.message}", Toast.LENGTH_SHORT).show()
             }

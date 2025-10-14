@@ -40,6 +40,14 @@ class ParticipantAdapter(
                 binding.participantContact.text = payer.contact
             }
 
+            if (payer.montantPersonnalise != null) {
+                binding.participantMontant.visibility = View.VISIBLE
+                val formatter = java.text.NumberFormat.getNumberInstance(java.util.Locale.FRANCE)
+                binding.participantMontant.text = "Montant personnalisé: ${formatter.format(payer.montantPersonnalise)} FCFA"
+            } else {
+                binding.participantMontant.visibility = View.GONE
+            }
+
             binding.btnDeleteParticipant.setOnClickListener {
                 onDeleteClick(payer)
             }

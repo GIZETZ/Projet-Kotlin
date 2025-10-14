@@ -20,6 +20,14 @@ import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
 
+// Data class pour représenter un retardataire avec son montant dû
+data class RetardataireInfo(
+    val payer: Payer,
+    val montantDu: Double,      // Montant total que le payeur doit payer
+    val montantPaye: Double,    // Montant déjà payé
+    val montantRestant: Double  // Montant restant à payer
+)
+
 class RetardatairesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRetardatairesBinding
     private val dashboardViewModel: DashboardViewModel by viewModels()
@@ -29,6 +37,7 @@ class RetardatairesActivity : AppCompatActivity() {
     private var allPayers = listOf<Payer>()
     private var retardataires = listOf<Payer>()
     private var selectedRetardataires = listOf<Payer>()
+    private var retardatairesInfo = mutableMapOf<Long, RetardataireInfo>() // Map payerId -> RetardataireInfo
     private val formatter = NumberFormat.getNumberInstance(Locale.FRANCE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,19 +102,43 @@ class RetardatairesActivity : AppCompatActivity() {
                 }
             }
         }
-
-        paiementViewModel.getPaiementsWithPayerByOperation(operationId).observe(this) { payments ->
-            val payerIds = payments.map { it.paiement.payerId }.toSet()
-            retardataires = allPayers.filter { !payerIds.contains(it.id) }
-            adapter.submitList(retardataires)
-            updateRetardatairesCount()
-        }
     }
 
     private fun calculateRetardataires(operationId: Long) {
         paiementViewModel.getPaiementsWithPayerByOperation(operationId).observe(this) { payments ->
-            val payerIds = payments.map { it.paiement.payerId }.toSet()
-            retardataires = allPayers.filter { !payerIds.contains(it.id) }
+            val operation = currentOperation ?: return@observe
+            
+            // Calculer la somme des paiements par payeur
+            val paiementsParPayeur = payments.groupBy { it.paiement.payerId }
+                .mapValues { entry -> entry.value.sumOf { it.paiement.montant } }
+            
+            // Identifier les retardataires (ceux dont la somme payée < solde fixe)
+            val retardatairesTemp = mutableListOf<Payer>()
+            retardatairesInfo.clear()
+            
+            allPayers.forEach { payer ->
+                // Montant que ce payeur doit payer (personnalisé ou par défaut)
+                val montantDu = payer.montantPersonnalise ?: operation.montantParDefautParPayeur
+                
+                // Montant déjà payé par ce payeur
+                val montantPaye = paiementsParPayeur[payer.id] ?: 0.0
+                
+                // Montant restant à payer
+                val montantRestant = montantDu - montantPaye
+                
+                // Si le montant restant > 0, c'est un retardataire
+                if (montantRestant > 0) {
+                    retardatairesTemp.add(payer)
+                    retardatairesInfo[payer.id] = RetardataireInfo(
+                        payer = payer,
+                        montantDu = montantDu,
+                        montantPaye = montantPaye,
+                        montantRestant = montantRestant
+                    )
+                }
+            }
+            
+            retardataires = retardatairesTemp
             adapter.submitList(retardataires)
             updateRetardatairesCount()
         }
@@ -134,16 +167,41 @@ class RetardatairesActivity : AppCompatActivity() {
 
     private fun generateReminderMessage(payer: Payer): String {
         val operation = currentOperation ?: return ""
-        // Utiliser le montant personnalisé du payeur, sinon le montant par défaut de l'opération
-        val montantDu = payer.montantPersonnalise ?: operation.montantParDefautParPayeur
+        val info = retardatairesInfo[payer.id]
+        
+        if (info == null) {
+            // Fallback si l'info n'est pas disponible
+            val montantDu = payer.montantPersonnalise ?: operation.montantParDefautParPayeur
+            return """
+                Bonjour ${payer.nom},
+                
+                Nous n'avons pas encore reçu votre paiement pour l'opération "${operation.nom}" (${operation.type}).
+                
+                📅 Date limite: À confirmer
+                💰 Montant attendu: ${formatter.format(montantDu)} FCFA
+                
+                Merci de bien vouloir régulariser votre situation dans les meilleurs délais.
+                
+                Cordialement,
+                MUSEP50
+            """.trimIndent()
+        }
+        
+        // Message avec les informations détaillées
+        val messagePayePartiel = if (info.montantPaye > 0) {
+            "\n💵 Montant déjà payé: ${formatter.format(info.montantPaye)} FCFA"
+        } else {
+            ""
+        }
 
         return """
             Bonjour ${payer.nom},
             
-            Nous n'avons pas encore reçu votre paiement pour l'opération "${operation.nom}" (${operation.type}).
+            Nous vous rappelons que votre cotisation pour l'opération "${operation.nom}" (${operation.type}) n'est pas encore soldée.
             
             📅 Date limite: À confirmer
-            💰 Montant attendu: ${formatter.format(montantDu)} FCFA
+            💰 Montant total à payer: ${formatter.format(info.montantDu)} FCFA$messagePayePartiel
+            💳 Montant restant dû: ${formatter.format(info.montantRestant)} FCFA
             
             Merci de bien vouloir régulariser votre situation dans les meilleurs délais.
             
