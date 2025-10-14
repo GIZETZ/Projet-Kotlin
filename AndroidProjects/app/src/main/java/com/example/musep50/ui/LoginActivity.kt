@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.musep50.R
 import com.example.musep50.databinding.ActivityLoginBinding
+import com.example.musep50.utils.BiometricAuthManager
 import com.example.musep50.viewmodel.AuthViewModel
 import com.example.musep50.viewmodel.LoginResult
 
@@ -16,12 +17,15 @@ class LoginActivity : AppCompatActivity() {
     private val viewModel: AuthViewModel by viewModels()
     private var currentPin = ""
     private var currentEmail = ""
+    private lateinit var biometricAuthManager: BiometricAuthManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        biometricAuthManager = BiometricAuthManager(this)
+        
         setupEmailStep()
         setupPinStep()
         observeViewModel()
@@ -124,6 +128,38 @@ class LoginActivity : AppCompatActivity() {
         binding.continueButton.visibility = View.GONE
         binding.registerButton.visibility = View.GONE
         binding.subtitleText.text = "Entrez votre code PIN"
+        
+        // Proposer l'authentification biométrique si disponible
+        if (biometricAuthManager.isBiometricAvailable()) {
+            // Attendre un peu pour que l'UI soit bien affichée
+            binding.root.postDelayed({
+                promptBiometricAuth()
+            }, 300)
+        }
+    }
+    
+    private fun promptBiometricAuth() {
+        biometricAuthManager.authenticate(
+            onSuccess = {
+                // Connexion réussie avec empreinte digitale
+                // On simule l'authentification en utilisant l'email stocké
+                val sharedPrefs = getSharedPreferences("musep50_prefs", MODE_PRIVATE)
+                val savedPin = sharedPrefs.getString("pin_${currentEmail}", null)
+                
+                if (savedPin != null) {
+                    viewModel.login(currentEmail, savedPin)
+                } else {
+                    Toast.makeText(this, "Veuillez vous connecter une fois avec votre PIN", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onError = { error ->
+                // L'utilisateur a choisi d'utiliser le PIN ou une erreur s'est produite
+                Toast.makeText(this, "Utilisez votre code PIN", Toast.LENGTH_SHORT).show()
+            },
+            onFailed = {
+                Toast.makeText(this, "Empreinte non reconnue", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     private fun observeViewModel() {
@@ -131,6 +167,10 @@ class LoginActivity : AppCompatActivity() {
             when (result) {
                 is LoginResult.Success -> {
                     try {
+                        // Sauvegarder le PIN pour l'authentification biométrique future
+                        val sharedPrefs = getSharedPreferences("musep50_prefs", MODE_PRIVATE)
+                        sharedPrefs.edit().putString("pin_${currentEmail}", currentPin).apply()
+                        
                         Toast.makeText(this, "Connexion réussie", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, DashboardActivity::class.java).apply {
                             putExtra("user_id", result.user.id)
