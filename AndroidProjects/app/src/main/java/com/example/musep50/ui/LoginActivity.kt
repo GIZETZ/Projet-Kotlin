@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         biometricAuthManager = BiometricAuthManager(this)
-        
+
         setupEmailStep()
         setupPinStep()
         observeViewModel()
@@ -57,6 +57,11 @@ class LoginActivity : AppCompatActivity() {
 
         binding.pinKeypad.btnBack.setOnClickListener {
             showEmailStep()
+        }
+
+        // Bouton d'authentification biométrique
+        binding.btnBiometric.setOnClickListener {
+            promptBiometricAuth()
         }
     }
 
@@ -128,16 +133,15 @@ class LoginActivity : AppCompatActivity() {
         binding.continueButton.visibility = View.GONE
         binding.registerButton.visibility = View.GONE
         binding.subtitleText.text = "Entrez votre code PIN"
-        
-        // Proposer l'authentification biométrique si disponible
+
+        // Afficher le bouton biométrique si disponible
         if (biometricAuthManager.isBiometricAvailable()) {
-            // Attendre un peu pour que l'UI soit bien affichée
-            binding.root.postDelayed({
-                promptBiometricAuth()
-            }, 300)
+            binding.btnBiometric.visibility = View.VISIBLE
+        } else {
+            binding.btnBiometric.visibility = View.GONE
         }
     }
-    
+
     private fun promptBiometricAuth() {
         biometricAuthManager.authenticate(
             onSuccess = {
@@ -145,7 +149,7 @@ class LoginActivity : AppCompatActivity() {
                 // On simule l'authentification en utilisant l'email stocké
                 val sharedPrefs = getSharedPreferences("musep50_prefs", MODE_PRIVATE)
                 val savedPin = sharedPrefs.getString("pin_${currentEmail}", null)
-                
+
                 if (savedPin != null) {
                     viewModel.login(currentEmail, savedPin)
                 } else {
@@ -170,7 +174,7 @@ class LoginActivity : AppCompatActivity() {
                         // Sauvegarder le PIN pour l'authentification biométrique future
                         val sharedPrefs = getSharedPreferences("musep50_prefs", MODE_PRIVATE)
                         sharedPrefs.edit().putString("pin_${currentEmail}", currentPin).apply()
-                        
+
                         Toast.makeText(this, "Connexion réussie", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, DashboardActivity::class.java).apply {
                             putExtra("user_id", result.user.id)
