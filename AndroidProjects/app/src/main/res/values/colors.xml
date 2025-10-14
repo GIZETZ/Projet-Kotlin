@@ -19,4 +19,5 @@
     
     <!-- Material Design colors -->
     <color name="md_theme_light_outline">#E0E0E0</color>
+    <color name="purple_500">#6200EE</color>
 </resources>
