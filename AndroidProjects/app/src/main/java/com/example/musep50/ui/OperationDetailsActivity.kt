@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.musep50.data.dao.PaiementWithPayer
+import com.example.musep50.data.entities.Operation
 import com.example.musep50.data.entities.User
 import com.example.musep50.databinding.ActivityOperationDetailsBinding
 import com.example.musep50.ui.adapter.PaymentAdapter
@@ -27,11 +28,15 @@ class OperationDetailsActivity : AppCompatActivity() {
     private val dateFormat = SimpleDateFormat("d MMM yyyy", Locale.FRANCE)
     private val formatter = NumberFormat.getNumberInstance(Locale.FRANCE)
     private var currentOperationId: Long = -1L
+    private var currentOperation: Operation? = null
+    private var currentEventId: Long = -1L
+
 
     private fun onPaymentClick(paiementWithPayer: PaiementWithPayer) {
         val dialog = EditPaymentDialog.newInstance(
             operationId = currentOperationId,
-            paiementWithPayer = paiementWithPayer
+            paiementWithPayer = paiementWithPayer,
+            eventId = currentEventId
         )
         dialog.show(supportFragmentManager, "EditPaymentDialog")
     }
@@ -114,17 +119,11 @@ class OperationDetailsActivity : AppCompatActivity() {
         }
 
         dashboardViewModel.allOperations.observe(this) { operations ->
-            val operation = operations.find { it.id == currentOperationId }
-            operation?.let {
-                binding.operationName.text = it.nom
-                binding.statusChip.text = it.statut
-                binding.operationDates.text = "${dateFormat.format(it.dateDebut)} - ${
-                    it.dateFin?.let { date -> dateFormat.format(date) } ?: "N/A"
-                }"
-                binding.montantCible.text = "${formatter.format(it.montantCible)} FCFA"
-
-                dashboardViewModel.loadOperationStats(listOf(currentOperationId))
+            currentOperation = operations.find { it.id == currentOperationId }
+            currentOperation?.let {
+                currentEventId = it.eventId
             }
+            updatePreview()
         }
 
         dashboardViewModel.operationStats.observe(this) { stats ->
@@ -135,6 +134,19 @@ class OperationDetailsActivity : AppCompatActivity() {
                 binding.progressBar.progress = it.pourcentage
                 binding.nombrePayeurs.text = "${it.nombrePaiements} payeur${if (it.nombrePaiements > 1) "s" else ""}"
             }
+        }
+    }
+
+    private fun updatePreview() {
+        currentOperation?.let {
+            binding.operationName.text = it.nom
+            binding.statusChip.text = it.statut
+            binding.operationDates.text = "${dateFormat.format(it.dateDebut)} - ${
+                it.dateFin?.let { date -> dateFormat.format(date) } ?: "N/A"
+            }"
+            binding.montantCible.text = "${formatter.format(it.montantCible)} FCFA"
+
+            dashboardViewModel.loadOperationStats(listOf(currentOperationId))
         }
     }
 
