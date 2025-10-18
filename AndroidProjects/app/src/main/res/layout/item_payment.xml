@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    app:cardCornerRadius="8dp"
+    android:layout_margin="@dimen/space_4"
+    app:cardCornerRadius="12dp"
     app:cardElevation="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="@dimen/space_12">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,14 +34,14 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/primary"
+                android:textColor="?attr/colorPrimary"
                 tools:text="2 500 FCFA" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/space_4"
             android:orientation="horizontal">
 
             <TextView
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="12sp"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 tools:text="15 Jan 2025" />
 
             <TextView
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 tools:text="Mobile Money" />
         </LinearLayout>
 
@@ -66,9 +66,9 @@
             android:id="@+id/commentaire"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/space_4"
             android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:visibility="gone"
             tools:text="Orange Money"
             tools:visibility="visible" />

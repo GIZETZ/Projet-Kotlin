@@ -51,7 +51,7 @@
                     <ScrollView
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
-                        android:background="#F5F5F5"
+                        android:background="@color/colorSurfaceVariant"
                         android:padding="12dp">
 
                         <TextView
@@ -148,7 +148,7 @@
                         android:layout_marginTop="8dp"
                         android:text="Le fichier CSV sera sauvegardé dans vos téléchargements"
                         android:textSize="12sp"
-                        android:textColor="@android:color/darker_gray" />
+                        android:textColor="?attr/colorOnSurfaceVariant" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

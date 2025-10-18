@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:textSize="14sp"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     tools:text="ADHESION" />
             </LinearLayout>
 
@@ -67,8 +67,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:indicatorColor="@color/primary"
-            app:trackColor="@color/md_theme_light_outline"
+            app:indicatorColor="?attr/colorPrimary"
+            app:trackColor="@color/colorOutline"
             tools:progress="65" />
 
         <!-- Stats -->
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:text="Collecté"
                     android:textSize="12sp"
-                    android:textColor="@android:color/darker_gray" />
+                    android:textColor="?attr/colorOnSurfaceVariant" />
 
                 <TextView
                     android:id="@+id/montantCollecte"
@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="@color/primary"
+                    android:textColor="?attr/colorPrimary"
                     tools:text="65 000 FCFA" />
             </LinearLayout>
 
@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:text="Restant"
                     android:textSize="12sp"
-                    android:textColor="@android:color/darker_gray" />
+                    android:textColor="?attr/colorOnSurfaceVariant" />
 
                 <TextView
                     android:id="@+id/montantRestant"
@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:text="Payeurs"
                     android:textSize="12sp"
-                    android:textColor="@android:color/darker_gray" />
+                    android:textColor="?attr/colorOnSurfaceVariant" />
 
                 <TextView
                     android:id="@+id/nombrePayeurs"

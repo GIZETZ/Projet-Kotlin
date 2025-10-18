@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    
-    <!-- Primary colors -->
-    <color name="primary">#F44336</color>
-    <color name="primary_dark">#FF7000</color>
-    <color name="primary_light">#3F51B5</color>
-    
-    <!-- Secondary colors -->
-    <color name="secondary">#FF9800</color>
-    <color name="secondary_dark">#E68900</color>
-    <color name="secondary_light">#FFB74D</color>
-    
-    <!-- Background -->
-    <color name="background">#F5F5F7</color>
-    <color name="surface">#FFFFFF</color>
-    
-    <!-- Material Design colors -->
-    <color name="md_theme_light_outline">#E0E0E0</color>
-    <color name="purple_500">#6200EE</color>
+    <!-- Brand palette: Light theme -->
+    <color name="colorPrimary">#F97316</color>
+    <color name="colorOnPrimary">#FFFFFFFF</color>
+    <color name="colorPrimaryContainer">#FFD8C2</color>
+    <color name="colorOnPrimaryContainer">#3A1D00</color>
+
+    <color name="colorSecondary">#FACC15</color>
+    <color name="colorOnSecondary">#1E1E1E</color>
+    <color name="colorSecondaryContainer">#FFF2B3</color>
+    <color name="colorOnSecondaryContainer">#272300</color>
+
+    <color name="colorTertiary">#14B8A6</color>
+    <color name="colorOnTertiary">#FFFFFFFF</color>
+    <color name="colorTertiaryContainer">#BFEDEA</color>
+    <color name="colorOnTertiaryContainer">#00201C</color>
+
+    <color name="colorSuccess">#22C55E</color>
+    <color name="colorOnSuccess">#FFFFFFFF</color>
+
+    <color name="colorBackground">#FFF9F2</color>
+    <color name="colorOnBackground">#1E1E1E</color>
+
+    <color name="colorSurface">#FFFFFFFF</color>
+    <color name="colorOnSurface">#1E1E1E</color>
+    <color name="colorSurfaceVariant">#FFF1E6</color>
+    <color name="colorOnSurfaceVariant">#4B453F</color>
+
+    <color name="colorOutline">#E7E5E4</color>
+    <color name="colorError">#B00020</color>
+    <color name="colorOnError">#FFFFFFFF</color>
+
+    <!-- Scrim/overlay for dimming content -->
+    <color name="scrim">#40000000</color>
 </resources>

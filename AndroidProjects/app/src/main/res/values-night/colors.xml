@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand palette: Dark theme -->
+    <color name="colorPrimary">#F97316</color>
+    <color name="colorOnPrimary">#1E1E1E</color>
+    <color name="colorPrimaryContainer">#7A3C0B</color>
+    <color name="colorOnPrimaryContainer">#FFEDD5</color>
+
+    <color name="colorSecondary">#FACC15</color>
+    <color name="colorOnSecondary">#1E1E1E</color>
+    <color name="colorSecondaryContainer">#6B5F00</color>
+    <color name="colorOnSecondaryContainer">#FEF9C3</color>
+
+    <color name="colorTertiary">#14B8A6</color>
+    <color name="colorOnTertiary">#0B0F10</color>
+    <color name="colorTertiaryContainer">#0A544E</color>
+    <color name="colorOnTertiaryContainer">#CFFAF5</color>
+
+    <color name="colorSuccess">#22C55E</color>
+    <color name="colorOnSuccess">#0B0F10</color>
+
+    <color name="colorBackground">#1C1917</color>
+    <color name="colorOnBackground">#F5F5F5</color>
+
+    <color name="colorSurface">#1F1B19</color>
+    <color name="colorOnSurface">#F5F5F5</color>
+    <color name="colorSurfaceVariant">#2A2522</color>
+    <color name="colorOnSurfaceVariant">#D6D3D1</color>
+
+    <color name="colorOutline">#3F3F3F</color>
+    <color name="colorError">#CF6679</color>
+    <color name="colorOnError">#1E1E1E</color>
+
+    <!-- Scrim/overlay for dimming content -->
+    <color name="scrim">#66000000</color>
+</resources>

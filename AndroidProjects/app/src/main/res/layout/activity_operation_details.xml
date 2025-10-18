@@ -67,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:textColor="@android:color/darker_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         tools:text="1 Jan - 31 Jan 2025" />
 
                     <!-- Stats Grid -->
@@ -88,7 +88,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Ciblé"
                                 android:textSize="12sp"
-                                android:textColor="@android:color/darker_gray" />
+                                android:textColor="?attr/colorOnSurfaceVariant" />
 
                             <TextView
                                 android:id="@+id/montantCible"
@@ -110,7 +110,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Collecté"
                                 android:textSize="12sp"
-                                android:textColor="@android:color/darker_gray" />
+                                android:textColor="?attr/colorOnSurfaceVariant" />
 
                             <TextView
                                 android:id="@+id/montantCollecte"
@@ -118,7 +118,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/primary"
+                                android:textColor="?attr/colorPrimary"
                                 tools:text="32 500 FCFA" />
                         </LinearLayout>
 
@@ -133,7 +133,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Restant"
                                 android:textSize="12sp"
-                                android:textColor="@android:color/darker_gray" />
+                                android:textColor="?attr/colorOnSurfaceVariant" />
 
                             <TextView
                                 android:id="@+id/montantRestant"
@@ -151,7 +151,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        app:indicatorColor="@color/primary"
+                        app:indicatorColor="?attr/colorPrimary"
+                        app:trackColor="@color/colorOutline"
                         tools:progress="65" />
 
                     <TextView

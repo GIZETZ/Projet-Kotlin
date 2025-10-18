@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/colorBackground"
     tools:context=".ui.LoginActivity">
 
     <androidx.cardview.widget.CardView
@@ -42,7 +42,7 @@
                 android:text="Connexion"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="@color/primary" />
+                android:textColor="?attr/colorPrimary" />
 
             <TextView
                 android:id="@+id/subtitleText"
@@ -52,7 +52,7 @@
                 android:layout_marginBottom="24dp"
                 android:text="Entrez votre adresse email"
                 android:textSize="14sp"
-                android:textColor="@android:color/darker_gray" />
+                android:textColor="?attr/colorOnSurfaceVariant" />
 
             <!-- Email Input (visible first) -->
             <com.google.android.material.textfield.TextInputLayout

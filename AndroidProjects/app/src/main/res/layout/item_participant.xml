@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="8dp"
+    android:layout_marginBottom="@dimen/space_8"
+    app:cardCornerRadius="12dp"
     app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp">
+        android:padding="@dimen/space_12">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -31,18 +31,18 @@
                 android:id="@+id/participantContact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/space_4"
                 android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:text="Contact" />
 
             <TextView
                 android:id="@+id/participantMontant"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/space_4"
                 android:textSize="14sp"
-                android:textColor="@color/purple_500"
+                android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
                 android:text="Montant personnalisé" />
         </LinearLayout>
