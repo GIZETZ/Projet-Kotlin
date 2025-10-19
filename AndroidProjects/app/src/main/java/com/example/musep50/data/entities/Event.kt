@@ -12,5 +12,6 @@ data class Event(
     val dateDebut: Long,
     val dateFin: Long? = null,
     val statut: String = "En cours", // "En cours", "Terminé", "Archivé"
+    val imageUri: String? = null,
     val createdAt: Long = System.currentTimeMillis()
 )

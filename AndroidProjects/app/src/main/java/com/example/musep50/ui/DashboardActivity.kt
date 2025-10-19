@@ -1,11 +1,13 @@
 package com.example.musep50.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +31,21 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var repository: Repository
     private var allEvents = listOf<Event>()
     private var currentUserId: Long = -1L
+    private var pendingImageEventId: Long? = null
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        val eventId = pendingImageEventId
+        pendingImageEventId = null
+        if (uri == null || eventId == null) return@registerForActivityResult
+        try {
+            contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        } catch (_: Exception) { }
+
+        val event = allEvents.find { it.id == eventId } ?: return@registerForActivityResult
+        lifecycleScope.launch {
+            repository.updateEvent(event.copy(imageUri = uri.toString()))
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +91,19 @@ class DashboardActivity : AppCompatActivity() {
             },
             onDeleteClick = { event ->
                 confirmDeleteEvent(event)
+            },
+            onAddImageClick = { event ->
+                pendingImageEventId = event.id
+                try {
+                    pickImageLauncher.launch(arrayOf("image/*"))
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Impossible d'ouvrir la galerie", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onRemoveImageClick = { event ->
+                lifecycleScope.launch {
+                    repository.updateEvent(event.copy(imageUri = null))
+                }
             }
         )
 

@@ -16,7 +16,9 @@ import java.util.Locale
 class EventAdapter(
     private val onItemClick: (Event) -> Unit,
     private val onEditClick: (Event) -> Unit,
-    private val onDeleteClick: (Event) -> Unit
+    private val onDeleteClick: (Event) -> Unit,
+    private val onAddImageClick: (Event) -> Unit,
+    private val onRemoveImageClick: (Event) -> Unit
 ) : ListAdapter<Event, EventAdapter.EventViewHolder>(EventDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
@@ -46,6 +48,17 @@ class EventAdapter(
             
             binding.operationCount.text = "0"
 
+            // Optional cover image
+            val imageView = binding.eventImage
+            val uri = event.imageUri
+            if (!uri.isNullOrBlank()) {
+                imageView.visibility = android.view.View.VISIBLE
+                imageView.setImageURI(android.net.Uri.parse(uri))
+            } else {
+                imageView.setImageDrawable(null)
+                imageView.visibility = android.view.View.GONE
+            }
+
             binding.root.setOnClickListener {
                 onItemClick(event)
             }
@@ -66,6 +79,14 @@ class EventAdapter(
                     }
                     R.id.action_delete_event -> {
                         onDeleteClick(event)
+                        true
+                    }
+                    R.id.action_add_image -> {
+                        onAddImageClick(event)
+                        true
+                    }
+                    R.id.action_remove_image -> {
+                        onRemoveImageClick(event)
                         true
                     }
                     else -> false

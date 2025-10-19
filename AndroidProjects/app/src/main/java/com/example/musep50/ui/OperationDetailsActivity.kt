@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.lifecycle.lifecycleScope
 import com.example.musep50.data.dao.PaiementWithPayer
 import com.example.musep50.data.entities.Operation
 import com.example.musep50.data.entities.User
@@ -14,6 +15,7 @@ import com.example.musep50.viewmodel.AuthViewModel
 import com.example.musep50.viewmodel.DashboardViewModel
 import com.example.musep50.viewmodel.PaiementViewModel
 import java.text.NumberFormat
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -147,6 +149,22 @@ class OperationDetailsActivity : AppCompatActivity() {
             binding.montantCible.text = "${formatter.format(it.montantCible)} FCFA"
 
             dashboardViewModel.loadOperationStats(listOf(currentOperationId))
+            updatePerPayerDue()
+        }
+    }
+
+    private fun updatePerPayerDue() {
+        val operation = currentOperation ?: return
+        val database = com.example.musep50.data.AppDatabase.getDatabase(this)
+        val repository = com.example.musep50.data.Repository(database)
+        lifecycleScope.launch {
+            val participants = repository.countParticipantsByOperation(operation.id)
+            val montantDu = if (operation.montantParDefautParPayeur > 0.0) {
+                operation.montantParDefautParPayeur
+            } else {
+                if (participants > 0) operation.montantCible / participants else 0.0
+            }
+            binding.montantDuParPayer.text = "${formatter.format(montantDu)} FCFA"
         }
     }
 
