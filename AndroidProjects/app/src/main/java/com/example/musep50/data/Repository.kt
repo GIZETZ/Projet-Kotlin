@@ -134,6 +134,9 @@ class Repository(private val database: AppDatabase) {
     fun getAllUsers(): LiveData<List<User>> =
         database.userDao().getAllUsers()
 
+    suspend fun updateUser(user: User) =
+        database.userDao().update(user)
+
     suspend fun getOperationStats(operationId: Long): com.example.musep50.viewmodel.OperationStats {
         val total = getTotalByOperation(operationId) ?: 0.0
         val count = getCountByOperation(operationId)

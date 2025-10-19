@@ -31,6 +31,7 @@ class EventOperationsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEventOperationsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyAppearancePrefs()
 
         eventId = intent.getLongExtra("event_id", -1)
 

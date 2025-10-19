@@ -26,6 +26,7 @@ class NewEventActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityNewEventBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyAppearancePrefs()
 
         setupToolbar()
         setupStatusDropdown()

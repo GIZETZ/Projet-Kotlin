@@ -29,6 +29,7 @@ class EditOperationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditOperationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyAppearancePrefs()
 
         operationId = intent.getLongExtra("operation_id", -1)
         eventId = intent.getLongExtra("event_id", -1)

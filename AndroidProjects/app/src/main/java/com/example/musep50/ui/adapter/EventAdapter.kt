@@ -21,6 +21,13 @@ class EventAdapter(
     private val onRemoveImageClick: (Event) -> Unit
 ) : ListAdapter<Event, EventAdapter.EventViewHolder>(EventDiffCallback()) {
 
+    private var operationCounts: Map<Long, Int> = emptyMap()
+
+    fun setOperationCounts(counts: Map<Long, Int>) {
+        this.operationCounts = counts
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val binding = ItemEventBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -46,7 +53,8 @@ class EventAdapter(
             val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
             binding.eventStartDate.text = dateFormatter.format(Date(event.dateDebut))
             
-            binding.operationCount.text = "0"
+            val count = operationCounts[event.id] ?: 0
+            binding.operationCount.text = count.toString()
 
             // Optional cover image
             val imageView = binding.eventImage

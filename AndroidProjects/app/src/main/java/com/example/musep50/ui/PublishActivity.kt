@@ -45,6 +45,7 @@ class PublishActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPublishBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyAppearancePrefs()
 
         val operationId = intent.getLongExtra("operation_id", -1L)
 

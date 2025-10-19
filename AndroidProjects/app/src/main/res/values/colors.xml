@@ -33,4 +33,8 @@
 
     <!-- Scrim/overlay for dimming content -->
     <color name="scrim">#40000000</color>
+
+    <!-- Extra colors for radial backgrounds -->
+    <color name="colorOrangeCiel">#FFB347</color>
+    <color name="colorSkyBlue">#61A7FF</color>
 </resources>

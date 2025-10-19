@@ -47,6 +47,7 @@ class OperationDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityOperationDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyAppearancePrefs()
 
         currentOperationId = intent.getLongExtra("operation_id", -1L)
 

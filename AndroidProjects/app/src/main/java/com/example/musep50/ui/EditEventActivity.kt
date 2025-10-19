@@ -28,6 +28,7 @@ class EditEventActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditEventBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyAppearancePrefs()
 
         eventId = intent.getLongExtra("event_id", -1)
 

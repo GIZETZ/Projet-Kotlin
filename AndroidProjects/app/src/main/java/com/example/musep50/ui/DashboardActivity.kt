@@ -53,6 +53,7 @@ class DashboardActivity : AppCompatActivity() {
         try {
             binding = ActivityDashboardBinding.inflate(layoutInflater)
             setContentView(binding.root)
+            applyAppearancePrefs()
 
             currentUserId = intent.getLongExtra("user_id", -1L)
 
@@ -170,6 +171,12 @@ class DashboardActivity : AppCompatActivity() {
             adapter.submitList(events)
             updateEmptyState(events.isEmpty())
         }
+
+        // Observe all operations and compute counts per event
+        repository.getAllOperations().observe(this) { operations ->
+            val counts = operations.groupingBy { it.eventId }.eachCount()
+            adapter.setOperationCounts(counts.mapValues { it.value })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -186,7 +193,7 @@ class DashboardActivity : AppCompatActivity() {
                 true
             }
             R.id.action_settings -> {
-                // TODO: Open settings
+                startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
