@@ -4,12 +4,20 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.core.content.FileProvider
+import android.graphics.pdf.PdfDocument
+import android.graphics.Paint
+import android.graphics.Typeface
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
 import com.example.musep50.data.AppDatabase
 import com.example.musep50.data.Repository
 import com.example.musep50.data.dao.PaiementWithPayer
@@ -45,6 +53,123 @@ class PublishActivity : AppCompatActivity() {
         loadData(operationId)
     }
 
+    private fun exportToPdf(shareAfter: Boolean) {
+        val operation = currentOperation ?: return
+        val text = binding.previewText.text.toString()
+
+        lifecycleScope.launch {
+            try {
+                val pdfFile = generatePdfFile(operation, text)
+                Toast.makeText(
+                    this@PublishActivity,
+                    "PDF exporté: ${pdfFile.absolutePath}",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                if (shareAfter) {
+                    sharePdf(pdfFile)
+                }
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this@PublishActivity,
+                    "Erreur PDF: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    private fun generatePdfFile(operation: Operation, content: String): File {
+        val fileName = "musep50_${operation.nom.replace(" ", "_")}_${System.currentTimeMillis()}.pdf"
+
+        val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val musepDir = File(downloadsDir, "Musep")
+        if (!musepDir.exists()) musepDir.mkdirs()
+
+        val file = File(musepDir, fileName)
+
+        val pageWidth = 595
+        val pageHeight = 842
+        val margin = 40
+
+        val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = 0xFF000000.toInt()
+            textSize = 12f
+            typeface = Typeface.MONOSPACE
+        }
+
+        val lines = content.split("\n")
+        val doc = PdfDocument()
+
+        var startLine = 0
+        var pageNumber = 1
+        while (startLine < lines.size) {
+            val pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).create()
+            val page = doc.startPage(pageInfo)
+            val canvas = page.canvas
+
+            val availableWidth = pageWidth - margin * 2
+            val availableHeight = pageHeight - margin * 2
+
+            var y = margin
+
+            val headerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                textSize = 14f
+                typeface = Typeface.DEFAULT_BOLD
+            }
+            val header = "MUSEP50 - ${operation.nom}"
+            canvas.drawText(header, margin.toFloat(), y.toFloat(), headerPaint)
+            y += 24
+
+            val builder = StringBuilder()
+            var consumed = 0
+            while (startLine + consumed < lines.size) {
+                builder.append(lines[startLine + consumed]).append('\n')
+                val layout = StaticLayout.Builder.obtain(builder.toString(), 0, builder.length, textPaint, availableWidth)
+                    .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                    .setIncludePad(false)
+                    .build()
+                if (layout.height > availableHeight - (y - margin)) {
+                    builder.setLength(builder.lastIndexOf('\n'))
+                    break
+                }
+                consumed++
+            }
+
+            val layout = StaticLayout.Builder.obtain(builder.toString(), 0, builder.length, textPaint, availableWidth)
+                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                .setIncludePad(false)
+                .build()
+            canvas.save()
+            canvas.translate(margin.toFloat(), y.toFloat())
+            layout.draw(canvas)
+            canvas.restore()
+
+            doc.finishPage(page)
+            startLine += consumed
+            pageNumber++
+            if (consumed == 0) break
+        }
+
+        file.outputStream().use { os ->
+            doc.writeTo(os)
+        }
+        doc.close()
+        return file
+    }
+
+    private fun sharePdf(file: File) {
+        val authority = "${applicationContext.packageName}.fileprovider"
+        val uri: Uri = FileProvider.getUriForFile(this, authority, file)
+
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "application/pdf"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        startActivity(Intent.createChooser(shareIntent, "Partager le PDF"))
+    }
+
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -68,6 +193,14 @@ class PublishActivity : AppCompatActivity() {
 
         binding.btnExportCsv.setOnClickListener {
             exportToCsv()
+        }
+
+        binding.btnExportPdf.setOnClickListener {
+            exportToPdf(shareAfter = false)
+        }
+
+        binding.btnSharePdf.setOnClickListener {
+            exportToPdf(shareAfter = true)
         }
     }
 

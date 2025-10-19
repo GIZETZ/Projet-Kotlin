@@ -142,6 +142,23 @@
                         app:icon="@drawable/ic_launcher_foreground"
                         style="@style/Widget.Material3.Button.OutlinedButton" />
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnExportPdf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="🧾 Exporter en PDF"
+                        app:icon="@drawable/ic_launcher_foreground"
+                        style="@style/Widget.Material3.Button.OutlinedButton" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSharePdf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="📤 Partager en PDF"
+                        app:icon="@drawable/ic_launcher_foreground" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

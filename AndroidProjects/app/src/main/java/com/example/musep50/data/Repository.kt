@@ -105,6 +105,22 @@ class Repository(private val database: AppDatabase) {
     suspend fun deletePaiement(paiement: Paiement) =
         database.paiementDao().delete(paiement)
 
+    // Operation-Payer (participants d'une opération)
+    fun getPayersByOperation(operationId: Long): LiveData<List<Payer>> =
+        database.operationPayerDao().getPayersByOperation(operationId)
+
+    suspend fun addPayerToOperation(operationId: Long, payerId: Long) =
+        database.operationPayerDao().insert(OperationPayer(operationId, payerId))
+
+    suspend fun removePayerFromOperation(operationId: Long, payerId: Long) =
+        database.operationPayerDao().delete(OperationPayer(operationId, payerId))
+
+    suspend fun isPayerInOperation(operationId: Long, payerId: Long): Boolean =
+        database.operationPayerDao().exists(operationId, payerId) > 0
+
+    suspend fun countParticipantsByOperation(operationId: Long): Int =
+        database.operationPayerDao().countByOperation(operationId)
+
     // User methods
     suspend fun getUserByEmail(email: String): User? =
         database.userDao().getUserByEmail(email)

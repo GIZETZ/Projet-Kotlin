@@ -95,10 +95,23 @@ class RetardatairesActivity : AppCompatActivity() {
 
         dashboardViewModel.allOperations.observe(this) { operations ->
             currentOperation = operations.find { it.id == operationId }
-            currentOperation?.let { operation ->
-                repository.getPayersByEvent(operation.eventId).observe(this) { payers ->
-                    allPayers = payers
-                    calculateRetardataires(operationId)
+            currentOperation?.let { op ->
+                lifecycleScope.launch {
+                    val participantCount = repository.countParticipantsByOperation(operationId)
+                    if (participantCount > 0) {
+                        repository.getPayersByOperation(operationId).observe(this@RetardatairesActivity) { payers ->
+                            allPayers = payers
+                            calculateRetardataires(operationId)
+                        }
+                    } else {
+                        // Fallback temporaire: utiliser les payeurs de l'événement si aucun participant n'est encore lié à l'opération
+                        Repository(AppDatabase.getDatabase(this@RetardatairesActivity))
+                            .getPayersByEvent(op.eventId)
+                            .observe(this@RetardatairesActivity) { payers ->
+                                allPayers = payers
+                                calculateRetardataires(operationId)
+                            }
+                    }
                 }
             }
         }
@@ -117,17 +130,22 @@ class RetardatairesActivity : AppCompatActivity() {
             retardatairesInfo.clear()
             
             allPayers.forEach { payer ->
-                // Montant que ce payeur doit payer (personnalisé ou par défaut)
-                val montantDu = payer.montantPersonnalise ?: operation.montantParDefautParPayeur
-                
+                // Montant que ce payeur doit payer:
+                // 1) personnalisé si défini
+                // 2) sinon montant par défaut de l'opération si > 0
+                // 3) sinon répartition équitable du montant cible entre les participants
+                val perHeadFallback = if (allPayers.isNotEmpty()) operation.montantCible / allPayers.size else 0.0
+                val montantDu = payer.montantPersonnalise
+                    ?: (if (operation.montantParDefautParPayeur > 0.0) operation.montantParDefautParPayeur else perHeadFallback)
+
                 // Montant déjà payé par ce payeur
                 val montantPaye = paiementsParPayeur[payer.id] ?: 0.0
-                
+
                 // Montant restant à payer
                 val montantRestant = montantDu - montantPaye
-                
+
                 // Si le montant restant > 0, c'est un retardataire
-                if (montantRestant > 0) {
+                if (montantRestant > 0.0) {
                     retardatairesTemp.add(payer)
                     retardatairesInfo[payer.id] = RetardataireInfo(
                         payer = payer,
@@ -146,10 +164,31 @@ class RetardatairesActivity : AppCompatActivity() {
 
     private fun updateRetardatairesCount() {
         val count = retardataires.size
-        binding.retardatairesCount.text = if (count > 0) {
-            "$count membre${if (count > 1) "s" else ""} en attente"
-        } else {
+        if (count > 0) {
+            binding.retardatairesCount.text = "$count membre${if (count > 1) "s" else ""} en attente"
+            return
+        }
+
+        // Vérifier si des participants ont un montant dû défini (> 0)
+        val anyDueDefined = allPayers.any { payer ->
+            val info = retardatairesInfo[payer.id]
+            if (info != null) {
+                info.montantDu > 0.0
+            } else {
+                val operation = currentOperation
+                if (operation == null) false else {
+                    val perHeadFallback = if (allPayers.isNotEmpty()) operation.montantCible / allPayers.size else 0.0
+                    val montantDu = payer.montantPersonnalise
+                        ?: (if (operation.montantParDefautParPayeur > 0.0) operation.montantParDefautParPayeur else perHeadFallback)
+                    montantDu > 0.0
+                }
+            }
+        }
+
+        binding.retardatairesCount.text = if (anyDueDefined) {
             "Tous les membres ont payé ! 🎉"
+        } else {
+            "Aucun montant dû n'est défini pour cette opération"
         }
     }
 
@@ -170,8 +209,10 @@ class RetardatairesActivity : AppCompatActivity() {
         val info = retardatairesInfo[payer.id]
         
         if (info == null) {
-            // Fallback si l'info n'est pas disponible
-            val montantDu = payer.montantPersonnalise ?: operation.montantParDefautParPayeur
+            // Fallback si l'info n'est pas disponible (aligné avec le calcul principal)
+            val perHeadFallback = if (allPayers.isNotEmpty()) operation.montantCible / allPayers.size else 0.0
+            val montantDu = payer.montantPersonnalise
+                ?: (if (operation.montantParDefautParPayeur > 0.0) operation.montantParDefautParPayeur else perHeadFallback)
             return """
                 Bonjour ${payer.nom},
                 
