@@ -7,6 +7,6 @@
         android:centerX="50%"
         android:centerY="30%"
         android:startColor="@color/colorSkyBlue"
-        android:centerColor="@color/colorPrimary"
-        android:endColor="@color/colorOrangeCiel"/>
+        android:centerColor="@color/colorSkyBlue"
+        android:endColor="@android:color/white"/>
 </shape>

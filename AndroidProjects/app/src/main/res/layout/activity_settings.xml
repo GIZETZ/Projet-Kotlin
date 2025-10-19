@@ -107,7 +107,7 @@
                             android:id="@+id/radioBgBlueOrange"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Dégradé radial Bleu → Orange ciel" />
+                            android:text="Dégradé radial Bleu → Blanc" />
                     </RadioGroup>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

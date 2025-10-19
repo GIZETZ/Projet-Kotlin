@@ -23,6 +23,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyAppearancePrefs()
 
         biometricAuthManager = BiometricAuthManager(this)
 

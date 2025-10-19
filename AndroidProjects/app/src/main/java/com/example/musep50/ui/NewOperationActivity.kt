@@ -25,6 +25,7 @@ class NewOperationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityNewOperationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyAppearancePrefs()
 
         eventId = intent.getLongExtra("event_id", -1)
 

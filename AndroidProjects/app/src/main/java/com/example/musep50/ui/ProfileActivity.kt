@@ -21,6 +21,7 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyAppearancePrefs()
 
         setupToolbar()
         loadUserProfile()
