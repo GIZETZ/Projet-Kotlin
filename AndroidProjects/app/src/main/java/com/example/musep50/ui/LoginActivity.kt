@@ -175,7 +175,11 @@ class LoginActivity : AppCompatActivity() {
                     try {
                         // Sauvegarder le PIN pour l'authentification biométrique future
                         val sharedPrefs = getSharedPreferences("musep50_prefs", MODE_PRIVATE)
-                        sharedPrefs.edit().putString("pin_${currentEmail}", currentPin).apply()
+                        sharedPrefs.edit()
+                            .putString("pin_${currentEmail}", currentPin)
+                            .putLong("current_user_id", result.user.id)
+                            .putString("current_user_email", result.user.email)
+                            .apply()
 
                         Toast.makeText(this, "Connexion réussie", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, DashboardActivity::class.java).apply {
