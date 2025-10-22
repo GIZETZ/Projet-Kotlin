@@ -2,9 +2,9 @@
   "versionCode": 2,
   "versionName": "1.1.0",
   "apkUrl": "https://github.com/GIZETZ/musep50/releases/download/v1.1.0/musep50-1.1.0.apk",
-  "sha256": "VOTRE_SHA256",
+  "sha256": "7A13B675DE9FFBB4DDFC1294CA5F0D284DFDBA2DB969DB930861CCD13E5C8328",
   "notes": " Corrections de bugs\n Améliorations UI",
-  "force": false,
+  "force": true,
   "minVersionCode": 1,
   "maxVersionCode": 999999
 }
